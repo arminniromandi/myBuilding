@@ -44,7 +44,7 @@ class CalculateActivity : ComponentActivity()  {
 
     @Composable
     fun Greeting(data:ArrayList<Int>) {
-Log.i("test" , data.toString())
+
         Column(
             modifier = Modifier
                 .padding(12.dp)

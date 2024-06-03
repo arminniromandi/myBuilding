@@ -13,24 +13,40 @@ import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.BottomAppBar
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.AccountBox
-import androidx.compose.material.icons.outlined.AddCircle
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Build
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,12 +54,23 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ReportFragment.Companion.reportFragment
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import ir.amozeshgam.persiandate.PersianDate
+import ir.arminniromandi.mybuilding.Fragment.Add
+import ir.arminniromandi.mybuilding.Fragment.BottomNavItem
+import ir.arminniromandi.mybuilding.Fragment.Home
+import ir.arminniromandi.mybuilding.Fragment.Screens
+import ir.arminniromandi.mybuilding.Fragment.Settings
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.TextInBox
 
@@ -59,151 +86,106 @@ class MainActivity : ComponentActivity() {
 
 
         setContent {
-            View()
+            Column {
+                BottomNav()
+            }
         }
 
     }
 
-
-    @Preview(showSystemUi = true)
     @Composable
-    private fun View() {
+    fun BottomNav() {
+        var navController = rememberNavController()
 
-
-        Column(
-            Modifier
-                .background(Color(0xFF141414))
-                .fillMaxSize()
-                .padding(horizontal = 24.dp)
-                .padding(top = 18.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-
-            ) {
-
-//                Icon(
-//                    painter = painterResource(id = R.drawable.settings),
-//                    tint = Color.White,
-//                    contentDescription = ""
-//                )
-
-                text(text = "سلام مدیر", size = 24)
-
-            }
-            Box(
-                Modifier
-                    .padding(top = 16.dp)
-                    .drawBehind {
-                        drawRoundRect(
-                            Brush.verticalGradient(
-                                listOf(
-                                    Color(0xFFD1F300),
-                                    Color(0xFF01D123)
-                                )
-                            ),
-                            cornerRadius = CornerRadius(14.dp.toPx())
-                        )
-                    }
-                    .fillMaxWidth()
-                    .height(100.dp),
-                contentAlignment = Alignment.Center
-            ) {
-
-                text(text = "چهارشنبه 12 شهریور", size = 22)
-            }
-
-            Divider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                thickness = 0.5.dp
-            )
-            Row(
-                modifier = Modifier
-                    .padding(top = 16.dp)
-                    .height(100.dp)
-                    .fillMaxWidth()
-
-                    .drawBehind {
-                        drawRoundRect(
-                            Brush.verticalGradient(
-                                listOf(
-                                    Color(0xFFD1F300),
-                                    Color(0xFF01D123)
-                                )
-                            ),
-                            cornerRadius = CornerRadius(14.dp.toPx())
-                        )
-                    },
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                text(text = "2", size = 25)
-                text(text = "تعداد پرداخت شده", size = 22)
-            }
-            Divider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                thickness = 0.5.dp
-            )
-
-            val scrollState = rememberScrollState()
-            var offset by remember { mutableStateOf(0f) }
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .padding(top = 8.dp)
-                    .drawBehind {
-                        drawRoundRect(
-                            color = Color.Gray,
-                            cornerRadius = CornerRadius(14.dp.toPx())
-                        )
-                    }
-                    .padding(horizontal = 8.dp)
-                    .scrollable(
-                        orientation = Orientation.Vertical,
-                        state = rememberScrollableState { delta ->
-                            offset += delta
-                            delta
-                        }
-                    )
-
-            ) {
-                TextInBox("اضافه کردن هزینه" , Icons.Outlined.AccountBox)
-                TextInBox("اضافه کردن واحد" , Icons.Outlined.Build)
-                TextInBox("اضافه کردن مشکل" , Icons.Filled.AddCircle)
-
-            }
-
-
+        var selectedItem = rememberSaveable {
+            mutableStateOf(0)
         }
 
-
-    }
-
-    @Composable
-    fun text(text: String, size: Int) {
-
-        Text(
-            text = text,
-            Modifier,
-            color = Color.White,
-            style = TextStyle(
-                fontFamily = FontFamily(
-                    Font(R.font.yekanbakh)
-                ),
-                fontSize = size.sp
+        var item = arrayOf(
+            BottomNavItem(
+                name = "Home",
+                selectedIcon = Icons.Filled.Home,
+                unSelectedIcon = Icons.Outlined.Home,
+            ),
+            BottomNavItem(
+                name = "Add",
+                selectedIcon = Icons.Filled.Add,
+                unSelectedIcon = Icons.Outlined.Add,
+            ),
+            BottomNavItem(
+                name = "Settings",
+                selectedIcon = Icons.Filled.Settings,
+                unSelectedIcon = Icons.Outlined.Settings,
             )
+
+
         )
 
+        Scaffold(
+            bottomBar = {
+                NavigationBar(containerColor = Color.Black , ) {
+                    item.forEachIndexed {index , item->
+                        NavigationBarItem(
+                            selected = selectedItem.value == index,
+                            colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Gray),
+                            onClick = {
+                                selectedItem.value = index
+                                navController.navigate(item.name)
+                            },
+                            icon = {
+                                if (index ==1){
+
+
+                                    FloatingActionButton(
+                                        modifier = Modifier.padding(bottom = 16.dp),
+                                        onClick = { /*TODO*/ }){
+                                        Icon(imageVector = Icons.Filled.AddCircle, contentDescription = "Add")
+                                    }
+                                }else{
+
+                                    Icon(
+                                        imageVector = if (selectedItem.value == index) item.selectedIcon
+                                        else item.unSelectedIcon,
+                                        contentDescription = item.name,
+                                        tint = Color.White
+                                    )
+
+                                }
+                            },
+                            label = {
+                                    Text(
+                                        text = item.name,
+                                        style = TextStyle(
+                                            color = Color.White,
+                                            fontFamily = FontFamily(Font(R.font.yekanbakh))
+                                        )
+                                    )
+                            },
+                            alwaysShowLabel = false
+                        )
+                    }
+                }
+
+
+            }
+        ) {
+
+            NavHost(
+                navController = navController,
+                startDestination = Screens.Home.screenName,
+                modifier = Modifier.padding(it)){
+                composable(Screens.Home.screenName){ Home() }
+                composable(Screens.Add.screenName){ Add() }
+                composable(Screens.Settings.screenName){ Settings() }
+                }
+
+
+        }
+
     }
+
+
+
 
 
     override fun onPause() {
@@ -215,9 +197,4 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    @Preview(showSystemUi = true)
-    @Composable
-    private fun hello() {
-        View()
-    }
 }
