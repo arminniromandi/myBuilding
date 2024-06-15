@@ -6,38 +6,20 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.BottomAppBar
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.AccountBox
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Build
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -45,34 +27,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import ir.amozeshgam.persiandate.PersianDate
 import ir.arminniromandi.mybuilding.Fragment.Add
 import ir.arminniromandi.mybuilding.Fragment.BottomNavItem
 import ir.arminniromandi.mybuilding.Fragment.Home
+import ir.arminniromandi.mybuilding.Fragment.Note
 import ir.arminniromandi.mybuilding.Fragment.Screens
 import ir.arminniromandi.mybuilding.Fragment.Settings
 import ir.arminniromandi.mybuilding.R
-import ir.arminniromandi.mybuilding.TextInBox
 
 class MainActivity : ComponentActivity() {
     private lateinit var pref: SharedPreferences
@@ -86,9 +57,12 @@ class MainActivity : ComponentActivity() {
 
 
         setContent {
-            Column {
+            Column(
+                Modifier.background(Color.Black)
+            ) {
                 BottomNav()
             }
+
         }
 
     }
@@ -101,6 +75,9 @@ class MainActivity : ComponentActivity() {
             mutableStateOf(0)
         }
 
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = navBackStackEntry?.destination?.route
+
         var item = arrayOf(
             BottomNavItem(
                 name = "Home",
@@ -108,10 +85,12 @@ class MainActivity : ComponentActivity() {
                 unSelectedIcon = Icons.Outlined.Home,
             ),
             BottomNavItem(
-                name = "Add",
-                selectedIcon = Icons.Filled.Add,
-                unSelectedIcon = Icons.Outlined.Add,
+                name = "Note",
+                selectedIcon = Icons.Filled.Info,
+                unSelectedIcon = Icons.Outlined.Info,
             ),
+
+
             BottomNavItem(
                 name = "Settings",
                 selectedIcon = Icons.Filled.Settings,
@@ -126,22 +105,16 @@ class MainActivity : ComponentActivity() {
                 NavigationBar(containerColor = Color.Black , ) {
                     item.forEachIndexed {index , item->
                         NavigationBarItem(
-                            selected = selectedItem.value == index,
+                            selected = currentRoute == item.name,
+
                             colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Gray),
                             onClick = {
-                                selectedItem.value = index
-                                navController.navigate(item.name)
+                                navController.navigate(item.name) {
+                                    popUpTo(navController.graph.startDestinationId)
+                                    launchSingleTop = true
+                                }
                             },
                             icon = {
-                                if (index ==1){
-
-
-                                    FloatingActionButton(
-                                        modifier = Modifier.padding(bottom = 16.dp),
-                                        onClick = { /*TODO*/ }){
-                                        Icon(imageVector = Icons.Filled.AddCircle, contentDescription = "Add")
-                                    }
-                                }else{
 
                                     Icon(
                                         imageVector = if (selectedItem.value == index) item.selectedIcon
@@ -150,7 +123,6 @@ class MainActivity : ComponentActivity() {
                                         tint = Color.White
                                     )
 
-                                }
                             },
                             label = {
                                     Text(
@@ -173,13 +145,20 @@ class MainActivity : ComponentActivity() {
             NavHost(
                 navController = navController,
                 startDestination = Screens.Home.screenName,
+                enterTransition = { // When entering Screen2
+                    slideInHorizontally(initialOffsetX = { it } ,
+                        animationSpec = tween(
+                            durationMillis = 400
+                        ),
+                        ) // Slide in from the left
+                },
+
                 modifier = Modifier.padding(it)){
-                composable(Screens.Home.screenName){ Home() }
-                composable(Screens.Add.screenName){ Add() }
+                composable(Screens.Home.screenName){ Home(navController) }
+                composable(Screens.Note.screenName){ Note() }
+                composable(Screens.Add.screenName){ Add(navController) }
                 composable(Screens.Settings.screenName){ Settings() }
                 }
-
-
         }
 
     }
@@ -198,3 +177,4 @@ class MainActivity : ComponentActivity() {
 
 
 }
+

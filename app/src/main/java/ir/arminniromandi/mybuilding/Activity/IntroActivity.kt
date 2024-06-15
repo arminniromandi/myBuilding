@@ -22,6 +22,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.material3.Button
@@ -51,12 +52,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import ir.arminapp.myapp2.Room.DBHandler
 import ir.arminapp.myapp2.Room.DataModel.Building
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.ui.theme.MyBuildingTheme
 import kotlinx.coroutines.launch
+import kotlin.math.sin
 
 class IntroActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,10 +78,21 @@ class IntroActivity : ComponentActivity() {
         var showIntro by remember {
             mutableStateOf(true)
         }
+        var showSaving by remember {
+            mutableStateOf(false)
+        }
+
         if (showIntro) {
-            Intro {
-                showIntro = false
+            if (showSaving){
+                
+                SaveData()
+                
+            }else{
+                Intro {
+                    showIntro = false
+                }
             }
+            
         } else {
 
             Column(
@@ -137,15 +151,17 @@ class IntroActivity : ComponentActivity() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    label = { Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 4.dp),
-                        text = "نام مدیر ساختمان (خودتان)",
-                        style = TextStyle(
-                            textDirection = TextDirection.Rtl
+                    label = {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 4.dp),
+                            text = "حد ساختمان تعداد وا",
+                            style = TextStyle(
+                                textDirection = TextDirection.Rtl
+                            )
                         )
-                    )},
+                    },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number
                     )
@@ -154,10 +170,11 @@ class IntroActivity : ComponentActivity() {
                 Button(onClick = {
                     DBHandler.getDataBase(this@IntroActivity)
                         .buildingDao()
-                        .insertData(Building(B_id = 0 , bHostName , bUnit.toInt()))
-
-                    startActivity(Intent(this@IntroActivity, MainActivity::class.java))
-
+                        .insertData(Building(B_id = 0, bHostName, bUnit.toInt()))
+                    
+                    
+                    showSaving = true
+                    showIntro = false
                 }) {
                     Text(
                         text = "ذخیره و ادامه",
@@ -166,7 +183,6 @@ class IntroActivity : ComponentActivity() {
 
 
                 }
-
 
 
             }
@@ -268,6 +284,71 @@ class IntroActivity : ComponentActivity() {
 
     }
 
+    @Composable
+    fun SaveData() {
+        val dao = DBHandler.getDataBase(this).buildingDao()
+
+        var unit by remember {
+            mutableStateOf(dao.getBUnit().get(1).B_Unit)
+        }
+        var data by remember { mutableStateOf(List(unit) { "" }) } // Initialize with 4 empty strings
+
+        for (i in data.indices) {
+            TextField(
+                singleLine = true,
+                value = data[i].toString(),
+                onValueChange = { newData ->
+                    data = data.toMutableList().also { it[i] = newData }
+
+                },
+                textStyle = TextStyle(
+                    textDirection = TextDirection.Rtl
+                ),
+                modifier = Modifier
+                    .padding(vertical = 8.dp, horizontal = 8.dp)
+                    .fillMaxWidth(),
+
+                label = {
+                    androidx.compose.material.Text(
+                        "واحد ${i + 1}",
+                        modifier = Modifier.fillMaxWidth(),
+                        style = TextStyle(
+                            textDirection = TextDirection.Rtl
+                        )
+                    )
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                )
+            )
+        }
+        
+
+        
+
+        Button(
+            onClick = {
+                data.forEach {
+                    //todo :
+                    //to int 
+                    // save it i dataBase
+
+                    Intent(this, MainActivity::class.java)
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp)
+        ) {
+            Text(text = "ادامه", style = TextStyle(fontSize = 20.sp , fontFamily = FontFamily(Font(R.font.yekanbakh))))
+        }
+
+
+    }
+
 
 }
+
+
+
 

@@ -2,9 +2,7 @@ package ir.amozeshgam.persiandate
 
 import java.util.*
 
-//https://www.amozeshgam.ir
-//آموزشگام | مرجع آموزش های گام به گام در زمینه های مختلف
-// این کلاس مسئول بازگردانی تاریخ شمسی و ساعت کنونی میباشد
+
 class PersianDate {
 
     var strWeekDay = ""
@@ -169,7 +167,6 @@ class PersianDate {
             }
         }
 
-        //endregion
 
         when (month) {
             1 -> strMonth = "فروردين"
@@ -191,7 +188,7 @@ class PersianDate {
             2 -> strWeekDay = "دوشنبه"
             3 -> strWeekDay = "سه شنبه"
             4 -> strWeekDay = "چهارشنبه"
-            5 -> strWeekDay = "پنج شنبه"
+            5 -> strWeekDay = "پنجشنبه"
             6 -> strWeekDay = "جمعه"
             7 -> strWeekDay = "شنبه"
         }

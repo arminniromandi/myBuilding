@@ -1,5 +1,7 @@
 package ir.arminniromandi.mybuilding
 
+import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -17,6 +19,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -27,10 +30,15 @@ import androidx.compose.ui.unit.sp
 fun TextInBox(
     text: String,
     icon:ImageVector,
-
+    onClick : () ->Unit
 ) {
+
     Box(
         modifier = Modifier
+            .clickable {
+                onClick()
+                Log.i("test","test")
+            }
             .height(95.dp)
             .fillMaxWidth()
             .padding(top = 8.dp)

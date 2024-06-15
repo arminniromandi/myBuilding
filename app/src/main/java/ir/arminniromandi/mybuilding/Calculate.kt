@@ -1,41 +1,43 @@
 package ir.arminniromandi.mybuilding
 
-class Calculate() {
+import android.content.Context
+import ir.arminapp.myapp2.Room.DBHandler
+import ir.arminniromandi.mybuilding.ModelForActivity.BUnit
+import ir.arminniromandi.mybuilding.ModelForActivity.UserForCalculate
+import ir.arminniromandi.mybuilding.dataBase.DataModel.BUser
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-    fun calculateAll(water : Int, allCost:Int ): ArrayList<Int> {
+open class Calculate(private val context: Context ) {
 
-        var vahed = 1
+    fun calculateAll(water : Int,
+                     allCost:Int ,
+                     data : List<UserForCalculate>
+    ): ArrayList<Int> {
+        val db = DBHandler.getDataBase(context).buildingDao()
+        var vahed = db.getBUnit().get(1)
+
+        var ab = (water.toFloat() / vahed.B_Unit)
+
+        var cost = allCost / vahed.B_Unit
 
 
-        var ab = (water.toFloat() / 35)
 
-        var cost = allCost / vahed
 
-        var afrad = arrayOf(
-            4,
-            3,
-            3,
-            4,
-            3,
-            1,
-            4,
-            5,
-            3,
-            4
-        )
-
-        vahed = 0
+        vahed.B_Unit = 0
         var calculate =  ArrayList<Int>()
-        afrad.forEach {
-            vahed++
-            var waterOfUnit = it * ab
+
+        data.forEach {
+            vahed.B_Unit++
+            var waterOfUnit = it.unit * ab
             var all = waterOfUnit + cost
             calculate.add(all.toInt())
-            println("vahed $vahed : ${all.toInt()}")
         }
 
         return calculate
     }
+
 
 
 
