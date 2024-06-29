@@ -25,7 +25,7 @@ class CheckDate(var context: Context) {
                val lastIndex = DBHandler.getDataBase(context).buildingDao().getLastMonth()
                launch(Dispatchers.Main) {
                     check = if (lastIndex != null) {
-                         lastIndex.CostInMounthAndYear != date.getDate()
+                         lastIndex.CostInMounthAndYear != date.getDateForCalculate()
                     }else
                          true
                }

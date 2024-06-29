@@ -7,7 +7,7 @@ import ir.arminapp.myapp2.Room.DBHandler
 
 @Entity(tableName = DBHandler.User_TABLE)
 data class BUser(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "U_Id") var B_id :Int = 0,
-    @ColumnInfo(name = "U_Unit" )var B_Unit :Int
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "U_Id") var U_id :Int = 0,
+    @ColumnInfo(name = "U_Unit" )var U_Unit :Int
 
 )

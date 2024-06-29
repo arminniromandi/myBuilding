@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import ir.arminapp.myapp2.Room.DAO.BuildingDao
 import ir.arminapp.myapp2.Room.DataModel.Building
-import ir.arminniromandi.mybuilding.dataBase.DAO.NoteDao
+import ir.arminniromandi.mybuilding.dataBase.dao.NoteDao
 import ir.arminniromandi.mybuilding.dataBase.DataModel.BUser
 import ir.arminniromandi.mybuilding.dataBase.DataModel.CostForUnit
 import ir.arminniromandi.mybuilding.dataBase.DataModel.CostInMonth
@@ -37,8 +37,12 @@ abstract class DBHandler : RoomDatabase() {
         const val CostForUnit_TABLE = "CostForUnit_TABLE"
         const val CostInMounth_TABLE = "CostInMounth_TABLE"
         const val Note_TABLE = "Note_Table"
+
         const val B_Unit = "B_Unit"
         const val B_HostName = "B_HostName"
+
+        const val U_Unit = "U_Unit"
+        const val U_Id = "U_Id"
 
 
 

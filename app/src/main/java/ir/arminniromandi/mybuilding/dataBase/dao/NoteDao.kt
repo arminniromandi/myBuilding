@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.dataBase.DAO
+package ir.arminniromandi.mybuilding.dataBase.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

@@ -1,6 +1,5 @@
 package ir.arminniromandi.mybuilding
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,7 +18,6 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -37,7 +35,6 @@ fun TextInBox(
         modifier = Modifier
             .clickable {
                 onClick()
-                Log.i("test","test")
             }
             .height(95.dp)
             .fillMaxWidth()
@@ -48,7 +45,7 @@ fun TextInBox(
                     Brush.horizontalGradient(
                         listOf(
                             Color.Black,
-                            Color.Blue
+                            Color(0xFF001896)
                         )
                     ),
                     cornerRadius = CornerRadius(14.dp.toPx())
@@ -92,8 +89,3 @@ fun TextInBox(
 }
 
 
-//@Preview(name = "TextInBox")
-//@Composable
-//private fun PreviewTextInBox() {
-//    TextInBox("اضافه کردن واحد")
-//}

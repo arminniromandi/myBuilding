@@ -1,7 +1,6 @@
 package ir.arminniromandi.mybuilding.Fragment
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.updateTransition
@@ -68,6 +67,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ir.arminapp.myapp2.Room.DBHandler
+import ir.arminniromandi.mybuilding.Activity.ui.theme.back
+import ir.arminniromandi.mybuilding.Activity.ui.theme.primary
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.dataBase.DataModel.NoteProblem
 import kotlinx.coroutines.CoroutineScope
@@ -99,14 +100,14 @@ fun Note() {
                 .fillMaxWidth()
 
                 .fillMaxHeight()
-                .background(Color.Black)
+                .background(back)
                 .padding(horizontal = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .background(Color.Black)
+                    .background(back)
                     .padding(vertical = 16.dp)
                     ,
                 verticalAlignment = Alignment.CenterVertically,
@@ -118,7 +119,6 @@ fun Note() {
 
                         CoroutineScope(Dispatchers.IO).launch {
                             DBHandler.getDataBase(context).NoteDao().deleteAllNotes()
-                            Toast.makeText(context, "تمامی مشکلات حذف شد", Toast.LENGTH_SHORT).show()
                         }
                     }
                 ){
@@ -135,8 +135,8 @@ fun Note() {
                     .height(68.dp)
                     .drawBehind {
                         drawRoundRect(
-                            Color.White,
-                            cornerRadius = CornerRadius(12.dp.toPx())
+                            primary,
+                            cornerRadius = CornerRadius(10.dp.toPx())
                         )
                     },
                     contentAlignment = Alignment.CenterEnd
@@ -240,7 +240,7 @@ fun Items(data: NoteProblem) {
                     }
                 },
                 colors = CheckboxDefaults.colors(
-                    checkedColor = Color(0xFFF0C405),
+                    checkedColor = primary,
                     uncheckedColor = Color.White,
                     checkmarkColor = Color.Black
 
@@ -296,7 +296,7 @@ fun MainUI(
 
         FloatingActionButton(
             onClick = { expanded = !expanded },
-            containerColor = Color(0xFFF0C405)
+            containerColor = primary
         ) {
             Icon(
                 imageVector = Icons.Filled.Add,

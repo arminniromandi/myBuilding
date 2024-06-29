@@ -1,15 +1,15 @@
-package ir.arminapp.myapp2.Room.DAO
+package ir.arminniromandi.mybuilding.dataBase.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.Update
 import ir.arminapp.myapp2.Room.DBHandler
 import ir.arminapp.myapp2.Room.DataModel.Building
-import ir.arminniromandi.mybuilding.ModelForActivity.BUnit
 import ir.arminniromandi.mybuilding.dataBase.DataModel.BUser
 import ir.arminniromandi.mybuilding.dataBase.DataModel.CostForUnit
 import ir.arminniromandi.mybuilding.dataBase.DataModel.CostInMonth
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BuildingDao {
@@ -21,16 +21,23 @@ interface BuildingDao {
     @Insert
     fun addUsers(users: BUser)
 
+    @Update
+    fun updateUsers(users: BUser)
+
+
+    @Query("SELECT * FROM ${DBHandler.CostInMounth_TABLE}")
+    fun getMouths():Flow<List<CostInMonth>>
 
 
 
 
-    @Query("SELECT ${DBHandler.B_Unit} FROM ${DBHandler.Building_TABLE}")
-    fun getBUnit():List<BUnit>
+
+    @Query("SELECT * FROM ${DBHandler.Building_TABLE}")
+    fun getBUnit():List<Building>
 
 
-//    @Query("SELECT ${DBHandler.} FROM User_TABLE")
-//    fun getUserUnit():List<UserForCalculate>
+    @Query("SELECT * FROM ${DBHandler.User_TABLE}")
+    fun getUserUnit():List<BUser>
 
     @Insert
     fun insertMonth(month: CostInMonth)
@@ -39,9 +46,15 @@ interface BuildingDao {
     fun insertCost(cost: CostForUnit)
 
 
-    @Transaction
+
     @Query("SELECT * FROM ${DBHandler.CostForUnit_TABLE} WHERE CostInMonthAndYear = :month")
-    fun getCostWithMonth(month:String):List<CostForUnit>
+    fun getCostWithMonth(month:String):Flow<List<CostForUnit>>
+
+
+
+    @Query("SELECT * FROM ${DBHandler.CostForUnit_TABLE}")
+    fun getCost():Flow<List<CostForUnit>>
+
 
 
     @Query("SELECT * FROM ${DBHandler.CostInMounth_TABLE} ORDER BY CostInMonth_Id DESC LIMIT 1")

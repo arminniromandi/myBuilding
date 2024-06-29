@@ -13,9 +13,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
@@ -39,10 +42,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ir.arminniromandi.mybuilding.Fragment.Add
 import ir.arminniromandi.mybuilding.Fragment.BottomNavItem
+import ir.arminniromandi.mybuilding.Fragment.EditUser
 import ir.arminniromandi.mybuilding.Fragment.Home
 import ir.arminniromandi.mybuilding.Fragment.Note
 import ir.arminniromandi.mybuilding.Fragment.Screens
-import ir.arminniromandi.mybuilding.Fragment.Settings
+import ir.arminniromandi.mybuilding.Fragment.ShowCost
 import ir.arminniromandi.mybuilding.R
 
 class MainActivity : ComponentActivity() {
@@ -79,31 +83,29 @@ class MainActivity : ComponentActivity() {
         val currentRoute = navBackStackEntry?.destination?.route
 
         var item = arrayOf(
-            BottomNavItem(
-                name = "Home",
-                selectedIcon = Icons.Filled.Home,
-                unSelectedIcon = Icons.Outlined.Home,
-            ),
+
             BottomNavItem(
                 name = "Note",
                 selectedIcon = Icons.Filled.Info,
                 unSelectedIcon = Icons.Outlined.Info,
             ),
-
-
             BottomNavItem(
-                name = "Settings",
-                selectedIcon = Icons.Filled.Settings,
-                unSelectedIcon = Icons.Outlined.Settings,
+                name = "Add",
+                selectedIcon = Icons.Filled.AddCircle,
+                unSelectedIcon = Icons.Outlined.AddCircle,
+            ),
+            BottomNavItem(
+                name = "Home",
+                selectedIcon = Icons.Filled.Home,
+                unSelectedIcon = Icons.Outlined.Home,
             )
-
-
         )
+
 
         Scaffold(
             bottomBar = {
-                NavigationBar(containerColor = Color.Black , ) {
-                    item.forEachIndexed {index , item->
+                NavigationBar(containerColor = Color.Black) {
+                    item.forEachIndexed { index, item ->
                         NavigationBarItem(
                             selected = currentRoute == item.name,
 
@@ -116,22 +118,22 @@ class MainActivity : ComponentActivity() {
                             },
                             icon = {
 
-                                    Icon(
-                                        imageVector = if (selectedItem.value == index) item.selectedIcon
-                                        else item.unSelectedIcon,
-                                        contentDescription = item.name,
-                                        tint = Color.White
-                                    )
+                                Icon(
+                                    imageVector = if (selectedItem.value == index) item.selectedIcon
+                                    else item.unSelectedIcon,
+                                    contentDescription = item.name,
+                                    tint = Color.White
+                                )
 
                             },
                             label = {
-                                    Text(
-                                        text = item.name,
-                                        style = TextStyle(
-                                            color = Color.White,
-                                            fontFamily = FontFamily(Font(R.font.yekanbakh))
-                                        )
+                                Text(
+                                    text = item.name,
+                                    style = TextStyle(
+                                        color = Color.White,
+                                        fontFamily = FontFamily(Font(R.font.yekanbakh))
                                     )
+                                )
                             },
                             alwaysShowLabel = false
                         )
@@ -146,25 +148,25 @@ class MainActivity : ComponentActivity() {
                 navController = navController,
                 startDestination = Screens.Home.screenName,
                 enterTransition = { // When entering Screen2
-                    slideInHorizontally(initialOffsetX = { it } ,
+                    slideInHorizontally(
+                        initialOffsetX = { it },
                         animationSpec = tween(
                             durationMillis = 400
                         ),
-                        ) // Slide in from the left
+                    ) // Slide in from the left
                 },
 
-                modifier = Modifier.padding(it)){
-                composable(Screens.Home.screenName){ Home(navController) }
-                composable(Screens.Note.screenName){ Note() }
-                composable(Screens.Add.screenName){ Add(navController) }
-                composable(Screens.Settings.screenName){ Settings() }
-                }
+                modifier = Modifier.padding(it)
+            ) {
+                composable(Screens.Home.screenName) { Home(navController) }
+                composable(Screens.Note.screenName) { Note() }
+                composable(Screens.Add.screenName) { Add(navController) }
+                composable(Screens.Edit.screenName) { EditUser(navController) }
+                composable(Screens.Cost.screenName) { ShowCost() }
+            }
         }
 
     }
-
-
-
 
 
     override fun onPause() {

@@ -1,19 +1,26 @@
 package ir.arminniromandi.mybuilding.Fragment
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldColors
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,9 +28,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
@@ -34,6 +44,7 @@ import ir.arminniromandi.mybuilding.Calculate
 
 import ir.arminniromandi.mybuilding.CheckDate
 import ir.arminniromandi.mybuilding.Date
+import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.dataBase.DataModel.CostInMonth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,10 +58,20 @@ fun Add(
 ) {
 
 
-    if (CheckDate(LocalContext.current).getAndCheck(Date()))
-        View()
-    else
-        ShowDialog(navigate)
+    Column(
+        Modifier
+            .fillMaxHeight()
+            .fillMaxWidth()
+            .background(Color.Black)
+    ) {
+
+
+//        if (CheckDate(LocalContext.current).getAndCheck(Date()))
+            View(navigate)
+//        else
+//            ShowDialog(navigate)
+
+    }
 
 }
 
@@ -58,22 +79,28 @@ fun Add(
 fun ShowDialog(navigate: NavHostController) {
 
 
-    AlertDialog(onDismissRequest = { /*TODO*/ }, confirmButton = {
-        Button(
-            onClick = {
-                navigate.navigate("Add")
+
+
+        AlertDialog(
+            onDismissRequest = { },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        navigate.navigate("Home")
+                    },
+                ) {
+                    Text(text = "برگشت به خانه")
+                }
             },
-        ) {
-            Text(text = "برگشت به خانه")
-        }
-    },
-        title = {
-            Text(text = "اخطار زمان اضافه کردن")
-        },
-        text = {
-            Text(text = "این ماه فقط میتوانید یک بار هزینه هارا اضافه کنید")
-        }
-    )
+            title = {
+                Text(text = "اخطار زمان اضافه کردن")
+            },
+            text = {
+                Text(text = "این ماه فقط میتوانید یک بار هزینه هارا اضافه کنید")
+            }
+        )
+
+
 
 }
 
@@ -82,11 +109,11 @@ var costWater = 0
 
 
 @Composable
-fun OnboardingScreen(modifier: Modifier = Modifier, ContinueClick: () -> Unit) {
+fun OnboardingScreen(ContinueClick: () -> Unit) {
 
     Box(
         Modifier
-            .background(Color(0xFFFBF4F4))
+            .background(Color(0xFF000000))
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
@@ -96,9 +123,10 @@ fun OnboardingScreen(modifier: Modifier = Modifier, ContinueClick: () -> Unit) {
 
 
             Text(
-                "لطفا هزینه آب را تعیین کنید",
+                color = Color.White,
+                text = "لطفا هزینه آب را تعیین کنید",
                 fontSize = 24.sp,
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp)
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
             )
 
 
@@ -106,14 +134,21 @@ fun OnboardingScreen(modifier: Modifier = Modifier, ContinueClick: () -> Unit) {
                 mutableStateOf("")
             }
             TextField(
+
                 value = waterCost,
                 onValueChange = { waterCost = it },
                 textStyle = TextStyle(
-                    textDirection = TextDirection.Rtl
+                    textDirection = TextDirection.Rtl ,
+                    color = Color.White
                 ),
                 modifier = Modifier
-                    .padding(vertical = 8.dp, horizontal = 8.dp)
+                    .padding(vertical = 8.dp, horizontal = 14.dp)
                     .fillMaxWidth(),
+
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.LightGray
+                ),
+
 
                 label = {
                     Text(
@@ -133,8 +168,11 @@ fun OnboardingScreen(modifier: Modifier = Modifier, ContinueClick: () -> Unit) {
 
             Button(
                 modifier = Modifier
-                    .padding(vertical = 16.dp)
-                    .fillMaxWidth(),
+                    .padding(vertical = 16.dp , horizontal = 18.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(2.dp))
+                ,
+
                 onClick = {
                     ContinueClick()
                     costWater = waterCost.toInt()
@@ -142,7 +180,10 @@ fun OnboardingScreen(modifier: Modifier = Modifier, ContinueClick: () -> Unit) {
             ) {
                 Text(
                     "ادامه",
-                    fontSize = 20.sp
+                    fontSize = 22.sp,
+                    fontFamily = FontFamily(
+                        Font(R.font.yekanbakh)
+                    )
                 )
             }
         }
@@ -151,29 +192,30 @@ fun OnboardingScreen(modifier: Modifier = Modifier, ContinueClick: () -> Unit) {
 
 
 @Composable
-fun View() {
+fun View(navigate: NavHostController) {
 
 
     var shouldShowOnboarding by remember { mutableStateOf(true) }
 
     Surface(Modifier) {
         if (shouldShowOnboarding) {
-            OnboardingScreen(Modifier) { shouldShowOnboarding = false }
+            OnboardingScreen() { shouldShowOnboarding = false }
         } else {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(text = "هزینه های پیش آمده را اضافه کنید", fontSize = 20.sp)
-                BUnitTF()
+                BUnitTF(navigate = navigate)
 
             }
         }
     }
 }
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
-fun BUnitTF() {
+fun BUnitTF(navigate: NavHostController) {
     var unit by remember {
         mutableStateOf(3)
     }
@@ -242,29 +284,14 @@ fun BUnitTF() {
     val context = LocalContext.current
     Button(
         onClick = {
-            var currentDate = Date().getDate()
+            var currentDate = Date().getDateForCalculate()
             var totalData = data.map {
                 it.toInt()
             }.sum()
 
-            CoroutineScope(Dispatchers.IO).launch {
 
-                val db = DBHandler.getDataBase(context).buildingDao()
-
-                var AllUnit = db.getBUnit()
-
-                //todo : fill it totalData
-//                var totalCalculate = Calculate(context).calculateAll(costWater, totalData)
-
-
-                    delay(500)
-
-                    db.insertMonth(CostInMonth(CostInMounthAndYear = currentDate))
-
-
-
-
-            }
+            Calculate(context).calculateAll(costWater, totalData)
+            navigate.navigate(Screens.Home.screenName)
 
 
         },
