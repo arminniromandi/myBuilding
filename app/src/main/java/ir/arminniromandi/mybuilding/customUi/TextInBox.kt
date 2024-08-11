@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding
+package ir.arminniromandi.mybuilding.customUi
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ir.arminniromandi.mybuilding.R
 
 @Composable
 fun TextInBox(
@@ -48,7 +49,7 @@ fun TextInBox(
                             Color(0xFF001896)
                         )
                     ),
-                    cornerRadius = CornerRadius(14.dp.toPx())
+                    cornerRadius = CornerRadius(8.dp.toPx())
                 )
             },
         contentAlignment = Alignment.Center

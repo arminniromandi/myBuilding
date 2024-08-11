@@ -1,24 +1,25 @@
-package ir.arminapp.myapp2.Room
+package ir.arminniromandi.mybuilding.dataBase
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import ir.arminapp.myapp2.Room.DAO.BuildingDao
-import ir.arminapp.myapp2.Room.DataModel.Building
 import ir.arminniromandi.mybuilding.dataBase.dao.NoteDao
-import ir.arminniromandi.mybuilding.dataBase.DataModel.BUser
-import ir.arminniromandi.mybuilding.dataBase.DataModel.CostForUnit
-import ir.arminniromandi.mybuilding.dataBase.DataModel.CostInMonth
-import ir.arminniromandi.mybuilding.dataBase.DataModel.NoteProblem
+import ir.arminniromandi.mybuilding.dataBase.dataModel.BUser
+import ir.arminniromandi.mybuilding.dataBase.dataModel.CostForUnit
+import ir.arminniromandi.mybuilding.dataBase.dataModel.CostInMonth
+import ir.arminniromandi.mybuilding.dataBase.dataModel.NoteProblem
+import ir.arminniromandi.mybuilding.dataBase.dao.BuildingDao
+import ir.arminniromandi.mybuilding.dataBase.dataModel.Building
 
 @Database(
     entities =
-    [Building::class,
-    NoteProblem::class,
-    BUser::class,
-    CostInMonth::class,
-    CostForUnit::class
+    [
+        Building::class,
+        NoteProblem::class,
+        BUser::class,
+        CostForUnit::class,
+        CostInMonth::class
     ],
     version = DBHandler.DATABASE_VERSION
 )
@@ -45,8 +46,7 @@ abstract class DBHandler : RoomDatabase() {
         const val U_Id = "U_Id"
 
 
-
-        private var INSTANTCE : DBHandler? = null
+        private var INSTANTCE: DBHandler? = null
 
         fun getDataBase(context: Context): DBHandler {
             if (INSTANTCE == null) {

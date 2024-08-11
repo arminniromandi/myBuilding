@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.InteroFragment
+package ir.arminniromandi.mybuilding.IntroFragment
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -40,12 +40,12 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import ir.arminapp.myapp2.Room.DBHandler
-import ir.arminapp.myapp2.Room.DataModel.Building
 import ir.arminniromandi.mybuilding.Activity.ui.theme.backIntro
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
 import ir.arminniromandi.mybuilding.R
+import ir.arminniromandi.mybuilding.dataBase.DBHandler
+import ir.arminniromandi.mybuilding.dataBase.dataModel.Building
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -56,12 +56,6 @@ fun GetBValue(
     unit: MutableState<Int>
 ) {
     val context = LocalContext.current
-
-
-    //
-    //
-    //
-
 
     val h_name = remember {
         mutableStateOf("")
@@ -122,6 +116,7 @@ fun GetBValue(
                 shape = RoundedCornerShape(50),
                 singleLine = true,
                 textStyle = TextStyle(
+                    fontSize = 20.sp,
                     textDirection = TextDirection.Rtl,
                     color = Color.White
                 ),
@@ -194,7 +189,10 @@ fun GetBValue(
                         fontSize = 24.sp,
                         textAlign = TextAlign.Center
                     ),
-                    onValueChange = {})
+                    onValueChange = {
+
+
+                    })
 
 
                 IconButton(
@@ -210,21 +208,6 @@ fun GetBValue(
                     )
                 }
             }
-            Button(onClick = {
-                unit.value = unitOfB.intValue
-                CoroutineScope(Dispatchers.IO).launch {
-                    DBHandler.getDataBase(context)
-                        .buildingDao()
-                        .insertData(Building(B_id = 0, h_name.value, unitOfB.intValue))
-
-                }
-
-                navController.navigate(ScreensIntro.SaveData.screenName)
-            }) {
-                Text(
-                    text = "ذخیره و ادامه",
-                    fontFamily = FontFamily(Font(R.font.yekanbakh))
-                )
 
 
 
@@ -232,8 +215,34 @@ fun GetBValue(
                     Modifier
                         .fillMaxWidth()
                         .fillMaxHeight(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
+
+
+
+                    Button(
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(horizontal = 34.dp)
+                            .padding(bottom = 12.dp)
+                        ,onClick = {
+                        unit.value = unitOfB.intValue
+                        CoroutineScope(Dispatchers.IO).launch {
+                            DBHandler.getDataBase(context)
+                                .buildingDao()
+                                .insertData(Building(B_id = 0, h_name.value, unitOfB.intValue))
+
+                        }
+
+                        navController.navigate(ScreensIntro.SaveData.screenName)
+                    }) {
+                        Text(
+                            text = "ذخیره و ادامه",
+                            fontFamily = FontFamily(Font(R.font.yekanbakh)),
+                            fontSize = 20.sp,
+                        )
+
+                }
 
                     Text(
                         text = "!! توجه",
@@ -250,8 +259,6 @@ fun GetBValue(
                         modifier = Modifier.padding(horizontal = 24.dp),
                         fontFamily = FontFamily(Font(R.font.yekanbakh))
                     )
-
-                }
 
 
             }

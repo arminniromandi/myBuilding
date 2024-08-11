@@ -2,6 +2,7 @@ package ir.arminniromandi.mybuilding.Fragment
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,12 +16,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -36,14 +40,24 @@ import androidx.navigation.NavHostController
 import ir.arminniromandi.mybuilding.Activity.ui.theme.back
 import ir.arminniromandi.mybuilding.Activity.ui.theme.cyan1
 import ir.arminniromandi.mybuilding.Activity.ui.theme.cyan2
-import ir.arminniromandi.mybuilding.Date
 import ir.arminniromandi.mybuilding.R
-import ir.arminniromandi.mybuilding.TextInBox
+import ir.arminniromandi.mybuilding.customUi.TextInBox
+import ir.arminniromandi.mybuilding.utils.date.Const
+import ir.arminniromandi.mybuilding.utils.date.Date
+import ir.arminniromandi.mybuilding.viewModel.MainViewModel
 
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
-fun Home(navigate: NavHostController) {
+fun Home(navigate: NavHostController , viewModel: MainViewModel) {
+
+    val payedCount by
+        viewModel.payed.observeAsState()
+
+    viewModel.getPayed(Date().getDateForCalculate() , Const.PAID)
+
+    val name by viewModel.name.observeAsState()
+    viewModel.getName()
 
     val verticalGradient = listOf(cyan1, cyan2)
     Column(
@@ -63,12 +77,12 @@ fun Home(navigate: NavHostController) {
 
         ) {
 
-            Text(text = "سلام مدیر", size = 24)
+            Text(text = "سلام $name", size = 24 , Modifier)
 
         }
         Box(
             Modifier
-                .padding(top = 16.dp)
+                .padding(top = 12.dp)
                 .padding(horizontal = 24.dp)
                 .drawBehind {
                     drawRoundRect(
@@ -79,27 +93,21 @@ fun Home(navigate: NavHostController) {
                     )
                 }
                 .fillMaxWidth()
-                .height(100.dp),
+                .height(85.dp),
             contentAlignment = Alignment.Center,
 
             ) {
 
             Text(
-
-                text = Date().getDate(), size = 22
+                text = Date().getDate(), size = 22  , Modifier
             )
         }
 
-        Divider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp),
-            thickness = 0.5.dp
-        )
+
         Row(
             modifier = Modifier
-                .padding(top = 16.dp)
-                .height(100.dp)
+                .padding(top = 12.dp)
+                .height(85.dp)
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
 
@@ -116,28 +124,31 @@ fun Home(navigate: NavHostController) {
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Text(text = "2", size = 25)
-            Text(text = "تعداد پرداخت شده", size = 22)
+            Text(text = payedCount.toString()?:"کلیک کنید"
+            , size = 25,
+                modifier = Modifier.clickable {
+                    viewModel.getPayed(Date().getDateForCalculate() , Const.PAID)
+                })
+            Text(text = "تعداد پرداخت شده", size = 22 , Modifier)
         }
         Divider(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
+            color = Color.LightGray,
             thickness = 0.5.dp
         )
-
-
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .padding(top = 8.dp)
+                .padding(top = 12.dp)
                 .verticalScroll(rememberScrollState())
                 .drawBehind {
                     drawRoundRect(
-                        color = Color.Gray,
-                        cornerRadius = CornerRadius(14.dp.toPx())
+                        color = Color(0xAD292929),
+                        cornerRadius = CornerRadius(7.dp.toPx())
                     )
                 }
                 .padding(horizontal = 8.dp)
@@ -158,17 +169,21 @@ fun Home(navigate: NavHostController) {
                 Icons.Filled.AddCircle
             ) { navigate.navigate(Screens.Note.screenName) }
 
+            TextInBox(text = "نمایش تمامی افراد ", icon =Icons.Default.Face) {
+                navigate.navigate(Screens.ShowBUnit.screenName)
+            }
+
         }
 
     }
 }
 
 @Composable
-fun Text(text: String, size: Int) {
+private fun Text(text: String, size: Int , modifier: Modifier ) {
 
     Text(
         text = text,
-        Modifier,
+        modifier = modifier,
         color = Color.White,
         style = TextStyle(
             fontFamily = FontFamily(

@@ -18,7 +18,15 @@ val back = Color(0xFF121212)
 val editTextColor_Text = Color(0xFFB4B4B4)
 val editTextColor = Color(0xFF242529)
 
+var checkBox = Color(0xFF4EBD00)
 
 
 val cyan1 = Color(0xFF37B7C3)
 val cyan2 = Color(0xFF088395)
+
+val backDialog = Color(0x9E524949)
+
+val cyanLight = Color(0xFF5DD7E9)
+
+val customButton = Color(0xFF1A7CC3)
+

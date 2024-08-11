@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.InteroFragment
+package ir.arminniromandi.mybuilding.IntroFragment
 
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -10,7 +10,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material3.Button
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -29,14 +28,13 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import ir.arminapp.myapp2.Room.DBHandler
 import ir.arminniromandi.mybuilding.Activity.MainActivity
-import ir.arminniromandi.mybuilding.Activity.ui.theme.back
 import ir.arminniromandi.mybuilding.Activity.ui.theme.backIntro
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
 import ir.arminniromandi.mybuilding.R
-import ir.arminniromandi.mybuilding.dataBase.DataModel.BUser
+import ir.arminniromandi.mybuilding.dataBase.DBHandler
+import ir.arminniromandi.mybuilding.dataBase.dataModel.BUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

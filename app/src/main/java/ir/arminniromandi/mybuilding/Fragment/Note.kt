@@ -66,11 +66,11 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ir.arminapp.myapp2.Room.DBHandler
 import ir.arminniromandi.mybuilding.Activity.ui.theme.back
 import ir.arminniromandi.mybuilding.Activity.ui.theme.primary
 import ir.arminniromandi.mybuilding.R
-import ir.arminniromandi.mybuilding.dataBase.DataModel.NoteProblem
+import ir.arminniromandi.mybuilding.dataBase.DBHandler
+import ir.arminniromandi.mybuilding.dataBase.dataModel.NoteProblem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -113,6 +113,8 @@ fun Note() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
+
+                // TODO: show a alert dialog
 
                 IconButton(
                     onClick = {
@@ -250,7 +252,7 @@ fun Items(data: NoteProblem) {
             )
 
             Text(
-                text = "${data.Note} .${data.Note_id}",
+                text = data.Note,
                 color = Color.White,
                 fontSize = 24.sp,
                 style = TextStyle(

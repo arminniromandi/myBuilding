@@ -4,8 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import ir.arminapp.myapp2.Room.DBHandler
-import ir.arminniromandi.mybuilding.dataBase.DataModel.NoteProblem
+import ir.arminniromandi.mybuilding.dataBase.DBHandler
+import ir.arminniromandi.mybuilding.dataBase.dataModel.NoteProblem
 import kotlinx.coroutines.flow.Flow
 
 @Dao

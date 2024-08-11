@@ -1,7 +1,6 @@
 package ir.arminniromandi.mybuilding.Fragment
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,12 +13,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldColors
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,23 +36,14 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import ir.arminapp.myapp2.Room.DBHandler
-import ir.arminniromandi.mybuilding.Calculate
-
-import ir.arminniromandi.mybuilding.CheckDate
-import ir.arminniromandi.mybuilding.Date
 import ir.arminniromandi.mybuilding.R
-import ir.arminniromandi.mybuilding.dataBase.DataModel.CostInMonth
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-
+import ir.arminniromandi.mybuilding.utils.Calculate
+import ir.arminniromandi.mybuilding.utils.date.CheckDate
+import ir.arminniromandi.mybuilding.utils.date.Date
 
 @Composable
 fun Add(
-    navigate: NavHostController
-) {
+    navigate: NavHostController) {
 
 
     Column(
@@ -65,21 +53,18 @@ fun Add(
             .background(Color.Black)
     ) {
 
-
-//        if (CheckDate(LocalContext.current).getAndCheck(Date()))
-            View(navigate)
-//        else
-//            ShowDialog(navigate)
+        if (CheckDate(context = LocalContext.current).getAndCheck(Date())) {
+            View(navigate = navigate)
+        } else {
+            ShowDialog(navigate = navigate)
+        }
 
     }
 
 }
 
 @Composable
-fun ShowDialog(navigate: NavHostController) {
-
-
-
+private fun ShowDialog(navigate: NavHostController) {
 
         AlertDialog(
             onDismissRequest = { },
@@ -168,7 +153,7 @@ fun OnboardingScreen(ContinueClick: () -> Unit) {
 
             Button(
                 modifier = Modifier
-                    .padding(vertical = 16.dp , horizontal = 18.dp)
+                    .padding(vertical = 16.dp, horizontal = 18.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(2.dp))
                 ,
@@ -192,7 +177,7 @@ fun OnboardingScreen(ContinueClick: () -> Unit) {
 
 
 @Composable
-fun View(navigate: NavHostController) {
+private fun View(navigate: NavHostController) {
 
 
     var shouldShowOnboarding by remember { mutableStateOf(true) }
@@ -219,7 +204,12 @@ fun BUnitTF(navigate: NavHostController) {
     var unit by remember {
         mutableStateOf(3)
     }
-    var data by remember { mutableStateOf(List(unit) { "" }) } // Initialize with 4 empty strings
+
+
+
+
+
+    var data by remember { mutableStateOf(List(unit) { "" }) }
 
     for (i in data.indices) {
         TextField(

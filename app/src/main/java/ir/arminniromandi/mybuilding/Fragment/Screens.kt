@@ -6,5 +6,8 @@ sealed class Screens (val screenName : String){
     data object Note : Screens("Note")
     data object Cost : Screens("Cost")
     data object Edit : Screens("Edit")
+    data object ShowBUnit : Screens("ShowBUnit")
+
+
 
 }

@@ -6,51 +6,63 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import ir.arminniromandi.mybuilding.Activity.ui.theme.MyBuildingTheme
+import ir.arminniromandi.mybuilding.Fragment.EditUserUnit
 import ir.arminniromandi.mybuilding.Fragment.Add
 import ir.arminniromandi.mybuilding.Fragment.BottomNavItem
-import ir.arminniromandi.mybuilding.Fragment.EditUser
 import ir.arminniromandi.mybuilding.Fragment.Home
 import ir.arminniromandi.mybuilding.Fragment.Note
 import ir.arminniromandi.mybuilding.Fragment.Screens
+import ir.arminniromandi.mybuilding.Fragment.ShowBUnit
 import ir.arminniromandi.mybuilding.Fragment.ShowCost
 import ir.arminniromandi.mybuilding.R
+import ir.arminniromandi.mybuilding.viewModel.MainViewModel
 
 class MainActivity : ComponentActivity() {
     private lateinit var pref: SharedPreferences
+    private val myViewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,43 +71,54 @@ class MainActivity : ComponentActivity() {
             startActivity(Intent(this, IntroActivity::class.java))
 
 
-
         setContent {
-            Column(
-                Modifier.background(Color.Black)
-            ) {
-                BottomNav()
-            }
+            MyBuildingTheme {
 
+                val systemUiController = rememberSystemUiController()
+                SideEffect {
+                    systemUiController.setSystemBarsColor(Color.Black)
+                }
+
+
+
+                Column(
+                    Modifier.background(Color.Black)
+                ) {
+                    BottomNav()
+                }
+            }
         }
 
     }
 
     @Composable
     fun BottomNav() {
-        var navController = rememberNavController()
+        val navController = rememberNavController()
 
-        var selectedItem = rememberSaveable {
-            mutableStateOf(0)
+        val selectedItem = rememberSaveable {
+            mutableIntStateOf(0)
         }
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
-        var item = arrayOf(
+        val item = arrayOf(
 
             BottomNavItem(
                 name = "Note",
+                text = "یادداشت",
                 selectedIcon = Icons.Filled.Info,
                 unSelectedIcon = Icons.Outlined.Info,
             ),
             BottomNavItem(
                 name = "Add",
+                text = "شارژ",
                 selectedIcon = Icons.Filled.AddCircle,
                 unSelectedIcon = Icons.Outlined.AddCircle,
             ),
             BottomNavItem(
                 name = "Home",
+                text = "داشبورد",
                 selectedIcon = Icons.Filled.Home,
                 unSelectedIcon = Icons.Outlined.Home,
             )
@@ -104,65 +127,97 @@ class MainActivity : ComponentActivity() {
 
         Scaffold(
             bottomBar = {
-                NavigationBar(containerColor = Color.Black) {
+                NavigationBar(containerColor = Color(0xFF252525)) {
                     item.forEachIndexed { index, item ->
-                        NavigationBarItem(
-                            selected = currentRoute == item.name,
+                        if (index == 1) {
 
-                            colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Gray),
-                            onClick = {
-                                navController.navigate(item.name) {
-                                    popUpTo(navController.graph.startDestinationId)
-                                    launchSingleTop = true
-                                }
-                            },
-                            icon = {
-
+                            Box(
+                                Modifier
+                                    .clickable {
+                                        navController.navigate(Screens.Add.screenName) {
+                                            popUpTo(navController.graph.startDestinationId)
+                                            launchSingleTop = true
+                                        }
+                                    }
+                                    .padding(8.dp)
+                                    .padding(bottom = 8.dp)
+                                    .clip(shape = RoundedCornerShape(50))
+                                    .background(Color.Blue)
+                            ) {
                                 Icon(
-                                    imageVector = if (selectedItem.value == index) item.selectedIcon
-                                    else item.unSelectedIcon,
-                                    contentDescription = item.name,
-                                    tint = Color.White
+                                    modifier = Modifier
+                                        .padding(12.dp)
+                                        .size(28.dp),
+                                    imageVector = Icons.Default.Add,
+                                    tint = Color.White,
+                                    contentDescription = ""
                                 )
+                            }
+                        } else {
+                            NavigationBarItem(
+                                selected = currentRoute == item.name,
 
-                            },
-                            label = {
-                                Text(
-                                    text = item.name,
-                                    style = TextStyle(
-                                        color = Color.White,
-                                        fontFamily = FontFamily(Font(R.font.yekanbakh))
+                                colors = NavigationBarItemDefaults.colors(
+                                    indicatorColor = Color(
+                                        0xFF1A237E
                                     )
-                                )
-                            },
-                            alwaysShowLabel = false
-                        )
+                                ),
+                                onClick = {
+                                    navController.navigate(item.name) {
+                                        popUpTo(navController.graph.startDestinationId)
+                                        launchSingleTop = true
+                                    }
+                                },
+                                icon = {
+
+                                    Icon(
+                                        imageVector = if (currentRoute == item.name) item.selectedIcon
+                                        else item.unSelectedIcon,
+                                        contentDescription = item.name,
+                                        tint = Color(0xFFBBDEFB)
+                                    )
+
+                                },
+                                label = {
+                                    Text(
+                                        text = item.text,
+                                        modifier = Modifier.padding(top = 8.dp),
+                                        style = TextStyle(
+                                            color = Color.White,
+                                            fontSize = 15.sp,
+                                            fontFamily = FontFamily(Font(R.font.yekanbakh))
+                                        )
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
 
 
             }
-        ) {
+        ) { it ->
 
             NavHost(
                 navController = navController,
                 startDestination = Screens.Home.screenName,
-                enterTransition = { // When entering Screen2
+                enterTransition = {
                     slideInHorizontally(
                         initialOffsetX = { it },
                         animationSpec = tween(
                             durationMillis = 400
                         ),
-                    ) // Slide in from the left
+                    )
                 },
 
                 modifier = Modifier.padding(it)
             ) {
-                composable(Screens.Home.screenName) { Home(navController) }
+                composable(Screens.Home.screenName) { Home(navController, myViewModel) }
                 composable(Screens.Note.screenName) { Note() }
-                composable(Screens.Add.screenName) { Add(navController) }
-                composable(Screens.Edit.screenName) { EditUser(navController) }
-                composable(Screens.Cost.screenName) { ShowCost() }
+                composable(Screens.Add.screenName) { Add(navController ) }
+                composable(Screens.ShowBUnit.screenName) { ShowBUnit() }
+                composable(Screens.Edit.screenName) { EditUserUnit(navController) }
+                composable(Screens.Cost.screenName) { ShowCost(navController) }
             }
         }
 

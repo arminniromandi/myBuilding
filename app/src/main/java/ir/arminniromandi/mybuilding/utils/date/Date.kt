@@ -1,6 +1,4 @@
-package ir.arminniromandi.mybuilding
-
-import ir.amozeshgam.persiandate.PersianDate
+package ir.arminniromandi.mybuilding.utils.date
 
 class Date {
      fun getDate(): String {

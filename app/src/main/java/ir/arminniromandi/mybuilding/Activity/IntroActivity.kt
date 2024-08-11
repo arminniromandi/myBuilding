@@ -1,7 +1,6 @@
 package ir.arminniromandi.mybuilding.Activity
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.tween
@@ -9,17 +8,17 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import ir.arminniromandi.mybuilding.InteroFragment.GetBValue
-import ir.arminniromandi.mybuilding.InteroFragment.Intro
-import ir.arminniromandi.mybuilding.InteroFragment.SaveData
-import ir.arminniromandi.mybuilding.InteroFragment.ScreensIntro
-import ir.arminniromandi.mybuilding.ui.theme.MyBuildingTheme
+import ir.arminniromandi.mybuilding.Activity.ui.theme.MyBuildingTheme
+import ir.arminniromandi.mybuilding.IntroFragment.GetBValue
+import ir.arminniromandi.mybuilding.IntroFragment.Intro
+import ir.arminniromandi.mybuilding.IntroFragment.SaveData
+import ir.arminniromandi.mybuilding.IntroFragment.ScreensIntro
 
 class IntroActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,10 +36,10 @@ class IntroActivity : ComponentActivity() {
     @Composable
     fun Fragment() {
         val navController = rememberNavController()
-        var unit = remember {
-            mutableStateOf(0)
+        val unit = remember {
+            mutableIntStateOf(0)
         }
-        Scaffold {
+        Scaffold { it ->
 
 
             NavHost(

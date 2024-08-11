@@ -1,6 +1,7 @@
-package ir.amozeshgam.persiandate
+package ir.arminniromandi.mybuilding.utils.date
 
 import java.util.*
+import java.util.Date
 
 
 class PersianDate {
@@ -20,7 +21,7 @@ class PersianDate {
 
     private fun setDateCalendar() {
 
-        val date = Date()
+        var date = Date()
         val ld: Int
 
         val calendar = GregorianCalendar()

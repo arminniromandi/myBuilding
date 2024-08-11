@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.InteroFragment
+package ir.arminniromandi.mybuilding.IntroFragment
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -18,9 +18,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import ir.arminniromandi.mybuilding.R
@@ -80,7 +84,7 @@ fun Intro(navController: NavHostController) {
 
             val nextButtonVisible = remember {
                 derivedStateOf {
-                    pagerState.currentPage < 2 // total pages are 5
+                    pagerState.currentPage < 2
                 }
             }
 
@@ -93,11 +97,17 @@ fun Intro(navController: NavHostController) {
                     coroutineScope.launch { pagerState.animateScrollToPage(prevPageIndex) }
                 },
             ) {
-                Text(text = if (prevButtonVisible.value) "قبلی" else "")
+                Text(text = if (prevButtonVisible.value) "قبلی" else "",
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.yekanbakh)),
+                    color = Color.White
+                )
             }
 
             HorizontalPagerIndicator(
                 pageCount = 3,
+                activeColor = Color.White,
+                inactiveColor = Color.LightGray,
                 pagerState = pagerState,
             )
 
@@ -110,7 +120,11 @@ fun Intro(navController: NavHostController) {
                         navController.navigate(ScreensIntro.GetBValue.screenName)
                 },
             ) {
-                Text(text = if (nextButtonVisible.value) "بعدی" else "بزن بریم")
+                Text(text = if (nextButtonVisible.value) "بعدی" else "بزن بریم",
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.yekanbakh)),
+                    color = Color.White
+                    )
             }
         }
 

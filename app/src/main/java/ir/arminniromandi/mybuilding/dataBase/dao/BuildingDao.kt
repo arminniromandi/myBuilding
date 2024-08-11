@@ -4,11 +4,11 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import ir.arminapp.myapp2.Room.DBHandler
-import ir.arminapp.myapp2.Room.DataModel.Building
-import ir.arminniromandi.mybuilding.dataBase.DataModel.BUser
-import ir.arminniromandi.mybuilding.dataBase.DataModel.CostForUnit
-import ir.arminniromandi.mybuilding.dataBase.DataModel.CostInMonth
+import ir.arminniromandi.mybuilding.dataBase.DBHandler
+import ir.arminniromandi.mybuilding.dataBase.dataModel.BUser
+import ir.arminniromandi.mybuilding.dataBase.dataModel.Building
+import ir.arminniromandi.mybuilding.dataBase.dataModel.CostForUnit
+import ir.arminniromandi.mybuilding.dataBase.dataModel.CostInMonth
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -33,11 +33,17 @@ interface BuildingDao {
 
 
     @Query("SELECT * FROM ${DBHandler.Building_TABLE}")
-    fun getBUnit():List<Building>
+    fun getBData():List<Building>
+
+    @Query("SELECT B_HostName FROM ${DBHandler.Building_TABLE}")
+    fun getBHostName():String
 
 
     @Query("SELECT * FROM ${DBHandler.User_TABLE}")
     fun getUserUnit():List<BUser>
+
+    @Query("SELECT * FROM ${DBHandler.User_TABLE}")
+    fun getUserUnitForEdit():Flow<List<BUser>>
 
     @Insert
     fun insertMonth(month: CostInMonth)
@@ -55,23 +61,17 @@ interface BuildingDao {
     @Query("SELECT * FROM ${DBHandler.CostForUnit_TABLE}")
     fun getCost():Flow<List<CostForUnit>>
 
+    @Update
+    fun updateCost(cost: CostForUnit)
+
+    @Query("SELECT COUNT(isPaid) FROM CostForUnit_TABLE where CostInMonthAndYear =:month AND isPaid = :isPaid")
+    fun getPaidCount(month:String , isPaid:Int):Int
 
 
     @Query("SELECT * FROM ${DBHandler.CostInMounth_TABLE} ORDER BY CostInMonth_Id DESC LIMIT 1")
     fun getLastMonth():CostInMonth
 
+    @Query("SELECT * FROM ${DBHandler.User_TABLE}")
+    fun getAllUsers():Flow<List<BUser>>
 
-
-//
-//    @Query("DELETE FROM ${DBHandler.NOTES_TABLE} WHERE ${DBHandler.NOTES_ID} = :id")
-//    fun deleteNotes(id: Int)
-//
-//    @Query("SELECT * FROM ${DBHandler.NOTES_TABLE} WHERE ${DBHandler.NOTES_ID} = :id")
-//    fun getNotesById(id: Int):Flow<List<Building>>
-//
-//    @Query("SELECT ${DBHandler.NOTES_ID} ,${DBHandler.NOTES_TITLE} FROM ${DBHandler.NOTES_TABLE} WHERE ${DBHandler.NOTES_DELETE_STATE} = :deleteState ")
-//    fun getNotesForRecyclerView(deleteState:String):Flow<List<RecyclerNotesData>>
-//
-//    @Query("UPDATE ${DBHandler.NOTES_TABLE} SET ${DBHandler.NOTES_DELETE_STATE} = :state WHERE ${DBHandler.NOTES_ID} = :id ")
-//    fun updateNotes(id :Int , state :String):Int
 }
