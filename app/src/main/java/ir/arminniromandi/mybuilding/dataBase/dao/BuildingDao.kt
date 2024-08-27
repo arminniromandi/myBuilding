@@ -58,9 +58,6 @@ interface BuildingDao {
 
 
 
-    @Query("SELECT * FROM ${DBHandler.CostForUnit_TABLE}")
-    fun getCost():Flow<List<CostForUnit>>
-
     @Update
     fun updateCost(cost: CostForUnit)
 

@@ -49,9 +49,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ir.arminniromandi.mybuilding.Activity.ui.theme.MyBuildingTheme
-import ir.arminniromandi.mybuilding.Fragment.EditUserUnit
 import ir.arminniromandi.mybuilding.Fragment.Add
 import ir.arminniromandi.mybuilding.Fragment.BottomNavItem
+import ir.arminniromandi.mybuilding.Fragment.EditUserUnit
 import ir.arminniromandi.mybuilding.Fragment.Home
 import ir.arminniromandi.mybuilding.Fragment.Note
 import ir.arminniromandi.mybuilding.Fragment.Screens
@@ -70,6 +70,7 @@ class MainActivity : ComponentActivity() {
         if (pref.getBoolean("showIntro", true))
             startActivity(Intent(this, IntroActivity::class.java))
 
+        println("hell")
 
         setContent {
             MyBuildingTheme {

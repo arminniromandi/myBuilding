@@ -161,7 +161,7 @@ private fun View( navigate: NavHostController) {
 
 
         Button(
-            onClick = { navigate.navigate(Screens.Home.screenName) },
+            onClick = { navigate.navigate(ir.arminniromandi.mybuilding.Fragment.Screens.Home.screenName) },
             modifier = Modifier.fillMaxWidth(0.5f),
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
@@ -322,7 +322,7 @@ private fun ShowDialog(navigate: NavHostController) {
                         )
 
                     }
-                    navigate.navigate(Screens.Home.screenName)
+                    navigate.navigate(ir.arminniromandi.mybuilding.Fragment.Screens.Home.screenName)
 
 
                 },

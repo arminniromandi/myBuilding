@@ -98,7 +98,6 @@ fun Note() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-
                 .fillMaxHeight()
                 .background(back)
                 .padding(horizontal = 12.dp),
@@ -153,7 +152,7 @@ fun Note() {
                             ),
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = 20.sp,
-                            color = Color.Black
+                            color = Color.White
                         )
                     )
                 }
@@ -298,7 +297,8 @@ fun MainUI(
 
         FloatingActionButton(
             onClick = { expanded = !expanded },
-            containerColor = primary
+            containerColor = primary,
+            contentColor = Color.White
         ) {
             Icon(
                 imageVector = Icons.Filled.Add,
@@ -343,9 +343,10 @@ fun CustomDialog(
             .padding(8.dp),
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+
+                .padding(16.dp),
         ) {
-            androidx.compose.material.Text(text = "Input Message")
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -362,7 +363,7 @@ fun CustomDialog(
 
                 label = {
                     Text(
-                        "هزینه آب ساختمان",
+                        "یادداشت",
                         modifier = Modifier.fillMaxWidth(),
                         style = TextStyle(
                             textDirection = TextDirection.Rtl
@@ -375,7 +376,7 @@ fun CustomDialog(
         Spacer(modifier = Modifier.height(8.dp))
 
         Row(
-            modifier = Modifier.align(Alignment.End)
+            modifier = Modifier.align(Alignment.Start)
         ) {
             Button(
                 onClick = {

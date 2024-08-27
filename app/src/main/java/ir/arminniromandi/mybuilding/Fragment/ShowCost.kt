@@ -1,12 +1,11 @@
 package ir.arminniromandi.mybuilding.Fragment
 
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-
-
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Divider
@@ -52,6 +53,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
 import ir.arminniromandi.mybuilding.Activity.ui.theme.back
 import ir.arminniromandi.mybuilding.Activity.ui.theme.checkBox
+import ir.arminniromandi.mybuilding.Activity.ui.theme.customButton
 import ir.arminniromandi.mybuilding.Activity.ui.theme.primary
 import ir.arminniromandi.mybuilding.Activity.ui.theme.primaryVariant
 import ir.arminniromandi.mybuilding.R
@@ -68,32 +70,40 @@ private val dialog = mutableStateOf(false)
 private val index = mutableIntStateOf(0)
 private val show = mutableStateOf(false)
 private val format = DecimalFormat("0,000")
+
 @Composable
-fun ShowCost(navigate:NavHostController) {
+fun ShowCost(navigate: NavHostController) {
     val context = LocalContext.current
-
-
 
 
     val cost = remember { mutableStateOf<Array<CostForUnit>>(emptyArray()) }
     val mouths = remember { mutableStateOf<Array<CostInMonth>>(emptyArray()) }
 
+
+
+
+
     LaunchedEffect(key1 = Unit) {
-        DBHandler.getDataBase(context).buildingDao().getMouths().collect {data ->
+        cost.value = emptyArray()
+        DBHandler.getDataBase(context).buildingDao().getMouths().collect { data ->
             mouths.value = data.toTypedArray()
         }
     }
+    val clickedMouth = remember {
+        mutableStateOf("")
+    }
+    if (show.value) {
 
-    LaunchedEffect(key1 = Unit) {
-        DBHandler.getDataBase(context).buildingDao().getCost().collect { fetchedCost ->
-            cost.value = fetchedCost.toTypedArray()
+        LaunchedEffect(key1 = Unit) {
+            DBHandler.getDataBase(context).buildingDao().getCostWithMonth(clickedMouth.value)
+                .collect { fetchedCost ->
+                    cost.value = fetchedCost.toTypedArray()
+                }
         }
     }
 
 
-    val clickedMouth = remember {
-        mutableStateOf("")
-    }
+
 
 
     if (dialog.value) {
@@ -102,7 +112,7 @@ fun ShowCost(navigate:NavHostController) {
 
 
     val state = LazyGridState()
-    
+
     Column(
         modifier = Modifier
 
@@ -115,8 +125,7 @@ fun ShowCost(navigate:NavHostController) {
             Modifier
                 .fillMaxWidth()
                 .background(back)
-                .padding(vertical = 16.dp)
-            ,
+                .padding(vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
@@ -137,13 +146,12 @@ fun ShowCost(navigate:NavHostController) {
                         dialog.value = true
                     }
 
-                }
-                ,
+                },
                 contentAlignment = Alignment.Center
             ) {
 
                 Text(
-                    text = if (!show.value)"تمامی هزینه ها" else "برای نمایش ریز هزینه کلیک کنید",
+                    text = if (!show.value) "تمامی هزینه ها" else "برای نمایش ریز هزینه کلیک کنید",
                     style = TextStyle(
                         fontFamily = FontFamily(
                             Font(R.font.yekanbakh)
@@ -157,16 +165,16 @@ fun ShowCost(navigate:NavHostController) {
 
             IconButton(
                 onClick = {
-                    if(!show.value){
+                    if (!show.value) {
                         navigate.navigate("home")
-                    }else{
+                    } else {
                         show.value = false
                     }
 
                 }
-            ){
+            ) {
                 Icon(
-                    imageVector = if (!show.value)Icons.Outlined.Home else Icons.Default.ArrowForward,
+                    imageVector = if (!show.value) Icons.Outlined.Home else Icons.Default.ArrowForward,
                     modifier = Modifier.size(45.dp),
                     contentDescription = "",
                     tint = Color.White
@@ -195,14 +203,15 @@ fun ShowCost(navigate:NavHostController) {
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
                     modifier = Modifier
-                        .padding(16.dp),
+                        .padding(12.dp),
                     state = state,
-                    reverseLayout = true
+                    reverseLayout = false
                 ) {
                     items(mouths.value.size) {
                         Box(
                             Modifier
                                 .fillMaxWidth()
+                                .padding(16.dp)
                                 .clip(RoundedCornerShape(8.dp))
                                 .background(primary)
                                 .clickable(true) {
@@ -220,7 +229,7 @@ fun ShowCost(navigate:NavHostController) {
                                         fontFamily = FontFamily(Font(R.font.yekanbakh))
                                     ),
                                     fontSize = 24.sp,
-                                    modifier = Modifier.padding(top = 12.dp , bottom = 8.dp)
+                                    modifier = Modifier.padding(top = 12.dp, bottom = 8.dp)
                                 )
 
 
@@ -231,7 +240,8 @@ fun ShowCost(navigate:NavHostController) {
                                         color = Color.White
                                     ),
                                     fontSize = 24.sp,
-                                    modifier = Modifier.padding(bottom = 12.dp )
+                                    modifier = Modifier
+                                        .padding(bottom = 12.dp)
                                         .align(Alignment.CenterHorizontally)
                                 )
                             }
@@ -247,7 +257,6 @@ fun ShowCost(navigate:NavHostController) {
     }
 
 
-   
 }
 
 
@@ -255,18 +264,16 @@ fun ShowCost(navigate:NavHostController) {
 private fun ShowCostByMouth(cost: Array<CostForUnit>) {
 
 
-    val state = LazyGridState()
-
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
+
             .background(back)
             .padding(vertical = 24.dp, horizontal = 24.dp)
-    ){
+    ) {
 
-        
+
         Row(
             Modifier
                 .fillMaxWidth()
@@ -319,32 +326,29 @@ private fun ShowCostByMouth(cost: Array<CostForUnit>) {
 
         ) {
 
-            items(cost.size){
-                CostItems(cost[it])
+            itemsIndexed(cost) { index, item ->
+                CostItems(item, index + 1)
             }
 
         }
 
 
-
     }
-    
-    
-    
+
+
 }
 
 @Composable
-private fun CostItems(data :CostForUnit) {
+private fun CostItems(data: CostForUnit, index: Int) {
     val context = LocalContext.current
 
     val cost = format.format(data.C_Cost.toInt())
-
 
     Row(
         Modifier
             .fillMaxWidth()
             .height(68.dp)
-            .padding(vertical = 8.dp)
+            .padding(vertical = 8.dp, horizontal = 12.dp)
             .drawBehind {
                 drawRoundRect(
                     primary,
@@ -354,9 +358,10 @@ private fun CostItems(data :CostForUnit) {
             .padding(horizontal = 24.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
-    ){
+    ) {
 
-        Checkbox(checked = data.isPaid,
+        Checkbox(
+            checked = data.isPaid,
             onCheckedChange = {
                 data.isPaid = it
                 CoroutineScope(Dispatchers.IO).launch {
@@ -370,7 +375,7 @@ private fun CostItems(data :CostForUnit) {
                 checkmarkColor = Color.White
 
             ),
-            modifier = Modifier.size(width = 26.dp , height = 24.dp)
+            modifier = Modifier.size(width = 26.dp, height = 24.dp)
 
         )
 
@@ -387,7 +392,7 @@ private fun CostItems(data :CostForUnit) {
         )
 
         Text(
-            text = data.B_id.toString(),
+            text = index.toString(),
             color = Color.White,
             fontSize = 24.sp,
             style = TextStyle(
@@ -398,8 +403,6 @@ private fun CostItems(data :CostForUnit) {
         )
 
 
-
-
     }
 
 
@@ -408,25 +411,43 @@ private fun CostItems(data :CostForUnit) {
 
 
 
+
 @Composable
 private fun Dialog(
-
     costInMonth: CostInMonth
-){
+) {
     val format = DecimalFormat("0,000")
 
 
-    AlertDialog(onDismissRequest = { dialog.value = false },
-        confirmButton = { 
-            Button(onClick = { dialog.value = false }) {
-            Text(text = "اوکی" ,  fontSize = 20.sp , fontFamily = FontFamily(
-                Font(R.font.yekanbakh)
-            ))
+    AlertDialog(
+        onDismissRequest = { dialog.value = false },
+        backgroundColor = Color.DarkGray,
+        confirmButton = {
+
+            Row (
+                modifier = Modifier.fillMaxWidth().padding(8.dp),
+                horizontalArrangement = Arrangement.Start
+                ){
+
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = customButton
+                    ),
+                    onClick = { dialog.value = false }) {
+                    Text(
+                        text = "اوکی", fontSize = 20.sp, fontFamily = FontFamily(
+                            Font(R.font.yekanbakhr)
+                        ),
+                        color = Color.White
+                    )
+                }
             }
         },
         title = {
-            Text(text = "ریز هزینه های این ماه" ,
+            Text(
+                text = "ریز هزینه های این ماه",
                 modifier = Modifier.fillMaxWidth(),
+                color = Color.White,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.End,
                 fontFamily = FontFamily(Font(R.font.yekanbakh)),
@@ -434,11 +455,11 @@ private fun Dialog(
                 )
         },
         text = {
-            Column {
+            Column(horizontalAlignment = Alignment.End) {
 
-                DialogText("هزینه آب : ${format.format(costInMonth.costWater)}")
-                DialogText("هزینه این ماه : ${format.format(costInMonth.cost)}")
-                DialogText(" هزینه کل : ${format.format(costInMonth.sumOfAll)}")
+                DialogText("هزینه آب :  ${format.format(costInMonth.costWater)}")
+                DialogText("هزینه این ماه :  ${format.format(costInMonth.cost)}")
+                DialogText(" هزینه کل :  ${format.format(costInMonth.sumOfAll)}")
             }
         },
         properties = DialogProperties(
@@ -453,12 +474,15 @@ private fun Dialog(
 
 
 }
+
 @Composable
-private fun DialogText(text: String){
-    Text(text = text ,
+private fun DialogText(text: String) {
+    Text(
+        text = text,
         fontSize = 15.sp,
-        color = Color.Gray,
-        modifier = Modifier.fillMaxWidth()
+        color = Color.LightGray,
+        modifier = Modifier.fillMaxWidth(),
+        textAlign = TextAlign.End
     )
 
 

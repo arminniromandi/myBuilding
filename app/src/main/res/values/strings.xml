@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Building</string>
+    <string name="app_name">ساختمان من</string>
     <string name="title_activity_intro">IntroActivity</string>
     <string name="title_activity_calculated">CalculatedActivity</string>
     <string name="title_activity_note">NoteActivity</string>

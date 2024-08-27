@@ -74,7 +74,7 @@ fun SaveData(
                     color = Color.White
                 ),
                 modifier = Modifier
-                    .padding(vertical = 8.dp, horizontal = 8.dp)
+                    .padding(vertical = 8.dp, horizontal = 16.dp)
                     .fillMaxWidth(),
 
                 label = {

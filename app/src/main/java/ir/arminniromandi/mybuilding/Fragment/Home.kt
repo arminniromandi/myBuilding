@@ -15,11 +15,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.DateRange
-import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -53,7 +52,6 @@ fun Home(navigate: NavHostController , viewModel: MainViewModel) {
 
     val payedCount by
         viewModel.payed.observeAsState()
-
     viewModel.getPayed(Date().getDateForCalculate() , Const.PAID)
 
     val name by viewModel.name.observeAsState()
@@ -148,7 +146,7 @@ fun Home(navigate: NavHostController , viewModel: MainViewModel) {
                 .drawBehind {
                     drawRoundRect(
                         color = Color(0xAD292929),
-                        cornerRadius = CornerRadius(7.dp.toPx())
+                        cornerRadius = CornerRadius(7.dp.toPx() , 7.dp.toPx())
                     )
                 }
                 .padding(horizontal = 8.dp)
@@ -156,22 +154,24 @@ fun Home(navigate: NavHostController , viewModel: MainViewModel) {
 
         ) {
             TextInBox(
-                "اضافه کردن هزینه جدید", Icons.Outlined.Add
+                "اضافه کردن شارژ جدید", Icons.Outlined.Add
             ) { navigate.navigate(Screens.Add.screenName) }
+
             TextInBox(
-                "نمایش هزینه های ثبت شده", Icons.Outlined.DateRange
+                "نمایش تمامی شارژ ", Icons.Outlined.DateRange
             ) { navigate.navigate(Screens.Cost.screenName) }
-            TextInBox(text = "ویرایش افراد واحد", icon = Icons.Outlined.Edit) {
-                navigate.navigate(Screens.Edit.screenName)
-            }
-            TextInBox(
-                "اضافه کردن مشکل",
-                Icons.Filled.AddCircle
-            ) { navigate.navigate(Screens.Note.screenName) }
 
             TextInBox(text = "نمایش تمامی افراد ", icon =Icons.Default.Face) {
                 navigate.navigate(Screens.ShowBUnit.screenName)
             }
+
+
+            TextInBox(
+                "اضافه کردن یادداشت",
+                Icons.Filled.Info
+            ) { navigate.navigate(Screens.Note.screenName) }
+
+
 
         }
 

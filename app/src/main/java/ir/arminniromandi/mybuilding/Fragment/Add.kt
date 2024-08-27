@@ -33,9 +33,11 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDirection
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import ir.arminniromandi.mybuilding.Activity.ui.theme.back
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.utils.Calculate
 import ir.arminniromandi.mybuilding.utils.date.CheckDate
@@ -43,14 +45,15 @@ import ir.arminniromandi.mybuilding.utils.date.Date
 
 @Composable
 fun Add(
-    navigate: NavHostController) {
+    navigate: NavHostController
+) {
 
 
     Column(
         Modifier
             .fillMaxHeight()
             .fillMaxWidth()
-            .background(Color.Black)
+            .background(back)
     ) {
 
         if (CheckDate(context = LocalContext.current).getAndCheck(Date())) {
@@ -98,7 +101,7 @@ fun OnboardingScreen(ContinueClick: () -> Unit) {
 
     Box(
         Modifier
-            .background(Color(0xFF000000))
+            .background(back)
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
@@ -124,7 +127,7 @@ fun OnboardingScreen(ContinueClick: () -> Unit) {
                 onValueChange = { waterCost = it },
                 textStyle = TextStyle(
                     textDirection = TextDirection.Rtl ,
-                    color = Color.White
+                    color = Color.Black
                 ),
                 modifier = Modifier
                     .padding(vertical = 8.dp, horizontal = 14.dp)
@@ -139,6 +142,7 @@ fun OnboardingScreen(ContinueClick: () -> Unit) {
                     Text(
                         "هزینه آب ساختمان",
                         modifier = Modifier.fillMaxWidth(),
+                        color = Color.Black,
                         style = TextStyle(
                             textDirection = TextDirection.Rtl
                         )
@@ -187,10 +191,12 @@ private fun View(navigate: NavHostController) {
             OnboardingScreen() { shouldShowOnboarding = false }
         } else {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(back),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "هزینه های پیش آمده را اضافه کنید", fontSize = 20.sp)
+                Text(text = "هزینه های پیش آمده را اضافه کنید", fontSize = 20.sp , color = Color.White)
                 BUnitTF(navigate = navigate)
 
             }
@@ -202,12 +208,8 @@ private fun View(navigate: NavHostController) {
 @Composable
 fun BUnitTF(navigate: NavHostController) {
     var unit by remember {
-        mutableStateOf(3)
+        mutableStateOf(2)
     }
-
-
-
-
 
     var data by remember { mutableStateOf(List(unit) { "" }) }
 
@@ -215,12 +217,9 @@ fun BUnitTF(navigate: NavHostController) {
         TextField(
             value = data[i].toString(),
             onValueChange = { newData ->
-                data = data.toMutableList().also { it[i] = newData }
+                data = data.toMutableList().also { it[i] = newData}
 
             },
-            textStyle = TextStyle(
-                textDirection = TextDirection.Rtl
-            ),
             modifier = Modifier
                 .padding(vertical = 8.dp, horizontal = 8.dp)
                 .fillMaxWidth(),
@@ -228,10 +227,12 @@ fun BUnitTF(navigate: NavHostController) {
             label = {
                 Text(
                     "هزینه ${i + 1}",
-                    modifier = Modifier.fillMaxWidth(),
                     style = TextStyle(
                         textDirection = TextDirection.Rtl
-                    )
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 14.dp)
                 )
             },
             keyboardOptions = KeyboardOptions(
@@ -248,8 +249,11 @@ fun BUnitTF(navigate: NavHostController) {
                 unit++
                 data = data.toMutableList().also { it.add("") }
 
+
             },
-            modifier = Modifier.fillMaxWidth(0.5f)
+            modifier = Modifier
+                .fillMaxWidth(0.5f)
+                .padding(8.dp)
 
 
         ) {
@@ -262,7 +266,9 @@ fun BUnitTF(navigate: NavHostController) {
                 data = data.toMutableList().also { it.removeLast() }
 
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
 
 
         ) {
@@ -292,6 +298,15 @@ fun BUnitTF(navigate: NavHostController) {
         Text(text = "محاسبه", style = TextStyle(fontSize = 20.sp))
     }
 
+
+}
+
+
+@Preview
+@Composable
+private fun SSS() {
+    var context = LocalContext.current
+    Add(navigate = NavHostController(context))
 
 }
 
