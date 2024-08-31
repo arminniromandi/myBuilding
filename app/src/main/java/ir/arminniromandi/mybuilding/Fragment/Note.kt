@@ -63,7 +63,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextDirection
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ir.arminniromandi.mybuilding.Activity.ui.theme.back
@@ -85,7 +84,6 @@ fun Note() {
 
     val context = LocalContext.current
 
-    val message = remember { mutableStateOf("Edit Me") }
     val openDialog = remember { mutableStateOf(false) }
     val editMessage = remember { mutableStateOf("") }
 
@@ -185,7 +183,7 @@ fun Note() {
                 ),
             contentAlignment = Alignment.Center
         ) {
-            CustomDialog(message, openDialog, editMessage)
+            CustomDialog( openDialog, editMessage)
         }
     }
 
@@ -196,7 +194,7 @@ fun Note() {
 @Composable
 fun ShowNote() {
     val context = LocalContext.current
-    var notes = remember { mutableStateOf<Array<NoteProblem>>(emptyArray()) }
+    val notes = remember { mutableStateOf<Array<NoteProblem>>(emptyArray()) }
     LaunchedEffect(key1 = Unit) {
         DBHandler.getDataBase(context).NoteDao().getNotes().collect { fetchedNotes ->
             notes.value = fetchedNotes.toTypedArray()
@@ -331,7 +329,6 @@ fun ItemUi(
 
 @Composable
 fun CustomDialog(
-    message: MutableState<String>,
     openDialog: MutableState<Boolean>,
     editMessage: MutableState<String>
 ) {
@@ -415,12 +412,6 @@ data class MiniFabItems(
     val title: String
 )
 
-
-@Preview
-@Composable
-private fun Viewww() {
-    Note()
-}
 
 
 

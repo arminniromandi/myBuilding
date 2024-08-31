@@ -27,7 +27,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import ir.arminniromandi.mybuilding.Activity.MainActivity
 import ir.arminniromandi.mybuilding.Activity.ui.theme.backIntro
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor
@@ -41,7 +40,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SaveData(
-    navHostController: NavHostController,
+
     unit: MutableState<Int>
 ) {
     val context = LocalContext.current
@@ -98,9 +97,9 @@ fun SaveData(
 
         Button(
             onClick = {
-                var allUnit = data.map { it.toInt() }
+                val allUnit = data.map { it.toInt() }
                 CoroutineScope(Dispatchers.IO).launch {
-                    var dao = DBHandler.getDataBase(context).buildingDao()
+                    val dao = DBHandler.getDataBase(context).buildingDao()
                     allUnit.forEach {
                         dao.addUsers(BUser(U_Unit = it))
                     }

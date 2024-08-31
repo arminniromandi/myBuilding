@@ -39,7 +39,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -57,7 +56,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-// TODO: maybe we dont use this
 
 private val dialog = mutableStateOf(false)
 private val unit = mutableStateOf("")
@@ -161,7 +159,7 @@ private fun View( navigate: NavHostController) {
 
 
         Button(
-            onClick = { navigate.navigate(ir.arminniromandi.mybuilding.Fragment.Screens.Home.screenName) },
+            onClick = { navigate.navigate(Screens.Home.screenName) },
             modifier = Modifier.fillMaxWidth(0.5f),
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
@@ -309,8 +307,7 @@ private fun ShowDialog(navigate: NavHostController) {
             Button(
                 onClick = {
                     dialog.value = false
-                    // TODO: update data here and go to home
-                // updateUsers is a function that updates the data!!
+
                     CoroutineScope(Dispatchers.IO).launch {
 
                         DBHandler.getDataBase(context).buildingDao().updateUsers(
@@ -322,7 +319,7 @@ private fun ShowDialog(navigate: NavHostController) {
                         )
 
                     }
-                    navigate.navigate(ir.arminniromandi.mybuilding.Fragment.Screens.Home.screenName)
+                    navigate.navigate(Screens.Home.screenName)
 
 
                 },
@@ -353,10 +350,3 @@ private fun ShowDialog(navigate: NavHostController) {
 }
 
 
-
-@Preview(name = "EditUserUnit")
-@Composable
-private fun PreviewEditUserUnit() {
-    val context = LocalContext.current
-    EditUserUnit(NavHostController(context))
-}

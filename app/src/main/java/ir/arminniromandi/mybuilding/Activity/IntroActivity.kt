@@ -57,7 +57,7 @@ class IntroActivity : ComponentActivity() {
                 modifier = Modifier.padding(it)
             ) {
                 composable(ScreensIntro.Intro.screenName) { Intro(navController) }
-                composable(ScreensIntro.SaveData.screenName) { SaveData(navController , unit) }
+                composable(ScreensIntro.SaveData.screenName) { SaveData(  unit) }
                 composable(ScreensIntro.GetBValue.screenName) { GetBValue(navController , unit) }
             }
 

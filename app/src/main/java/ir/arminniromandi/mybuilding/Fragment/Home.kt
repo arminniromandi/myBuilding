@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.outlined.Add
@@ -48,11 +49,11 @@ import ir.arminniromandi.mybuilding.viewModel.MainViewModel
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
-fun Home(navigate: NavHostController , viewModel: MainViewModel) {
+fun Home(navigate: NavHostController, viewModel: MainViewModel) {
 
     val payedCount by
-        viewModel.payed.observeAsState()
-    viewModel.getPayed(Date().getDateForCalculate() , Const.PAID)
+    viewModel.payed.observeAsState()
+    viewModel.getPayed(Date().getDateForCalculate(), Const.PAID)
 
     val name by viewModel.name.observeAsState()
     viewModel.getName()
@@ -75,7 +76,7 @@ fun Home(navigate: NavHostController , viewModel: MainViewModel) {
 
         ) {
 
-            Text(text = "سلام $name", size = 24 , Modifier)
+            Text(text = "سلام $name", size = 24, Modifier)
 
         }
         Box(
@@ -97,7 +98,7 @@ fun Home(navigate: NavHostController , viewModel: MainViewModel) {
             ) {
 
             Text(
-                text = Date().getDate(), size = 22  , Modifier
+                text = Date().getDate(), size = 22, Modifier
             )
         }
 
@@ -122,12 +123,11 @@ fun Home(navigate: NavHostController , viewModel: MainViewModel) {
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Text(text = payedCount.toString()?:"کلیک کنید"
-            , size = 25,
+            Text(text = payedCount.toString(), size = 25,
                 modifier = Modifier.clickable {
-                    viewModel.getPayed(Date().getDateForCalculate() , Const.PAID)
+                    viewModel.getPayed(Date().getDateForCalculate(), Const.PAID)
                 })
-            Text(text = "تعداد پرداخت شده", size = 22 , Modifier)
+            Text(text = "تعداد پرداخت شده", size = 22, Modifier)
         }
         Divider(
             modifier = Modifier
@@ -146,7 +146,7 @@ fun Home(navigate: NavHostController , viewModel: MainViewModel) {
                 .drawBehind {
                     drawRoundRect(
                         color = Color(0xAD292929),
-                        cornerRadius = CornerRadius(7.dp.toPx() , 7.dp.toPx())
+                        cornerRadius = CornerRadius(7.dp.toPx(), 7.dp.toPx())
                     )
                 }
                 .padding(horizontal = 8.dp)
@@ -161,8 +161,11 @@ fun Home(navigate: NavHostController , viewModel: MainViewModel) {
                 "نمایش تمامی شارژ ", Icons.Outlined.DateRange
             ) { navigate.navigate(Screens.Cost.screenName) }
 
-            TextInBox(text = "نمایش تمامی افراد ", icon =Icons.Default.Face) {
+            TextInBox(text = "نمایش تمامی افراد ", icon = Icons.Default.Face) {
                 navigate.navigate(Screens.ShowBUnit.screenName)
+            }
+            TextInBox(text = "ویرایش سریع افراد ", icon = Icons.Default.Edit) {
+                navigate.navigate(Screens.Edit.screenName)
             }
 
 
@@ -172,14 +175,13 @@ fun Home(navigate: NavHostController , viewModel: MainViewModel) {
             ) { navigate.navigate(Screens.Note.screenName) }
 
 
-
         }
 
     }
 }
 
 @Composable
-private fun Text(text: String, size: Int , modifier: Modifier ) {
+private fun Text(text: String, size: Int, modifier: Modifier) {
 
     Text(
         text = text,

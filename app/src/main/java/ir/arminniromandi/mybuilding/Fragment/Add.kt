@@ -17,7 +17,6 @@ import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,7 +32,6 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDirection
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -69,25 +67,24 @@ fun Add(
 @Composable
 private fun ShowDialog(navigate: NavHostController) {
 
-        AlertDialog(
-            onDismissRequest = { },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        navigate.navigate("Home")
-                    },
-                ) {
-                    Text(text = "برگشت به خانه")
-                }
-            },
-            title = {
-                Text(text = "اخطار زمان اضافه کردن")
-            },
-            text = {
-                Text(text = "این ماه فقط میتوانید یک بار هزینه هارا اضافه کنید")
+    AlertDialog(
+        onDismissRequest = { },
+        confirmButton = {
+            Button(
+                onClick = {
+                    navigate.navigate("Home")
+                },
+            ) {
+                Text(text = "برگشت به خانه")
             }
-        )
-
+        },
+        title = {
+            Text(text = "اخطار زمان اضافه کردن")
+        },
+        text = {
+            Text(text = "این ماه فقط میتوانید یک بار هزینه هارا اضافه کنید")
+        }
+    )
 
 
 }
@@ -125,16 +122,16 @@ fun OnboardingScreen(ContinueClick: () -> Unit) {
 
                 value = waterCost,
                 onValueChange = { waterCost = it },
-                textStyle = TextStyle(
-                    textDirection = TextDirection.Rtl ,
-                    color = Color.Black
-                ),
+
+
+
                 modifier = Modifier
                     .padding(vertical = 8.dp, horizontal = 14.dp)
                     .fillMaxWidth(),
 
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.LightGray
+                textStyle = TextStyle(
+                    textDirection = TextDirection.Rtl,
+                    color = Color.White
                 ),
 
 
@@ -143,9 +140,7 @@ fun OnboardingScreen(ContinueClick: () -> Unit) {
                         "هزینه آب ساختمان",
                         modifier = Modifier.fillMaxWidth(),
                         color = Color.Black,
-                        style = TextStyle(
-                            textDirection = TextDirection.Rtl
-                        )
+                        style = TextStyle(textDirection = TextDirection.Rtl)
                     )
                 },
                 keyboardOptions = KeyboardOptions(
@@ -159,8 +154,7 @@ fun OnboardingScreen(ContinueClick: () -> Unit) {
                 modifier = Modifier
                     .padding(vertical = 16.dp, horizontal = 18.dp)
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(2.dp))
-                ,
+                    .clip(RoundedCornerShape(2.dp)),
 
                 onClick = {
                     ContinueClick()
@@ -196,7 +190,11 @@ private fun View(navigate: NavHostController) {
                     .background(back),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "هزینه های پیش آمده را اضافه کنید", fontSize = 20.sp , color = Color.White)
+                Text(
+                    text = "هزینه های پیش آمده را اضافه کنید",
+                    fontSize = 20.sp,
+                    color = Color.White
+                )
                 BUnitTF(navigate = navigate)
 
             }
@@ -215,9 +213,9 @@ fun BUnitTF(navigate: NavHostController) {
 
     for (i in data.indices) {
         TextField(
-            value = data[i].toString(),
+            value = data[i],
             onValueChange = { newData ->
-                data = data.toMutableList().also { it[i] = newData}
+                data = data.toMutableList().also { it[i] = newData }
 
             },
             modifier = Modifier
@@ -280,8 +278,7 @@ fun BUnitTF(navigate: NavHostController) {
     val context = LocalContext.current
     Button(
         onClick = {
-            var currentDate = Date().getDateForCalculate()
-            var totalData = data.map {
+            val totalData = data.map {
                 it.toInt()
             }.sum()
 
@@ -302,13 +299,7 @@ fun BUnitTF(navigate: NavHostController) {
 }
 
 
-@Preview
-@Composable
-private fun SSS() {
-    var context = LocalContext.current
-    Add(navigate = NavHostController(context))
 
-}
 
 
 
