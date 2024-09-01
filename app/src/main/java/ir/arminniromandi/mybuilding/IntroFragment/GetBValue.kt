@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -24,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,12 +36,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import ir.arminniromandi.mybuilding.Activity.ui.theme.backIntro
+import ir.arminniromandi.mybuilding.Activity.ui.theme.customButton
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
 import ir.arminniromandi.mybuilding.R
@@ -50,19 +54,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+private val dialog = mutableStateOf(false)
+val h_name = mutableStateOf("")
+val unitOfB = mutableIntStateOf(0)
+
 @Composable
 fun GetBValue(
     navController: NavController,
     unit: MutableState<Int>
 ) {
-    val context = LocalContext.current
 
-    val h_name = remember {
-        mutableStateOf("")
-    }
-    val unitOfB = remember {
-        mutableIntStateOf(0)
-    }
+    if (dialog.value)
+        Dialog(navController ,h_name.value , unitOfB.intValue)
+
+
 
     Box(
         Modifier
@@ -211,61 +216,159 @@ fun GetBValue(
 
 
 
-                Column(
-                    Modifier
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+
+
+                Button(
+                    modifier = Modifier
                         .fillMaxWidth()
-                        .fillMaxHeight(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-
-
-
-                    Button(
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(horizontal = 34.dp)
-                            .padding(bottom = 12.dp)
-                        ,onClick = {
+                        .padding(horizontal = 34.dp)
+                        .padding(bottom = 12.dp),
+                    onClick = {
                         unit.value = unitOfB.intValue
-                        CoroutineScope(Dispatchers.IO).launch {
-                            DBHandler.getDataBase(context)
-                                .buildingDao()
-                                .insertData(Building(B_id = 0, h_name.value, unitOfB.intValue))
+                        dialog.value = true
 
-                        }
-
-                        navController.navigate(ScreensIntro.SaveData.screenName)
                     }) {
-                        Text(
-                            text = "ذخیره و ادامه",
-                            fontFamily = FontFamily(Font(R.font.yekanbakh)),
-                            fontSize = 20.sp,
-                        )
+                    Text(
+                        text = "ذخیره و ادامه",
+                        fontFamily = FontFamily(Font(R.font.yekanbakh)),
+                        fontSize = 20.sp,
+                    )
 
                 }
 
-                    Text(
-                        text = "!! توجه",
-                        color = Color.Green,
-                        fontSize = 20.sp,
-                        fontFamily = FontFamily(Font(R.font.yekanbakh))
-                    )
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Text(
-                        text = "مدیر گرامی باید برای محاسبه هزینه آب  به تعداد واحد ساختمان نفرات هر واحد را اضافه کنید",
-                        color = Color.White,
-                        fontSize = 18.sp,
-                        textAlign = TextAlign.End,
-                        modifier = Modifier.padding(horizontal = 24.dp),
-                        fontFamily = FontFamily(Font(R.font.yekanbakh))
-                    )
+                Text(
+                    text = "!! توجه",
+                    color = Color.Green,
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.yekanbakh))
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = "مدیر گرامی باید برای محاسبه هزینه آب  به تعداد واحد ساختمان نفرات هر واحد را اضافه کنید",
+                    color = Color.White,
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.padding(horizontal = 24.dp),
+                    fontFamily = FontFamily(Font(R.font.yekanbakh))
+                )
 
 
             }
 
 
         }
+
     }
 }
+    @Composable
+    private fun Dialog(
+        navController: NavController,
+        name: String,
+        unit: Int
+    ){
+        val context = LocalContext.current
+
+        AlertDialog(
+            onDismissRequest = { dialog.value = false },
+            backgroundColor = Color.DarkGray,
+            confirmButton = {
+
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.Start
+                ){
+
+                    Button(
+                        colors = androidx.compose.material.ButtonDefaults.buttonColors(
+                            backgroundColor = customButton
+                        ),
+                        onClick = {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                DBHandler.getDataBase(context)
+                                    .buildingDao()
+                                    .insertData(Building(B_id = 0, h_name.value, unitOfB.intValue))
+
+                            }
+
+                            navController.navigate(ScreensIntro.SaveData.screenName)
+                        }) {
+                        Text(
+                            text = "بله", fontSize = 16.sp, fontFamily = FontFamily(
+                                Font(R.font.yekanbakhr)
+                            ),
+                            color = Color.White
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+
+                    Button(
+                        colors = androidx.compose.material.ButtonDefaults.buttonColors(
+                            backgroundColor = Color.White
+                        ),
+                        onClick = {
+                            dialog.value = false
+                        }) {
+                        Text(
+                            text = "خیر", fontSize = 16.sp, fontFamily = FontFamily(
+                                Font(R.font.yekanbakhr)
+                            ),
+                            color = Color.DarkGray
+                        )
+
+
+                    }
+
+
+                }
+            },
+            title = {
+                Text(
+                    text = "آیا از صحت داده ها مطمعن هستید",
+                    modifier = Modifier.fillMaxWidth(),
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.End,
+                    fontFamily = FontFamily(Font(R.font.yekanbakh)),
+
+                    )
+            },
+            text = {
+                Column(horizontalAlignment = Alignment.End) {
+                    Text(text = "نام مدیر : $name" ,
+                        fontSize = 18.sp,
+                        color = Color.White,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.End
+                        )
+                    Text(text = "تعداد واحد : $unit",
+                        fontSize = 18.sp,
+                        color = Color.White,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.End)
+
+                }
+            },
+            properties = DialogProperties(
+                usePlatformDefaultWidth = false
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+
+
+        )
+
+    }
+
+
 
 

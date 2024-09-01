@@ -25,6 +25,8 @@ interface BuildingDao {
     fun updateUsers(users: BUser)
 
 
+
+
     @Query("SELECT * FROM ${DBHandler.CostInMounth_TABLE}")
     fun getMouths():Flow<List<CostInMonth>>
 

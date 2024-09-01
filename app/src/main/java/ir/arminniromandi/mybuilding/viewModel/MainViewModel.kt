@@ -7,33 +7,53 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import ir.arminniromandi.mybuilding.dataBase.DBHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancelFutureOnCompletion
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
 class MainViewModel(private val application: Application) :AndroidViewModel(application){
 
-    private val _data = MutableLiveData(1)
-    val payed: LiveData<Int> = _data
-
     private val _name = MutableLiveData("مدیر")
+    private val _data = MutableLiveData(1)
+    private val _isInsert = MutableLiveData(false)
+
+    val payed: LiveData<Int> = _data
     val name :LiveData<String> = _name
+    val isInsert :LiveData<Boolean> = _isInsert
 
 
+
+
+    fun isInserted() {
+        viewModelScope.launch {
+            val count = withContext(Dispatchers.IO) { // Perform database operation on IO thread
+                val db = DBHandler.getDataBase(context = application.baseContext)
+                db.buildingDao().getBData()
+            }
+            if (count.isEmpty())
+                _isInsert.value = true
+            else
+                _isInsert.value = false
+
+
+        }
+    }
 
     fun getPayed(month: String , paid : Int) {
         viewModelScope.launch {
-            val count = withContext(Dispatchers.IO) { // Perform database operation on IO thread
+            val count = withContext(Dispatchers.IO) {
                 val db = DBHandler.getDataBase(context = application.baseContext)
                 db.buildingDao().getPaidCount(month , paid  )
             }
             _data.value = count
         }
+
     }
 
     fun getName() {
         viewModelScope.launch {
-            val name = withContext(Dispatchers.IO) { // Perform database operation on IO thread
+            val name = withContext(Dispatchers.IO) {
                 val db = DBHandler.getDataBase(context = application.baseContext)
                 db.buildingDao().getBHostName()
             }

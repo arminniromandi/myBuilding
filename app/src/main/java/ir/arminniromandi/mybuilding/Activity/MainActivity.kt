@@ -65,10 +65,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pref = getSharedPreferences("pref", Context.MODE_PRIVATE)
-        if (pref.getBoolean("showIntro", true))
-            startActivity(Intent(this, IntroActivity::class.java))
 
-        println("hell")
+        if (pref.getBoolean("showIntro", true)) {
+            myViewModel.isInserted()
+            if (myViewModel.isInsert.value == false)
+                startActivity(Intent(this, IntroActivity::class.java))
+        }
+
+
+
 
         setContent {
             MyBuildingTheme {
@@ -201,7 +206,7 @@ class MainActivity : ComponentActivity() {
                     slideInHorizontally(
                         initialOffsetX = { it },
                         animationSpec = tween(
-                            durationMillis = 400
+                            durationMillis = 600
                         ),
                     )
                 },
@@ -210,7 +215,7 @@ class MainActivity : ComponentActivity() {
             ) {
                 composable(Screens.Home.screenName) { Home(navController, myViewModel) }
                 composable(Screens.Note.screenName) { Note() }
-                composable(Screens.Add.screenName) { Add(navController ) }
+                composable(Screens.Add.screenName) { Add(navController) }
                 composable(Screens.ShowBUnit.screenName) { ShowBUnit() }
                 composable(Screens.Edit.screenName) { EditUserUnit(navController) }
                 composable(Screens.Cost.screenName) { ShowCost(navController) }

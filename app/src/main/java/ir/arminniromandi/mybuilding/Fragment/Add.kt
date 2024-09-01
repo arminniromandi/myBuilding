@@ -2,6 +2,7 @@ package ir.arminniromandi.mybuilding.Fragment
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,8 +18,10 @@ import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,22 +33,31 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import ir.arminniromandi.mybuilding.Activity.ui.theme.back
+import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor
+import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
+import ir.arminniromandi.mybuilding.Activity.ui.theme.primaryVariant
 import ir.arminniromandi.mybuilding.R
+import ir.arminniromandi.mybuilding.accessbility.DialogText
 import ir.arminniromandi.mybuilding.utils.Calculate
 import ir.arminniromandi.mybuilding.utils.date.CheckDate
 import ir.arminniromandi.mybuilding.utils.date.Date
 
+var showDialog = mutableStateOf(false)
 @Composable
 fun Add(
     navigate: NavHostController
 ) {
 
+    if (showDialog.value)
+        ShowDialog(navigate = navigate)
 
     Column(
         Modifier
@@ -57,7 +69,7 @@ fun Add(
         if (CheckDate(context = LocalContext.current).getAndCheck(Date())) {
             View(navigate = navigate)
         } else {
-            ShowDialog(navigate = navigate)
+          showDialog.value = true
         }
 
     }
@@ -70,19 +82,39 @@ private fun ShowDialog(navigate: NavHostController) {
     AlertDialog(
         onDismissRequest = { },
         confirmButton = {
-            Button(
-                onClick = {
-                    navigate.navigate("Home")
-                },
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start
             ) {
-                Text(text = "برگشت به خانه")
+                Button(
+                    onClick = {
+                        navigate.navigate("Home")
+                    },
+                    colors = androidx.compose.material.ButtonDefaults.buttonColors(
+                        backgroundColor = primaryVariant
+                    )
+                ) {
+                    Text(
+                        text = "برگشت به خانه" ,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.End,
+                        fontFamily = FontFamily(Font(R.font.yekanbakh)),
+                    )
+                }
             }
         },
         title = {
-            Text(text = "اخطار زمان اضافه کردن")
+            Text(text = "اخطار زمان اضافه کردن",
+                modifier = Modifier.fillMaxWidth(),
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.End,
+                fontFamily = FontFamily(Font(R.font.yekanbakh))
+                )
         },
         text = {
-            Text(text = "این ماه فقط میتوانید یک بار هزینه هارا اضافه کنید")
+            DialogText(text = "این ماه فقط میتوانید یک بار هزینه هارا اضافه کنید" , color = Color.DarkGray)
         }
     )
 
@@ -90,11 +122,12 @@ private fun ShowDialog(navigate: NavHostController) {
 }
 
 
+
 var costWater = 0
 
 
 @Composable
-fun OnboardingScreen(ContinueClick: () -> Unit) {
+fun OnboardingScreen(continueClick: () -> Unit) {
 
     Box(
         Modifier
@@ -109,8 +142,9 @@ fun OnboardingScreen(ContinueClick: () -> Unit) {
 
             Text(
                 color = Color.White,
-                text = "لطفا هزینه آب را تعیین کنید",
+                text = "لطفا هزینه آب را وارد کنید",
                 fontSize = 24.sp,
+                fontFamily = FontFamily(Font(R.font.yekanbakh)),
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
             )
 
@@ -122,8 +156,6 @@ fun OnboardingScreen(ContinueClick: () -> Unit) {
 
                 value = waterCost,
                 onValueChange = { waterCost = it },
-
-
 
                 modifier = Modifier
                     .padding(vertical = 8.dp, horizontal = 14.dp)
@@ -139,7 +171,7 @@ fun OnboardingScreen(ContinueClick: () -> Unit) {
                     Text(
                         "هزینه آب ساختمان",
                         modifier = Modifier.fillMaxWidth(),
-                        color = Color.Black,
+                        color = editTextColor_Text,
                         style = TextStyle(textDirection = TextDirection.Rtl)
                     )
                 },
@@ -157,7 +189,7 @@ fun OnboardingScreen(ContinueClick: () -> Unit) {
                     .clip(RoundedCornerShape(2.dp)),
 
                 onClick = {
-                    ContinueClick()
+                    continueClick()
                     costWater = waterCost.toInt()
                 }
             ) {
@@ -182,7 +214,7 @@ private fun View(navigate: NavHostController) {
 
     Surface(Modifier) {
         if (shouldShowOnboarding) {
-            OnboardingScreen() { shouldShowOnboarding = false }
+            OnboardingScreen { shouldShowOnboarding = false }
         } else {
             Column(
                 modifier = Modifier
@@ -193,6 +225,7 @@ private fun View(navigate: NavHostController) {
                 Text(
                     text = "هزینه های پیش آمده را اضافه کنید",
                     fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.yekanbakh)),
                     color = Color.White
                 )
                 BUnitTF(navigate = navigate)
@@ -206,27 +239,32 @@ private fun View(navigate: NavHostController) {
 @Composable
 fun BUnitTF(navigate: NavHostController) {
     var unit by remember {
-        mutableStateOf(2)
+        mutableIntStateOf(2)
     }
 
     var data by remember { mutableStateOf(List(unit) { "" }) }
+
 
     for (i in data.indices) {
         TextField(
             value = data[i],
             onValueChange = { newData ->
                 data = data.toMutableList().also { it[i] = newData }
-
             },
             modifier = Modifier
                 .padding(vertical = 8.dp, horizontal = 8.dp)
                 .fillMaxWidth(),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = editTextColor
+            ),
+
 
             label = {
                 Text(
                     "هزینه ${i + 1}",
                     style = TextStyle(
-                        textDirection = TextDirection.Rtl
+                        textDirection = TextDirection.Rtl,
+                        color = editTextColor_Text
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -278,9 +316,14 @@ fun BUnitTF(navigate: NavHostController) {
     val context = LocalContext.current
     Button(
         onClick = {
-            val totalData = data.map {
-                it.toInt()
-            }.sum()
+            //.map
+            val totalData = data.sumOf {
+                if (it.isEmpty()) {
+                    0
+                } else
+                    it.toInt()
+            }
+            //sum
 
 
             Calculate(context).calculateAll(costWater, totalData)

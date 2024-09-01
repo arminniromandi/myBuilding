@@ -111,7 +111,7 @@ fun Note() {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
-                // TODO: show a alert dialog
+
 
                 IconButton(
                     onClick = {
@@ -143,7 +143,7 @@ fun Note() {
 
                     Text(
                         modifier = Modifier.padding(end = 8.dp),
-                        text = "جدول مدیریت مشکلات",
+                        text = "یادداشت ها",
                         style = TextStyle(
                             fontFamily = FontFamily(
                                 Font(R.font.yekanbakh)

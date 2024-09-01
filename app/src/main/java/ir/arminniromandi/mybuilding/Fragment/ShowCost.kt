@@ -57,6 +57,7 @@ import ir.arminniromandi.mybuilding.Activity.ui.theme.customButton
 import ir.arminniromandi.mybuilding.Activity.ui.theme.primary
 import ir.arminniromandi.mybuilding.Activity.ui.theme.primaryVariant
 import ir.arminniromandi.mybuilding.R
+import ir.arminniromandi.mybuilding.accessbility.DialogText
 import ir.arminniromandi.mybuilding.dataBase.DBHandler
 import ir.arminniromandi.mybuilding.dataBase.dataModel.CostForUnit
 import ir.arminniromandi.mybuilding.dataBase.dataModel.CostInMonth
@@ -268,7 +269,6 @@ private fun ShowCostByMouth(cost: Array<CostForUnit>) {
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-
             .background(back)
             .padding(vertical = 24.dp, horizontal = 24.dp)
     ) {
@@ -409,9 +409,6 @@ private fun CostItems(data: CostForUnit, index: Int) {
 }
 
 
-
-
-
 @Composable
 private fun Dialog(
     costInMonth: CostInMonth
@@ -424,10 +421,12 @@ private fun Dialog(
         backgroundColor = Color.DarkGray,
         confirmButton = {
 
-            Row (
-                modifier = Modifier.fillMaxWidth().padding(8.dp),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
                 horizontalArrangement = Arrangement.Start
-                ){
+            ) {
 
                 Button(
                     colors = ButtonDefaults.buttonColors(
@@ -475,17 +474,5 @@ private fun Dialog(
 
 }
 
-@Composable
-private fun DialogText(text: String) {
-    Text(
-        text = text,
-        fontSize = 15.sp,
-        color = Color.LightGray,
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.End
-    )
-
-
-}
 
 
