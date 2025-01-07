@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import ir.arminniromandi.mybuilding.dataBase.DBHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancelFutureOnCompletion
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -31,7 +30,7 @@ class MainViewModel(private val application: Application) :AndroidViewModel(appl
                 val db = DBHandler.getDataBase(context = application.baseContext)
                 db.buildingDao().getBData()
             }
-            if (count.isEmpty())
+            if (count == 0)
                 _isInsert.value = true
             else
                 _isInsert.value = false

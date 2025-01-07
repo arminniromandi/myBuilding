@@ -20,11 +20,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.outlined.AddCircle
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -47,14 +47,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ir.arminniromandi.mybuilding.Activity.ui.theme.MyBuildingTheme
-import ir.arminniromandi.mybuilding.Fragment.Add
-import ir.arminniromandi.mybuilding.Fragment.BottomNavItem
-import ir.arminniromandi.mybuilding.Fragment.EditUserUnit
-import ir.arminniromandi.mybuilding.Fragment.Home
-import ir.arminniromandi.mybuilding.Fragment.Note
-import ir.arminniromandi.mybuilding.Fragment.Screens
-import ir.arminniromandi.mybuilding.Fragment.ShowBUnit
-import ir.arminniromandi.mybuilding.Fragment.ShowCost
+import ir.arminniromandi.mybuilding.Fragment.HomeScreens
+import ir.arminniromandi.mybuilding.Fragment.home.Add
+import ir.arminniromandi.mybuilding.Fragment.home.BottomNavItem
+import ir.arminniromandi.mybuilding.Fragment.home.Home
+import ir.arminniromandi.mybuilding.Fragment.home.Note
+import ir.arminniromandi.mybuilding.Fragment.home.ShowBUnit
+import ir.arminniromandi.mybuilding.Fragment.home.ShowCost
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.viewModel.MainViewModel
 
@@ -75,6 +74,8 @@ class MainActivity : ComponentActivity() {
 
 
 
+
+
         setContent {
             MyBuildingTheme {
 
@@ -82,8 +83,6 @@ class MainActivity : ComponentActivity() {
                 SideEffect {
                     systemUiController.setSystemBarsColor(Color.Black)
                 }
-
-
 
                 Column(
                     Modifier.background(Color.Black)
@@ -108,8 +107,8 @@ class MainActivity : ComponentActivity() {
             BottomNavItem(
                 name = "Note",
                 text = "یادداشت",
-                selectedIcon = Icons.Filled.Info,
-                unSelectedIcon = Icons.Outlined.Info,
+                selectedIcon = Icons.Filled.Edit,
+                unSelectedIcon = Icons.Outlined.Edit,
             ),
             BottomNavItem(
                 name = "Add",
@@ -135,7 +134,7 @@ class MainActivity : ComponentActivity() {
                             Box(
                                 Modifier
                                     .clickable {
-                                        navController.navigate(Screens.Add.screenName) {
+                                        navController.navigate(HomeScreens.Add.screenName) {
                                             popUpTo(navController.graph.startDestinationId)
                                             launchSingleTop = true
                                         }
@@ -201,7 +200,7 @@ class MainActivity : ComponentActivity() {
 
             NavHost(
                 navController = navController,
-                startDestination = Screens.Home.screenName,
+                startDestination = HomeScreens.Home.screenName,
                 enterTransition = {
                     slideInHorizontally(
                         initialOffsetX = { it },
@@ -213,12 +212,11 @@ class MainActivity : ComponentActivity() {
 
                 modifier = Modifier.padding(it)
             ) {
-                composable(Screens.Home.screenName) { Home(navController, myViewModel) }
-                composable(Screens.Note.screenName) { Note() }
-                composable(Screens.Add.screenName) { Add(navController) }
-                composable(Screens.ShowBUnit.screenName) { ShowBUnit() }
-                composable(Screens.Edit.screenName) { EditUserUnit(navController) }
-                composable(Screens.Cost.screenName) { ShowCost(navController) }
+                composable(HomeScreens.Home.screenName) { Home(navController, myViewModel) }
+                composable(HomeScreens.Note.screenName) { Note() }
+                composable(HomeScreens.Add.screenName) { Add(navController) }
+                composable(HomeScreens.ShowBUnit.screenName) { ShowBUnit() }
+                composable(HomeScreens.Cost.screenName) { ShowCost(navController) }
             }
         }
 

@@ -2,9 +2,19 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.devtools.ksp")
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
+
+    signingConfigs {
+        create("release") {
+            storeFile = file("C:\\Users\\ARMIN141\\AndroidStudioProjects\\myBuilding\\myKey.jks")
+            storePassword = "@Arminn141"
+            keyAlias = "key0"
+            keyPassword = "@Armin141"
+        }
+    }
     namespace = "ir.arminniromandi.mybuilding"
     compileSdk = 34
 
@@ -12,8 +22,8 @@ android {
         applicationId = "ir.arminniromandi.mybuilding"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -28,14 +38,15 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "21"
     }
     buildFeatures {
         compose = true

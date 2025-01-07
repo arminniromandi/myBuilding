@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.Fragment
+package ir.arminniromandi.mybuilding.Fragment.home
 
 
 import androidx.compose.foundation.background
@@ -57,7 +57,7 @@ import ir.arminniromandi.mybuilding.Activity.ui.theme.customButton
 import ir.arminniromandi.mybuilding.Activity.ui.theme.primary
 import ir.arminniromandi.mybuilding.Activity.ui.theme.primaryVariant
 import ir.arminniromandi.mybuilding.R
-import ir.arminniromandi.mybuilding.accessbility.DialogText
+import ir.arminniromandi.mybuilding.customUi.DialogText
 import ir.arminniromandi.mybuilding.dataBase.DBHandler
 import ir.arminniromandi.mybuilding.dataBase.dataModel.CostForUnit
 import ir.arminniromandi.mybuilding.dataBase.dataModel.CostInMonth
@@ -93,8 +93,9 @@ fun ShowCost(navigate: NavHostController) {
     val clickedMouth = remember {
         mutableStateOf("")
     }
-    if (show.value) {
 
+
+    if (show.value) {
         LaunchedEffect(key1 = Unit) {
             DBHandler.getDataBase(context).buildingDao().getCostWithMonth(clickedMouth.value)
                 .collect { fetchedCost ->
@@ -145,6 +146,18 @@ fun ShowCost(navigate: NavHostController) {
 
                     if (show.value) {
                         dialog.value = true
+                    } else {
+
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val db = DBHandler
+                                .getDataBase(context)
+                                .buildingDao()
+
+                            db.deleteCost()
+                            db.deleteMounth()
+
+                        }
+
                     }
 
                 },

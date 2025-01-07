@@ -6,11 +6,14 @@ val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)
 
+val transparent = Color(0x00000000)
+
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF2A0083)
 val Pink40 = Color(0xFF7D5260)
 
 val backIntro = Color(0xFF000C3B)
+val statusBarIntro = Color(0xFF0E226F)
 val primary = Color(0xFF001AFF)
 val primaryVariant = Color(0xFF027FF2)
 val back = Color(0xFF121212)
@@ -24,7 +27,7 @@ var checkBox = Color(0xFF4EBD00)
 val cyan1 = Color(0xFF37B7C3)
 val cyan2 = Color(0xFF088395)
 
-val backDialog = Color(0x9E524949)
+val backDialog = Color(0xE9524949)
 
 val cyanLight = Color(0xFF5DD7E9)
 

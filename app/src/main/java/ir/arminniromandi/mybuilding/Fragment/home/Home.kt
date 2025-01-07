@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.Fragment
+package ir.arminniromandi.mybuilding.Fragment.home
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -15,10 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -40,6 +38,7 @@ import androidx.navigation.NavHostController
 import ir.arminniromandi.mybuilding.Activity.ui.theme.back
 import ir.arminniromandi.mybuilding.Activity.ui.theme.cyan1
 import ir.arminniromandi.mybuilding.Activity.ui.theme.cyan2
+import ir.arminniromandi.mybuilding.Fragment.HomeScreens
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.customUi.TextInBox
 import ir.arminniromandi.mybuilding.utils.date.Const
@@ -153,26 +152,24 @@ fun Home(navigate: NavHostController, viewModel: MainViewModel) {
 
 
         ) {
-            TextInBox(
-                "اضافه کردن شارژ جدید", Icons.Outlined.Add
-            ) { navigate.navigate(Screens.Add.screenName) }
+
+
+
 
             TextInBox(
                 "نمایش تمامی شارژ ", Icons.Outlined.DateRange
-            ) { navigate.navigate(Screens.Cost.screenName) }
+            ) { navigate.navigate(HomeScreens.Cost.screenName) }
 
             TextInBox(text = "نمایش تمامی افراد ", icon = Icons.Default.Face) {
-                navigate.navigate(Screens.ShowBUnit.screenName)
+                navigate.navigate(HomeScreens.ShowBUnit.screenName)
             }
-            TextInBox(text = "ویرایش سریع افراد ", icon = Icons.Default.Edit) {
-                navigate.navigate(Screens.Edit.screenName)
-            }
-
 
             TextInBox(
                 "اضافه کردن یادداشت",
                 Icons.Filled.Info
-            ) { navigate.navigate(Screens.Note.screenName) }
+            ) { navigate.navigate(HomeScreens.Note.screenName) }
+
+
 
 
         }

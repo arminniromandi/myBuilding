@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.Fragment
+package ir.arminniromandi.mybuilding.Fragment.home
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -44,21 +44,20 @@ import ir.arminniromandi.mybuilding.Activity.ui.theme.back
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
 import ir.arminniromandi.mybuilding.Activity.ui.theme.primaryVariant
+import ir.arminniromandi.mybuilding.Fragment.HomeScreens
 import ir.arminniromandi.mybuilding.R
-import ir.arminniromandi.mybuilding.accessbility.DialogText
+import ir.arminniromandi.mybuilding.customUi.DialogText
 import ir.arminniromandi.mybuilding.utils.Calculate
 import ir.arminniromandi.mybuilding.utils.date.CheckDate
 import ir.arminniromandi.mybuilding.utils.date.Date
 
-var showDialog = mutableStateOf(false)
+private var showDialog = mutableStateOf(false)
 @Composable
 fun Add(
     navigate: NavHostController
 ) {
 
-    if (showDialog.value)
-        ShowDialog(navigate = navigate)
-
+    
     Column(
         Modifier
             .fillMaxHeight()
@@ -69,8 +68,9 @@ fun Add(
         if (CheckDate(context = LocalContext.current).getAndCheck(Date())) {
             View(navigate = navigate)
         } else {
-          showDialog.value = true
+            ShowDialog(navigate = navigate)
         }
+
 
     }
 
@@ -88,6 +88,7 @@ private fun ShowDialog(navigate: NavHostController) {
             ) {
                 Button(
                     onClick = {
+                        showDialog.value = false
                         navigate.navigate("Home")
                     },
                     colors = androidx.compose.material.ButtonDefaults.buttonColors(
@@ -257,6 +258,9 @@ fun BUnitTF(navigate: NavHostController) {
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = editTextColor
             ),
+            textStyle = TextStyle(
+                color = Color.White
+            ),
 
 
             label = {
@@ -327,7 +331,7 @@ fun BUnitTF(navigate: NavHostController) {
 
 
             Calculate(context).calculateAll(costWater, totalData)
-            navigate.navigate(Screens.Home.screenName)
+            navigate.navigate(HomeScreens.Home.screenName)
 
 
         },

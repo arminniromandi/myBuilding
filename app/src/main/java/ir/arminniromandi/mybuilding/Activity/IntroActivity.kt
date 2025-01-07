@@ -8,17 +8,20 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ir.arminniromandi.mybuilding.Activity.ui.theme.MyBuildingTheme
-import ir.arminniromandi.mybuilding.IntroFragment.GetBValue
-import ir.arminniromandi.mybuilding.IntroFragment.Intro
-import ir.arminniromandi.mybuilding.IntroFragment.SaveData
-import ir.arminniromandi.mybuilding.IntroFragment.ScreensIntro
+import ir.arminniromandi.mybuilding.Activity.ui.theme.statusBarIntro
+import ir.arminniromandi.mybuilding.Fragment.IntroFragment.GetInfo
+import ir.arminniromandi.mybuilding.Fragment.IntroFragment.Intro
+import ir.arminniromandi.mybuilding.Fragment.IntroFragment.SaveData
+import ir.arminniromandi.mybuilding.Fragment.ScreensIntro
 
 class IntroActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +30,11 @@ class IntroActivity : ComponentActivity() {
 
         setContent {
             MyBuildingTheme {
+                val systemUiController = rememberSystemUiController()
+                SideEffect {
+                    systemUiController.setSystemBarsColor(statusBarIntro)
+                }
+
                 Fragment()
             }
         }
@@ -58,7 +66,7 @@ class IntroActivity : ComponentActivity() {
             ) {
                 composable(ScreensIntro.Intro.screenName) { Intro(navController) }
                 composable(ScreensIntro.SaveData.screenName) { SaveData(  unit) }
-                composable(ScreensIntro.GetBValue.screenName) { GetBValue(navController , unit) }
+                composable(ScreensIntro.GetBValue.screenName) { GetInfo(navController , unit) }
             }
 
 

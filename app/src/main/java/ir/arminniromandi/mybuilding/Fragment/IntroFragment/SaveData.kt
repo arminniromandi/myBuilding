@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.IntroFragment
+package ir.arminniromandi.mybuilding.Fragment.IntroFragment
 
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material3.Button
@@ -28,22 +29,29 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ir.arminniromandi.mybuilding.Activity.MainActivity
+import ir.arminniromandi.mybuilding.Activity.ui.theme.backDialog
 import ir.arminniromandi.mybuilding.Activity.ui.theme.backIntro
+import ir.arminniromandi.mybuilding.Activity.ui.theme.customButton
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
 import ir.arminniromandi.mybuilding.R
+import ir.arminniromandi.mybuilding.customUi.DialogText
 import ir.arminniromandi.mybuilding.dataBase.DBHandler
 import ir.arminniromandi.mybuilding.dataBase.dataModel.BUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+
+private val showDialog = mutableStateOf(false)
+
 @Composable
 fun SaveData(
-
     unit: MutableState<Int>
 ) {
     val context = LocalContext.current
+
+    val isValidData = remember { mutableStateOf(false) }
 
     var data by remember { mutableStateOf(List(unit.value) { "" }) } // Initialize with 4 empty strings
 
@@ -51,10 +59,12 @@ fun SaveData(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(backIntro)
-        ,
+            .background(backIntro),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if (showDialog.value)
+            ShowDialog(showDialog)
+
 
 
         for (i in data.indices) {
@@ -69,12 +79,13 @@ fun SaveData(
                     backgroundColor = editTextColor
                 ),
                 textStyle = TextStyle(
-                    textDirection = TextDirection.Rtl ,
+                    textDirection = TextDirection.Rtl,
                     color = Color.White
                 ),
                 modifier = Modifier
                     .padding(vertical = 8.dp, horizontal = 16.dp)
                     .fillMaxWidth(),
+                isError = if (data[i].isNullOrBlank()) true else false,
 
                 label = {
                     Text(
@@ -97,28 +108,92 @@ fun SaveData(
 
         Button(
             onClick = {
-                val allUnit = data.map { it.toInt() }
-                CoroutineScope(Dispatchers.IO).launch {
-                    val dao = DBHandler.getDataBase(context).buildingDao()
-                    allUnit.forEach {
-                        dao.addUsers(BUser(U_Unit = it))
+                val allUnit = data.map {
+                    if (it.isNullOrBlank()) null else it.toInt()
+                 }
+
+                  allUnit.forEach { intData ->
+                    if (intData == null) {
+                        showDialog.value = true
                     }
+                      if (!(intData == null))
+                          isValidData.value = true
+
+                }
+
+                if (isValidData.value){
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val dao = DBHandler.getDataBase(context).buildingDao()
+                        allUnit.forEach {
+                            dao.addUsers(BUser(U_Unit = it!!))
+                        }
+                    }
+
+
+                    context.startActivity(Intent(context, MainActivity::class.java))
                 }
 
 
-                context.startActivity(Intent(context, MainActivity::class.java))
+
 
             },
+            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                containerColor = customButton
+            ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp)
+                .padding(horizontal = 12.dp)
         ) {
             Text(
                 text = "ادامه",
-                style = TextStyle(fontSize = 20.sp, fontFamily = FontFamily(Font(R.font.yekanbakh)))
+                color = Color.White,
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.yekanbakhr))
+                )
             )
         }
+
     }
 
+
+}
+
+@Composable
+private fun ShowDialog(state: MutableState<Boolean>) {
+
+    AlertDialog(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp),
+        onDismissRequest = { state.value = false },
+        buttons = {
+            Button(
+                modifier = Modifier.padding(start = 12.dp , bottom = 12.dp),
+                onClick = { state.value = false },
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = customButton)
+            ) {
+                Text(
+                    text = "اوکی",
+                    color = Color.White,
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        fontFamily = FontFamily(Font(R.font.yekanbakhr))
+                    )
+
+                )
+
+            }
+        },
+        backgroundColor = backDialog,
+        title = {
+            DialogText(text = "مشکل در ورود داده ها", size = 20 , color = Color.White )
+
+        },
+        text = {
+            DialogText(text = "لطفا تمامی واحد ها را به درستی وارد کنید" , size = 18)
+        }
+    )
 
 }
