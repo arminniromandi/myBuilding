@@ -16,18 +16,24 @@ open class Calculate(val context: Context) {
         water: Int,
         allCost: Int
     ) {
-
-
         CoroutineScope(Dispatchers.IO).launch {
             val db = DBHandler.getDataBase(context).buildingDao()
-            val bUnit = db.getBData()[0].B_Unit
 
+            // get all data
             val allUnit = db.getUserUnit()
 
-            val ab = (water.toFloat() / bUnit.toFloat())
-            val cost = allCost / bUnit.toFloat()
-            val sum = water + allCost
+            //get  B unit count
+            val unitCount = db.getBData()
 
+            //get all Count BUnit
+            val bCount = db.getBUnitCount()
+
+            // get all of unit and sum it
+            val ab = (water / unitCount)
+            val cost = allCost / bCount
+
+                    //some more data
+            val sum = water + allCost
             db.insertMonth(
                 CostInMonth(
                     C_MonthId = 0,
@@ -49,7 +55,7 @@ open class Calculate(val context: Context) {
                         db.insertCost(
                             CostForUnit(
                                 B_id = 0,
-                                C_Cost = all.toInt().toString(),
+                                C_Cost = Math.round(all.toDouble()).toString(),
                                 C_Unit = unit,
                                 isPaid = false,
                                 C_MonthAndYear = Date().getDateForCalculate()

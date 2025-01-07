@@ -34,8 +34,14 @@ interface BuildingDao {
 
 
 
-    @Query("SELECT * FROM ${DBHandler.Building_TABLE}")
-    fun getBData():List<Building>
+    @Query("SELECT SUM(U_Unit) FROM ${DBHandler.User_TABLE}")
+    fun getBData():Int
+
+
+    @Query("SELECT COUNT(*) FROM ${DBHandler.User_TABLE}")
+    fun getBUnitCount():Int
+
+
 
     @Query("SELECT B_HostName FROM ${DBHandler.Building_TABLE}")
     fun getBHostName():String
@@ -72,5 +78,14 @@ interface BuildingDao {
 
     @Query("SELECT * FROM ${DBHandler.User_TABLE}")
     fun getAllUsers():Flow<List<BUser>>
+
+
+    @Query("DELETE FROM ${DBHandler.CostForUnit_TABLE}")
+    fun deleteCost()
+
+
+    @Query("DELETE FROM ${DBHandler.CostInMounth_TABLE}")
+    fun deleteMounth()
+
 
 }

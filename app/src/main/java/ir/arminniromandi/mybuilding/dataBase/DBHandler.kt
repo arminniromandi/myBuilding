@@ -4,13 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import ir.arminniromandi.mybuilding.dataBase.dao.BuildingDao
 import ir.arminniromandi.mybuilding.dataBase.dao.NoteDao
 import ir.arminniromandi.mybuilding.dataBase.dataModel.BUser
+import ir.arminniromandi.mybuilding.dataBase.dataModel.Building
 import ir.arminniromandi.mybuilding.dataBase.dataModel.CostForUnit
 import ir.arminniromandi.mybuilding.dataBase.dataModel.CostInMonth
 import ir.arminniromandi.mybuilding.dataBase.dataModel.NoteProblem
-import ir.arminniromandi.mybuilding.dataBase.dao.BuildingDao
-import ir.arminniromandi.mybuilding.dataBase.dataModel.Building
 
 @Database(
     entities =

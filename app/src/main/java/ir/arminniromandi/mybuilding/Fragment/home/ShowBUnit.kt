@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.Fragment
+package ir.arminniromandi.mybuilding.Fragment.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -267,7 +267,7 @@ private fun ShowDialog(unit: Int, count: Int) {
         ) {
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = unit.toString(),
+                text = "$unit : واحد",
                 fontSize = 24.sp,
                 color = Color.White,
                 fontFamily = FontFamily(Font(R.font.yekanbakh))

@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.IntroFragment
+package ir.arminniromandi.mybuilding.Fragment
 
 sealed class ScreensIntro (val screenName : String){
     data object Intro : ScreensIntro("Intro")

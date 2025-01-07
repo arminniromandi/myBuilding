@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.IntroFragment
+package ir.arminniromandi.mybuilding.Fragment.IntroFragment
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -47,6 +47,8 @@ import ir.arminniromandi.mybuilding.Activity.ui.theme.backIntro
 import ir.arminniromandi.mybuilding.Activity.ui.theme.customButton
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
+import ir.arminniromandi.mybuilding.Activity.ui.theme.transparent
+import ir.arminniromandi.mybuilding.Fragment.ScreensIntro
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.dataBase.DBHandler
 import ir.arminniromandi.mybuilding.dataBase.dataModel.Building
@@ -59,13 +61,13 @@ val h_name = mutableStateOf("")
 val unitOfB = mutableIntStateOf(0)
 
 @Composable
-fun GetBValue(
+fun GetInfo(
     navController: NavController,
     unit: MutableState<Int>
 ) {
 
     if (dialog.value)
-        Dialog(navController ,h_name.value , unitOfB.intValue)
+        Dialog(navController, h_name.value, unitOfB.intValue)
 
 
 
@@ -126,7 +128,10 @@ fun GetBValue(
                     color = Color.White
                 ),
                 colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = editTextColor
+                    backgroundColor = editTextColor,
+                    disabledIndicatorColor = transparent,
+                    focusedIndicatorColor = transparent,
+                    unfocusedIndicatorColor = transparent
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -201,7 +206,10 @@ fun GetBValue(
 
 
                 IconButton(
-                    onClick = { unitOfB.intValue-- },
+                    onClick = {
+                        if (unitOfB.intValue >= 1)
+                            unitOfB.intValue--
+                    },
                     modifier = Modifier
                         .clip(shape = RoundedCornerShape(12.dp))
                         .background(Color.Red)
@@ -267,107 +275,112 @@ fun GetBValue(
 
     }
 }
-    @Composable
-    private fun Dialog(
-        navController: NavController,
-        name: String,
-        unit: Int
-    ){
-        val context = LocalContext.current
 
-        AlertDialog(
-            onDismissRequest = { dialog.value = false },
-            backgroundColor = Color.DarkGray,
-            confirmButton = {
 
-                Row (
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    horizontalArrangement = Arrangement.Start
-                ){
+@Composable
+private fun Dialog(
+    navController: NavController,
+    name: String,
+    unit: Int
+) {
+    val context = LocalContext.current
 
-                    Button(
-                        colors = androidx.compose.material.ButtonDefaults.buttonColors(
-                            backgroundColor = customButton
+    AlertDialog(
+        onDismissRequest = { dialog.value = false },
+        backgroundColor = Color.DarkGray,
+        confirmButton = {
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.Start
+            ) {
+
+                Button(
+                    colors = androidx.compose.material.ButtonDefaults.buttonColors(
+                        backgroundColor = customButton
+                    ),
+                    onClick = {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            DBHandler.getDataBase(context)
+                                .buildingDao()
+                                .insertData(Building(B_id = 0, h_name.value, unitOfB.intValue))
+
+                        }
+
+                        navController.navigate(ScreensIntro.SaveData.screenName)
+                    }) {
+                    Text(
+                        text = "بله", fontSize = 16.sp, fontFamily = FontFamily(
+                            Font(R.font.yekanbakhr)
                         ),
-                        onClick = {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                DBHandler.getDataBase(context)
-                                    .buildingDao()
-                                    .insertData(Building(B_id = 0, h_name.value, unitOfB.intValue))
-
-                            }
-
-                            navController.navigate(ScreensIntro.SaveData.screenName)
-                        }) {
-                        Text(
-                            text = "بله", fontSize = 16.sp, fontFamily = FontFamily(
-                                Font(R.font.yekanbakhr)
-                            ),
-                            color = Color.White
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    Button(
-                        colors = androidx.compose.material.ButtonDefaults.buttonColors(
-                            backgroundColor = Color.White
-                        ),
-                        onClick = {
-                            dialog.value = false
-                        }) {
-                        Text(
-                            text = "خیر", fontSize = 16.sp, fontFamily = FontFamily(
-                                Font(R.font.yekanbakhr)
-                            ),
-                            color = Color.DarkGray
-                        )
-
-
-                    }
-
-
-                }
-            },
-            title = {
-                Text(
-                    text = "آیا از صحت داده ها مطمعن هستید",
-                    modifier = Modifier.fillMaxWidth(),
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.End,
-                    fontFamily = FontFamily(Font(R.font.yekanbakh)),
-
+                        color = Color.White
                     )
-            },
-            text = {
-                Column(horizontalAlignment = Alignment.End) {
-                    Text(text = "نام مدیر : $name" ,
-                        fontSize = 18.sp,
-                        color = Color.White,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.End
-                        )
-                    Text(text = "تعداد واحد : $unit",
-                        fontSize = 18.sp,
-                        color = Color.White,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.End)
+                }
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Button(
+                    colors = androidx.compose.material.ButtonDefaults.buttonColors(
+                        backgroundColor = Color.White
+                    ),
+                    onClick = {
+                        dialog.value = false
+                    }) {
+                    Text(
+                        text = "خیر", fontSize = 16.sp, fontFamily = FontFamily(
+                            Font(R.font.yekanbakhr)
+                        ),
+                        color = Color.DarkGray
+                    )
+
 
                 }
-            },
-            properties = DialogProperties(
-                usePlatformDefaultWidth = false
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
 
 
-        )
+            }
+        },
+        title = {
+            Text(
+                text = "آیا از صحت داده ها مطمعن هستید",
+                modifier = Modifier.fillMaxWidth(),
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.End,
+                fontFamily = FontFamily(Font(R.font.yekanbakh)),
 
-    }
+                )
+        },
+        text = {
+            Column(horizontalAlignment = Alignment.End) {
+                Text(
+                    text = "نام مدیر : $name",
+                    fontSize = 18.sp,
+                    color = Color.White,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.End
+                )
+                Text(
+                    text = "تعداد واحد : $unit",
+                    fontSize = 18.sp,
+                    color = Color.White,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.End
+                )
+
+            }
+        },
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp)
+
+
+    )
+
+}
 
 
 
