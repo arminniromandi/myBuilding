@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.Fragment
+package ir.arminniromandi.mybuilding.navigation.Screens
 
 sealed class HomeScreens (val screenName : String){
     data object Home : HomeScreens("Home")

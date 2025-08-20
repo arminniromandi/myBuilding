@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.Fragment.home
+package ir.arminniromandi.mybuilding.Screens.home
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -38,7 +38,7 @@ import androidx.navigation.NavHostController
 import ir.arminniromandi.mybuilding.Activity.ui.theme.back
 import ir.arminniromandi.mybuilding.Activity.ui.theme.cyan1
 import ir.arminniromandi.mybuilding.Activity.ui.theme.cyan2
-import ir.arminniromandi.mybuilding.Fragment.HomeScreens
+import ir.arminniromandi.mybuilding.navigation.Screens.HomeScreens
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.customUi.TextInBox
 import ir.arminniromandi.mybuilding.utils.date.Const

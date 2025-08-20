@@ -1,14 +1,11 @@
 package ir.arminniromandi.mybuilding.Activity
 
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -27,34 +24,22 @@ import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ir.arminniromandi.mybuilding.Activity.ui.theme.MyBuildingTheme
-import ir.arminniromandi.mybuilding.Fragment.HomeScreens
-import ir.arminniromandi.mybuilding.Fragment.home.Add
-import ir.arminniromandi.mybuilding.Fragment.home.BottomNavItem
-import ir.arminniromandi.mybuilding.Fragment.home.Home
-import ir.arminniromandi.mybuilding.Fragment.home.Note
-import ir.arminniromandi.mybuilding.Fragment.home.ShowBUnit
-import ir.arminniromandi.mybuilding.Fragment.home.ShowCost
-import ir.arminniromandi.mybuilding.R
+import ir.arminniromandi.mybuilding.navigation.Screens.HomeScreens
+import ir.arminniromandi.mybuilding.model.BottomNavItem
+import ir.arminniromandi.mybuilding.model.NavBarItem
+import ir.arminniromandi.mybuilding.navigation.navHost.MainNavHost
 import ir.arminniromandi.mybuilding.viewModel.MainViewModel
 
 class MainActivity : ComponentActivity() {
@@ -63,23 +48,19 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        pref = getSharedPreferences("pref", Context.MODE_PRIVATE)
 
+        pref = getSharedPreferences("pref", MODE_PRIVATE)
         if (pref.getBoolean("showIntro", true)) {
             myViewModel.isInserted()
             if (myViewModel.isInsert.value == false)
                 startActivity(Intent(this, IntroActivity::class.java))
         }
 
-
-
-
-
-
         setContent {
             MyBuildingTheme {
 
                 val systemUiController = rememberSystemUiController()
+
                 SideEffect {
                     systemUiController.setSystemBarsColor(Color.Black)
                 }
@@ -87,7 +68,7 @@ class MainActivity : ComponentActivity() {
                 Column(
                     Modifier.background(Color.Black)
                 ) {
-                    BottomNav()
+                    Body()
                 }
             }
         }
@@ -95,7 +76,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun BottomNav() {
+    fun Body() {
         val navController = rememberNavController()
 
 
@@ -154,41 +135,10 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         } else {
-                            NavigationBarItem(
-                                selected = currentRoute == item.name,
-
-                                colors = NavigationBarItemDefaults.colors(
-                                    indicatorColor = Color(
-                                        0xFF1A237E
-                                    )
-                                ),
-                                onClick = {
-                                    navController.navigate(item.name) {
-                                        popUpTo(navController.graph.startDestinationId)
-                                        launchSingleTop = true
-                                    }
-                                },
-                                icon = {
-
-                                    Icon(
-                                        imageVector = if (currentRoute == item.name) item.selectedIcon
-                                        else item.unSelectedIcon,
-                                        contentDescription = item.name,
-                                        tint = Color(0xFFBBDEFB)
-                                    )
-
-                                },
-                                label = {
-                                    Text(
-                                        text = item.text,
-                                        modifier = Modifier.padding(top = 8.dp),
-                                        style = TextStyle(
-                                            color = Color.White,
-                                            fontSize = 15.sp,
-                                            fontFamily = FontFamily(Font(R.font.yekanbakh))
-                                        )
-                                    )
-                                }
+                            NavBarItem(
+                                item = item,
+                                currentRoute = currentRoute,
+                                navController = navController
                             )
                         }
                     }
@@ -198,26 +148,11 @@ class MainActivity : ComponentActivity() {
             }
         ) { it ->
 
-            NavHost(
+            MainNavHost(
                 navController = navController,
-                startDestination = HomeScreens.Home.screenName,
-                enterTransition = {
-                    slideInHorizontally(
-                        initialOffsetX = { it },
-                        animationSpec = tween(
-                            durationMillis = 600
-                        ),
-                    )
-                },
-
-                modifier = Modifier.padding(it)
-            ) {
-                composable(HomeScreens.Home.screenName) { Home(navController, myViewModel) }
-                composable(HomeScreens.Note.screenName) { Note() }
-                composable(HomeScreens.Add.screenName) { Add(navController) }
-                composable(HomeScreens.ShowBUnit.screenName) { ShowBUnit() }
-                composable(HomeScreens.Cost.screenName) { ShowCost(navController) }
-            }
+                innerPadding = it,
+                myViewModel = myViewModel
+            )
         }
 
     }

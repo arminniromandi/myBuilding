@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.Fragment.home
+package ir.arminniromandi.mybuilding.Screens.home
 
 
 import androidx.compose.foundation.background

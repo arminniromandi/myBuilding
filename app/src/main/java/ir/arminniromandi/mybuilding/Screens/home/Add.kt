@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.Fragment.home
+package ir.arminniromandi.mybuilding.Screens.home
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -44,7 +44,7 @@ import ir.arminniromandi.mybuilding.Activity.ui.theme.back
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
 import ir.arminniromandi.mybuilding.Activity.ui.theme.primaryVariant
-import ir.arminniromandi.mybuilding.Fragment.HomeScreens
+import ir.arminniromandi.mybuilding.navigation.Screens.HomeScreens
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.customUi.DialogText
 import ir.arminniromandi.mybuilding.utils.Calculate

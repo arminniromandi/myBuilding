@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.Fragment.home
+package ir.arminniromandi.mybuilding.Screens.home
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility

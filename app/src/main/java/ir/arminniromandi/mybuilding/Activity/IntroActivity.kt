@@ -1,5 +1,6 @@
 package ir.arminniromandi.mybuilding.Activity
 
+import android.app.Fragment
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,6 +9,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -18,10 +20,11 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ir.arminniromandi.mybuilding.Activity.ui.theme.MyBuildingTheme
 import ir.arminniromandi.mybuilding.Activity.ui.theme.statusBarIntro
-import ir.arminniromandi.mybuilding.Fragment.IntroFragment.GetInfo
-import ir.arminniromandi.mybuilding.Fragment.IntroFragment.Intro
-import ir.arminniromandi.mybuilding.Fragment.IntroFragment.SaveData
-import ir.arminniromandi.mybuilding.Fragment.ScreensIntro
+import ir.arminniromandi.mybuilding.Screens.IntroFragment.GetInfo
+import ir.arminniromandi.mybuilding.Screens.IntroFragment.Intro
+import ir.arminniromandi.mybuilding.Screens.IntroFragment.SaveData
+import ir.arminniromandi.mybuilding.navigation.Screens.ScreensIntro
+import ir.arminniromandi.mybuilding.navigation.navHost.IntroNavHost
 
 class IntroActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,14 +38,14 @@ class IntroActivity : ComponentActivity() {
                     systemUiController.setSystemBarsColor(statusBarIntro)
                 }
 
-                Fragment()
+                Body()
             }
         }
     }
 
 
     @Composable
-    fun Fragment() {
+    fun Body() {
         val navController = rememberNavController()
         val unit = remember {
             mutableIntStateOf(0)
@@ -50,24 +53,11 @@ class IntroActivity : ComponentActivity() {
         Scaffold { it ->
 
 
-            NavHost(
+            IntroNavHost(
                 navController = navController,
-                startDestination = ScreensIntro.Intro.screenName,
-                enterTransition = { // When entering Screen2
-                    slideInHorizontally(
-                        initialOffsetX = { it },
-                        animationSpec = tween(
-                            durationMillis = 400
-                        ),
-                    )
-                },
-
-                modifier = Modifier.padding(it)
-            ) {
-                composable(ScreensIntro.Intro.screenName) { Intro(navController) }
-                composable(ScreensIntro.SaveData.screenName) { SaveData(  unit) }
-                composable(ScreensIntro.GetBValue.screenName) { GetInfo(navController , unit) }
-            }
+                innerPadding = it,
+                unit = unit
+            )
 
 
         }

@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.Fragment.IntroFragment
+package ir.arminniromandi.mybuilding.Screens.IntroFragment
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -48,7 +48,7 @@ import ir.arminniromandi.mybuilding.Activity.ui.theme.customButton
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
 import ir.arminniromandi.mybuilding.Activity.ui.theme.transparent
-import ir.arminniromandi.mybuilding.Fragment.ScreensIntro
+import ir.arminniromandi.mybuilding.navigation.Screens.ScreensIntro
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.dataBase.DBHandler
 import ir.arminniromandi.mybuilding.dataBase.dataModel.Building

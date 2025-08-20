@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ir.arminniromandi.mybuilding.dataBase.DBHandler
 import kotlinx.coroutines.Dispatchers
@@ -11,7 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class MainViewModel(private val application: Application) :AndroidViewModel(application){
+class MainViewModel(private val application: Application) : ViewModel(){
 
     private val _name = MutableLiveData("مدیر")
     private val _data = MutableLiveData(1)

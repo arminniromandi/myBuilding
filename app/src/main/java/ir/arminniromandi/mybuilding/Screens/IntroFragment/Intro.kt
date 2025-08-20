@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.Fragment.IntroFragment
+package ir.arminniromandi.mybuilding.Screens.IntroFragment
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.accompanist.pager.HorizontalPagerIndicator
-import ir.arminniromandi.mybuilding.Fragment.ScreensIntro
+import ir.arminniromandi.mybuilding.navigation.Screens.ScreensIntro
 import ir.arminniromandi.mybuilding.R
 import kotlinx.coroutines.launch
 
