@@ -50,23 +50,23 @@ import ir.arminniromandi.mybuilding.customUi.DialogText
 import ir.arminniromandi.mybuilding.utils.Calculate
 import ir.arminniromandi.mybuilding.utils.date.CheckDate
 import ir.arminniromandi.mybuilding.utils.date.Date
+import ir.arminniromandi.mybuilding.viewModel.MainViewModel
 
 private var showDialog = mutableStateOf(false)
 @Composable
 fun Add(
-    navigate: NavHostController
+    navigate: NavHostController,
+    viewModel: MainViewModel
 ) {
 
-    
     Column(
         Modifier
             .fillMaxHeight()
             .fillMaxWidth()
-            .background(back)
     ) {
 
         if (CheckDate(context = LocalContext.current).getAndCheck(Date())) {
-            View(navigate = navigate)
+            View(navigate = navigate , viewModel)
         } else {
             ShowDialog(navigate = navigate)
         }
@@ -77,7 +77,7 @@ fun Add(
 }
 
 @Composable
-private fun ShowDialog(navigate: NavHostController) {
+private  fun ShowDialog(navigate: NavHostController) {
 
     AlertDialog(
         onDismissRequest = { },
@@ -208,7 +208,7 @@ fun OnboardingScreen(continueClick: () -> Unit) {
 
 
 @Composable
-private fun View(navigate: NavHostController) {
+private fun View(navigate: NavHostController , viewModel: MainViewModel ) {
 
 
     var shouldShowOnboarding by remember { mutableStateOf(true) }
@@ -229,7 +229,9 @@ private fun View(navigate: NavHostController) {
                     fontFamily = FontFamily(Font(R.font.yekanbakh)),
                     color = Color.White
                 )
-                BUnitTF(navigate = navigate)
+                BUnitTF(navigate = navigate){
+                    viewModel.isChargeAdded()
+                }
 
             }
         }
@@ -238,7 +240,7 @@ private fun View(navigate: NavHostController) {
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
-fun BUnitTF(navigate: NavHostController) {
+inline fun BUnitTF(navigate: NavHostController, crossinline onAdded:()->Unit) {
     var unit by remember {
         mutableIntStateOf(2)
     }
@@ -331,6 +333,7 @@ fun BUnitTF(navigate: NavHostController) {
 
 
             Calculate(context).calculateAll(costWater, totalData)
+            onAdded()
             navigate.navigate(HomeScreens.Home.screenName)
 
 

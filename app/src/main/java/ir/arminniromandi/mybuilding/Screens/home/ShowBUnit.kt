@@ -2,6 +2,7 @@ package ir.arminniromandi.mybuilding.Screens.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,7 +22,9 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.EventNote
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
@@ -68,6 +71,8 @@ fun ShowBUnit() {
             allUser.value = data.toTypedArray()
         }
     }
+    val textColor = if (!isSystemInDarkTheme()) Color.Black else Color.White
+
 
 
 
@@ -76,7 +81,6 @@ fun ShowBUnit() {
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(back)
             .padding(vertical = 16.dp, horizontal = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -87,12 +91,10 @@ fun ShowBUnit() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(68.dp)
-                .drawBehind {
-                    drawRoundRect(
-                        primaryVariant,
-                        cornerRadius = CornerRadius(10.dp.toPx())
-                    )
-                },
+                .clip(RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.primary)
+
+            ,
             contentAlignment = Alignment.Center
         ) {
 
@@ -129,7 +131,7 @@ fun ShowBUnit() {
                 imageVector = Icons.Default.Edit,
                 contentDescription = "Edit",
                 modifier = Modifier.padding(start = 12.dp),
-                tint = Color.White
+                tint = textColor
             )
 
             Text(
@@ -139,7 +141,7 @@ fun ShowBUnit() {
                     fontFamily = FontFamily(
                         Font(R.font.yekanbakh)
                     ),
-                    color = Color.White
+                    color = textColor
                 )
             )
 
@@ -150,7 +152,7 @@ fun ShowBUnit() {
                     fontFamily = FontFamily(
                         Font(R.font.yekanbakh)
                     ),
-                    color = Color.White
+                    color = textColor
                 )
             )
 

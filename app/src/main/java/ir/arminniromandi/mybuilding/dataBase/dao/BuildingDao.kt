@@ -76,6 +76,10 @@ interface BuildingDao {
     @Query("SELECT * FROM ${DBHandler.CostInMounth_TABLE} ORDER BY CostInMonth_Id DESC LIMIT 1")
     fun getLastMonth():CostInMonth
 
+    @Query("SELECT COUNT(CostInMonth_Id) FROM ${DBHandler.CostInMounth_TABLE} where CostInMonthAndYear =:month ")
+    fun isLastMonthExist(month:String):Int
+
+
     @Query("SELECT * FROM ${DBHandler.User_TABLE}")
     fun getAllUsers():Flow<List<BUser>>
 

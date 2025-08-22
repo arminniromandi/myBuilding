@@ -15,14 +15,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.EventNote
+import androidx.compose.material.icons.automirrored.outlined.EventNote
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.EventNote
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.EventNote
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,11 +40,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import ir.arminniromandi.mybuilding.Activity.ui.theme.MyBuildingTheme
+import ir.arminniromandi.mybuilding.Activity.ui.theme.AppTheme
 import ir.arminniromandi.mybuilding.navigation.Screens.HomeScreens
 import ir.arminniromandi.mybuilding.model.BottomNavItem
 import ir.arminniromandi.mybuilding.model.NavBarItem
 import ir.arminniromandi.mybuilding.navigation.navHost.MainNavHost
+import ir.arminniromandi.mybuilding.utils.date.Date
 import ir.arminniromandi.mybuilding.viewModel.MainViewModel
 
 class MainActivity : ComponentActivity() {
@@ -56,8 +62,10 @@ class MainActivity : ComponentActivity() {
                 startActivity(Intent(this, IntroActivity::class.java))
         }
 
+
+
         setContent {
-            MyBuildingTheme {
+            AppTheme(darkTheme = false) {
 
                 val systemUiController = rememberSystemUiController()
 
@@ -66,7 +74,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 Column(
-                    Modifier.background(Color.Black)
+                    Modifier.background(MaterialTheme.colorScheme.background)
                 ) {
                     Body()
                 }
@@ -88,8 +96,8 @@ class MainActivity : ComponentActivity() {
             BottomNavItem(
                 name = "Note",
                 text = "یادداشت",
-                selectedIcon = Icons.Filled.Edit,
-                unSelectedIcon = Icons.Outlined.Edit,
+                selectedIcon = Icons.AutoMirrored.Filled.EventNote,
+                unSelectedIcon = Icons.AutoMirrored.Outlined.EventNote,
             ),
             BottomNavItem(
                 name = "Add",
@@ -108,7 +116,7 @@ class MainActivity : ComponentActivity() {
 
         Scaffold(
             bottomBar = {
-                NavigationBar(containerColor = Color(0xFF252525)) {
+                NavigationBar(containerColor = Color(0xFFF9FAFB)) {
                     item.forEachIndexed { index, item ->
                         if (index == 1) {
 
@@ -123,7 +131,7 @@ class MainActivity : ComponentActivity() {
                                     .padding(8.dp)
                                     .padding(bottom = 8.dp)
                                     .clip(shape = RoundedCornerShape(50))
-                                    .background(Color.Blue)
+                                    .background(MaterialTheme.colorScheme.primary)
                             ) {
                                 Icon(
                                     modifier = Modifier

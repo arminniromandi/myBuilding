@@ -39,7 +39,7 @@ fun MainNavHost(
     ) {
         composable(HomeScreens.Home.screenName) { Home(navController, myViewModel) }
         composable(HomeScreens.Note.screenName) { Note() }
-        composable(HomeScreens.Add.screenName) { Add(navController) }
+        composable(HomeScreens.Add.screenName) { Add(navController , myViewModel) }
         composable(HomeScreens.ShowBUnit.screenName) { ShowBUnit() }
         composable(HomeScreens.Cost.screenName) { ShowCost(navController) }
     }

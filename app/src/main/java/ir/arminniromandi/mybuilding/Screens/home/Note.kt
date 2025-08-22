@@ -13,6 +13,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -65,6 +66,9 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.SmallFloatingActionButton
 import ir.arminniromandi.mybuilding.Activity.ui.theme.back
 import ir.arminniromandi.mybuilding.Activity.ui.theme.primary
 import ir.arminniromandi.mybuilding.R
@@ -86,6 +90,8 @@ fun Note() {
 
     val openDialog = remember { mutableStateOf(false) }
     val editMessage = remember { mutableStateOf("") }
+    val textColor = if (!isSystemInDarkTheme()) Color.Black else Color.White
+
 
 
     Scaffold(
@@ -97,14 +103,12 @@ fun Note() {
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .background(back)
                 .padding(horizontal = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .background(back)
                     .padding(vertical = 16.dp)
                     ,
                 verticalAlignment = Alignment.CenterVertically,
@@ -124,17 +128,19 @@ fun Note() {
                     Icon(
                         painter = painterResource(id = R.drawable.trash),
                         contentDescription = "",
-                        tint = Color.White
+                        tint = textColor
                     )
                 }
+                val pr = colorScheme.primary
 
                 Box(modifier = Modifier
 
                     .fillMaxWidth(0.9f)
                     .height(68.dp)
+
                     .drawBehind {
                         drawRoundRect(
-                            primary,
+                            pr,
                             cornerRadius = CornerRadius(10.dp.toPx())
                         )
                     },
@@ -142,7 +148,7 @@ fun Note() {
                 ) {
 
                     Text(
-                        modifier = Modifier.padding(end = 8.dp),
+                        modifier = Modifier.padding(end = 12.dp),
                         text = "یادداشت ها",
                         style = TextStyle(
                             fontFamily = FontFamily(
@@ -212,6 +218,8 @@ fun ShowNote() {
 
 @Composable
 fun Items(data: NoteProblem) {
+    val textColor = if (!isSystemInDarkTheme()) Color.Black else Color.White
+
     val context = LocalContext.current
     Row(
         modifier = Modifier
@@ -238,19 +246,13 @@ fun Items(data: NoteProblem) {
                             )
                     }
                 },
-                colors = CheckboxDefaults.colors(
-                    checkedColor = primary,
-                    uncheckedColor = Color.White,
-                    checkmarkColor = Color.Black
-
-                ),
                 modifier = Modifier.size(width = 26.dp , height = 24.dp)
 
             )
 
             Text(
                 text = data.Note,
-                color = Color.White,
+                color = textColor,
                 fontSize = 24.sp,
                 style = TextStyle(
                     textDecoration = if (data.Checked) TextDecoration.LineThrough else TextDecoration.None
@@ -314,11 +316,10 @@ fun ItemUi(
 ) {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.End) {
 
-        FloatingActionButton(
+        SmallFloatingActionButton (
             onClick = {
                 openDialog.value = true
-            }, modifier = Modifier.size(45.dp),
-            containerColor = Color(0xFF27D300)
+            }, modifier = Modifier.size(45.dp)
 
         ) {
             Icon(imageVector = icon, contentDescription = "")

@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
@@ -38,9 +39,7 @@ fun RowScope.NavBarItem(
         selected = currentRoute == item.name,
 
         colors = NavigationBarItemDefaults.colors(
-            indicatorColor = Color(
-                0xFF1A237E
-            )
+            indicatorColor = MaterialTheme.colorScheme.secondaryContainer
         ),
         onClick = {
             navController.navigate(item.name) {
@@ -54,16 +53,16 @@ fun RowScope.NavBarItem(
                 imageVector = if (currentRoute == item.name) item.selectedIcon
                 else item.unSelectedIcon,
                 contentDescription = item.name,
-                tint = Color(0xFFBBDEFB)
+                tint = MaterialTheme.colorScheme.secondary
             )
 
         },
         label = {
             Text(
                 text = item.text,
-                modifier = Modifier.padding(top = 8.dp),
+                modifier = Modifier.padding(top = 2.dp),
                 style = TextStyle(
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
                     fontSize = 15.sp,
                     fontFamily = FontFamily(Font(R.font.yekanbakh))
                 )
