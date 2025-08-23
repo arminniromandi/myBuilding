@@ -42,6 +42,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -119,10 +120,10 @@ fun Home(navigate: NavHostController, viewModel: MainViewModel) {
     val name by viewModel.name.observeAsState()
     viewModel.getName()
 
-    val verticalGradient = listOf(cyan1, cyan2)
     Column(
         Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 24.dp)
             .padding(top = 18.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -246,7 +247,7 @@ fun Home(navigate: NavHostController, viewModel: MainViewModel) {
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
 private fun HomePreview() {
     Home(

@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
 
 
         setContent {
-            AppTheme(darkTheme = false) {
+            AppTheme {
 
                 val systemUiController = rememberSystemUiController()
 
@@ -116,7 +116,7 @@ class MainActivity : ComponentActivity() {
 
         Scaffold(
             bottomBar = {
-                NavigationBar(containerColor = Color(0xFFF9FAFB)) {
+                NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
                     item.forEachIndexed { index, item ->
                         if (index == 1) {
 

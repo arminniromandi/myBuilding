@@ -1,5 +1,7 @@
 package ir.arminniromandi.mybuilding.Activity.ui.theme
 
+import android.R.attr.fontFamily
+import android.R.attr.fontWeight
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -21,15 +23,17 @@ val Typography = Typography(
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
-
-    /* Other default text styles to override
     titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
+         fontFamily = FontFamily(
+            Font(R.font.yekanbakh)
+        ),
         fontWeight = FontWeight.Normal,
         fontSize = 22.sp,
         lineHeight = 28.sp,
         letterSpacing = 0.sp
-    ),
+    )
+    /* Other default text styles to override
+
     labelSmall = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Medium,
@@ -38,4 +42,5 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     )
     */
+
 )
