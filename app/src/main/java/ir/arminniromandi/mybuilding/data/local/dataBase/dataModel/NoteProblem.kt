@@ -1,9 +1,9 @@
-package ir.arminniromandi.mybuilding.dataBase.dataModel
+package ir.arminniromandi.mybuilding.data.local.dataBase.dataModel
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ir.arminniromandi.mybuilding.dataBase.DBHandler
+import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
 
 @Entity(tableName = DBHandler.Note_TABLE)
 data class NoteProblem(

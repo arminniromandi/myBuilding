@@ -35,7 +35,6 @@ import androidx.compose.material.contentColorFor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -66,14 +65,12 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.SmallFloatingActionButton
-import ir.arminniromandi.mybuilding.Activity.ui.theme.back
 import ir.arminniromandi.mybuilding.Activity.ui.theme.primary
 import ir.arminniromandi.mybuilding.R
-import ir.arminniromandi.mybuilding.dataBase.DBHandler
-import ir.arminniromandi.mybuilding.dataBase.dataModel.NoteProblem
+import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.NoteProblem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

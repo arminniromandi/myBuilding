@@ -20,6 +20,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -44,32 +45,33 @@ import ir.arminniromandi.mybuilding.Activity.ui.theme.back
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
 import ir.arminniromandi.mybuilding.Activity.ui.theme.primaryVariant
-import ir.arminniromandi.mybuilding.navigation.Screens.HomeScreens
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.customUi.DialogText
+import ir.arminniromandi.mybuilding.navigation.Screens.HomeScreens
 import ir.arminniromandi.mybuilding.utils.Calculate
 import ir.arminniromandi.mybuilding.utils.date.CheckDate
 import ir.arminniromandi.mybuilding.utils.date.Date
 import ir.arminniromandi.mybuilding.viewModel.MainViewModel
 
-private var showDialog = mutableStateOf(false)
 @Composable
 fun Add(
     navigate: NavHostController,
     viewModel: MainViewModel
 ) {
+    val context = LocalContext.current
 
+    val showDialog by remember{
+        mutableStateOf(!CheckDate(context).getAndCheck(Date()))
+    }
+    if(showDialog)
+        ShowDialog(navigate = navigate , showDialog)
     Column(
         Modifier
             .fillMaxHeight()
             .fillMaxWidth()
     ) {
 
-        if (CheckDate(context = LocalContext.current).getAndCheck(Date())) {
-            View(navigate = navigate , viewModel)
-        } else {
-            ShowDialog(navigate = navigate)
-        }
+        View(navigate = navigate , viewModel = viewModel)
 
 
     }
@@ -77,7 +79,7 @@ fun Add(
 }
 
 @Composable
-private  fun ShowDialog(navigate: NavHostController) {
+private  fun ShowDialog(navigate: NavHostController , showDialog : Boolean) {
 
     AlertDialog(
         onDismissRequest = { },
@@ -88,7 +90,7 @@ private  fun ShowDialog(navigate: NavHostController) {
             ) {
                 Button(
                     onClick = {
-                        showDialog.value = false
+                        showDialog = false
                         navigate.navigate("Home")
                     },
                     colors = androidx.compose.material.ButtonDefaults.buttonColors(
@@ -125,8 +127,6 @@ private  fun ShowDialog(navigate: NavHostController) {
 
 
 var costWater = 0
-
-
 @Composable
 fun OnboardingScreen(continueClick: () -> Unit) {
 

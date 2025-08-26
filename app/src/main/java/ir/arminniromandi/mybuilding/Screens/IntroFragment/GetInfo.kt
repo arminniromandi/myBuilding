@@ -50,8 +50,8 @@ import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
 import ir.arminniromandi.mybuilding.Activity.ui.theme.transparent
 import ir.arminniromandi.mybuilding.navigation.Screens.ScreensIntro
 import ir.arminniromandi.mybuilding.R
-import ir.arminniromandi.mybuilding.dataBase.DBHandler
-import ir.arminniromandi.mybuilding.dataBase.dataModel.Building
+import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.Building
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

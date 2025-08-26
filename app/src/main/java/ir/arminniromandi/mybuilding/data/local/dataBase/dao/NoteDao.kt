@@ -1,11 +1,11 @@
-package ir.arminniromandi.mybuilding.dataBase.dao
+package ir.arminniromandi.mybuilding.data.local.dataBase.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import ir.arminniromandi.mybuilding.dataBase.DBHandler
-import ir.arminniromandi.mybuilding.dataBase.dataModel.NoteProblem
+import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.NoteProblem
 import kotlinx.coroutines.flow.Flow
 
 @Dao

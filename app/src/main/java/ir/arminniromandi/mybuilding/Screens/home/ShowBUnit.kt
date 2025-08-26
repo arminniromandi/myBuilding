@@ -22,7 +22,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.EventNote
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -45,15 +44,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ir.arminniromandi.mybuilding.Activity.ui.theme.back
 import ir.arminniromandi.mybuilding.Activity.ui.theme.backDialog
 import ir.arminniromandi.mybuilding.Activity.ui.theme.customButton
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
-import ir.arminniromandi.mybuilding.Activity.ui.theme.primaryVariant
 import ir.arminniromandi.mybuilding.R
-import ir.arminniromandi.mybuilding.dataBase.DBHandler
-import ir.arminniromandi.mybuilding.dataBase.dataModel.BUser
+import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

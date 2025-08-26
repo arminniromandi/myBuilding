@@ -36,8 +36,8 @@ import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.customUi.DialogText
-import ir.arminniromandi.mybuilding.dataBase.DBHandler
-import ir.arminniromandi.mybuilding.dataBase.dataModel.BUser
+import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
