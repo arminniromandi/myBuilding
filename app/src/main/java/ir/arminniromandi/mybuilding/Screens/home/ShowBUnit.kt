@@ -248,7 +248,7 @@ fun ItemshowBUnit(users: BUser, onClick: (BUser) -> Unit) {
 }
 
 @Composable
-private fun ShowDialog(unit: Int, count: Int) {
+internal fun ShowDialog(unit: Int, count: Int) {
     val context = LocalContext.current
 
 

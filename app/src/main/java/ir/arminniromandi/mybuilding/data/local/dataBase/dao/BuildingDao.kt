@@ -46,9 +46,16 @@ interface BuildingDao {
     @Query("SELECT B_HostName FROM ${DBHandler.Building_TABLE}")
     fun getBHostName():String
 
+    @Query("SELECT COUNT(B_Id) FROM ${DBHandler.Building_TABLE}")
+    fun countOfBuilding():Int
+
 
     @Query("SELECT * FROM ${DBHandler.User_TABLE}")
     fun getUserUnit():List<BUser>
+
+
+
+
 
     @Query("SELECT * FROM ${DBHandler.User_TABLE}")
     fun getUserUnitForEdit():Flow<List<BUser>>

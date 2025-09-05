@@ -121,7 +121,6 @@ fun ShowCost(navigate: NavHostController) {
 
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(back)
     ) {
 
         Row(
@@ -272,7 +271,7 @@ fun ShowCost(navigate: NavHostController) {
                     Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ){
-                    Text("هیچ شارژی محاسبه نکرده اید برای محاسبه جدید روی + کلیک کنید" , style = MaterialTheme.typography.titleLarge , color = MaterialTheme.colorScheme.onBackground )
+                    Text("هیچ شارژی محاسبه نکرده اید برای محاسبه جدید روی + کلیک کنید" , style = MaterialTheme.typography.titleLarge , color = MaterialTheme.colorScheme.onBackground)
                 }
             }
 

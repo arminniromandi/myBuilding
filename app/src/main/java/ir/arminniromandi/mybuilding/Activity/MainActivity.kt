@@ -25,6 +25,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         myViewModel = MainViewModel(application , PreferencesManager(this))
+
         myViewModel.checkIsInserted{
             startActivity(Intent(this, IntroActivity::class.java))
         }

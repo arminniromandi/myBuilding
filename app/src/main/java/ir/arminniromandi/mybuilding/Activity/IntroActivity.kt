@@ -39,8 +39,6 @@ class IntroActivity : ComponentActivity() {
             mutableIntStateOf(0)
         }
         Scaffold { it ->
-
-
             IntroNavHost(
                 navController = navController,
                 innerPadding = it,

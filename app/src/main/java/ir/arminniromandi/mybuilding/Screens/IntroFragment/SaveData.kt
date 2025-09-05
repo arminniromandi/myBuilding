@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -59,6 +61,7 @@ fun SaveData(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
+            .verticalScroll(rememberScrollState())
             .background(backIntro),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

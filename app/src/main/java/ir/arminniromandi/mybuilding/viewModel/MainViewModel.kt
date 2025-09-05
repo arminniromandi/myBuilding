@@ -1,9 +1,10 @@
 package ir.arminniromandi.mybuilding.viewModel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
 import ir.arminniromandi.mybuilding.data.local.preferences.PreferencesManager
@@ -14,9 +15,9 @@ import kotlinx.coroutines.withContext
 
 
 class MainViewModel(
-    private val application: Application,
+    private val application: Context,
     val prefsManager : PreferencesManager
-    ) : AndroidViewModel(application){
+    ) : ViewModel(){
 
     private val db = DBHandler.getDataBase(application)
 
@@ -32,13 +33,12 @@ class MainViewModel(
 
     init {
         getName()
+        isInserted()
         isChargeAdded()
     }
 
     fun checkIsInserted(onAction : ()->Unit){
-        if (!prefsManager.checkState()) return
-
-            isInserted()
+        if (!prefsManager.checkState())
             if (isInsert.value == false)
                 onAction()
 
@@ -55,13 +55,20 @@ class MainViewModel(
 
     fun isInserted() {
         viewModelScope.launch {
-            val count = withContext(Dispatchers.IO) { // Perform database operation on IO thread
-
+            val count =  withContext(Dispatchers.IO) {
                 db.buildingDao().getBData()
             }
-            _isInsert.value = count == 0
 
 
+             _isInsert.value = count == 0
+            Log.i(
+                "test",
+                "count" +(count).toString()
+            )
+            Log.i(
+                "test",
+                "is Insert = " +isInsert.value.toString()
+            )
         }
     }
     fun isChargeAdded(){

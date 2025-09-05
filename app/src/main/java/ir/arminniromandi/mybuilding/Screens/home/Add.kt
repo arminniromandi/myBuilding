@@ -1,7 +1,6 @@
 package ir.arminniromandi.mybuilding.Screens.home
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,13 +13,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -41,7 +41,6 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import ir.arminniromandi.mybuilding.Activity.ui.theme.back
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
 import ir.arminniromandi.mybuilding.Activity.ui.theme.primaryVariant
@@ -53,6 +52,7 @@ import ir.arminniromandi.mybuilding.utils.date.CheckDate
 import ir.arminniromandi.mybuilding.utils.date.Date
 import ir.arminniromandi.mybuilding.viewModel.MainViewModel
 
+var showDialog = mutableStateOf(false)
 @Composable
 fun Add(
     navigate: NavHostController,
@@ -60,11 +60,11 @@ fun Add(
 ) {
     val context = LocalContext.current
 
-    val showDialog by remember{
-        mutableStateOf(!CheckDate(context).getAndCheck(Date()))
-    }
-    if(showDialog)
-        ShowDialog(navigate = navigate , showDialog)
+    showDialog.value = !CheckDate(context).getAndCheck(Date())
+
+    if(showDialog.value)
+        ShowDialog(navigate = navigate , showDialog.value)
+
     Column(
         Modifier
             .fillMaxHeight()
@@ -90,7 +90,6 @@ private  fun ShowDialog(navigate: NavHostController , showDialog : Boolean) {
             ) {
                 Button(
                     onClick = {
-                        showDialog = false
                         navigate.navigate("Home")
                     },
                     colors = androidx.compose.material.ButtonDefaults.buttonColors(
@@ -128,11 +127,10 @@ private  fun ShowDialog(navigate: NavHostController , showDialog : Boolean) {
 
 var costWater = 0
 @Composable
-fun OnboardingScreen(continueClick: () -> Unit) {
+fun GetCostWaterScreen(continueClick: () -> Unit) {
 
     Box(
         Modifier
-            .background(back)
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
@@ -142,13 +140,13 @@ fun OnboardingScreen(continueClick: () -> Unit) {
 
 
             Text(
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onBackground,
                 text = "لطفا هزینه آب را وارد کنید",
                 fontSize = 24.sp,
                 fontFamily = FontFamily(Font(R.font.yekanbakh)),
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
             )
-
+            
 
             var waterCost by remember {
                 mutableStateOf("")
@@ -164,7 +162,7 @@ fun OnboardingScreen(continueClick: () -> Unit) {
 
                 textStyle = TextStyle(
                     textDirection = TextDirection.Rtl,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onBackground
                 ),
 
 
@@ -172,7 +170,7 @@ fun OnboardingScreen(continueClick: () -> Unit) {
                     Text(
                         "هزینه آب ساختمان",
                         modifier = Modifier.fillMaxWidth(),
-                        color = editTextColor_Text,
+                        color = MaterialTheme.colorScheme.onBackground,
                         style = TextStyle(textDirection = TextDirection.Rtl)
                     )
                 },
@@ -188,6 +186,11 @@ fun OnboardingScreen(continueClick: () -> Unit) {
                     .padding(vertical = 16.dp, horizontal = 18.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(2.dp)),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MaterialTheme.colorScheme.primary
+                )
+
+                ,
 
                 onClick = {
                     continueClick()
@@ -196,6 +199,7 @@ fun OnboardingScreen(continueClick: () -> Unit) {
             ) {
                 Text(
                     "ادامه",
+                    color = MaterialTheme.colorScheme.onPrimary ,
                     fontSize = 22.sp,
                     fontFamily = FontFamily(
                         Font(R.font.yekanbakh)
@@ -215,19 +219,18 @@ private fun View(navigate: NavHostController , viewModel: MainViewModel ) {
 
     Surface(Modifier) {
         if (shouldShowOnboarding) {
-            OnboardingScreen { shouldShowOnboarding = false }
+            GetCostWaterScreen { shouldShowOnboarding = false }
         } else {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(back),
+                    .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = "هزینه های پیش آمده را اضافه کنید",
                     fontSize = 20.sp,
                     fontFamily = FontFamily(Font(R.font.yekanbakh)),
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 BUnitTF(navigate = navigate){
                     viewModel.isChargeAdded()
