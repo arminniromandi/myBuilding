@@ -1,5 +1,6 @@
 package ir.arminniromandi.mybuilding.Screens.IntroFragment
 
+import android.R.attr.name
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,9 +24,9 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,28 +49,32 @@ import ir.arminniromandi.mybuilding.Activity.ui.theme.customButton
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
 import ir.arminniromandi.mybuilding.Activity.ui.theme.transparent
-import ir.arminniromandi.mybuilding.navigation.Screens.ScreensIntro
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.Building
+import ir.arminniromandi.mybuilding.navigation.Screens.ScreensIntro
+import ir.arminniromandi.mybuilding.viewModel.IntroViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 private val dialog = mutableStateOf(false)
-val h_name = mutableStateOf("")
-val unitOfB = mutableIntStateOf(0)
+
 
 @Composable
 fun GetInfo(
     navController: NavController,
-    unit: MutableState<Int>
+    unit: MutableIntState,
+    viewModel: IntroViewModel
 ) {
+    
 
+    val h_name = remember {
+        mutableStateOf(viewModel.name.value ?: "")
+    }
     if (dialog.value)
-        Dialog(navController, h_name.value, unitOfB.intValue)
-
-
+        Dialog(navController, h_name.value, unit.intValue)
+    
 
     Box(
         Modifier
@@ -177,7 +182,7 @@ fun GetInfo(
             ) {
 
                 IconButton(
-                    onClick = { unitOfB.intValue++ },
+                    onClick = { unit.intValue++ },
                     modifier = Modifier
                         .clip(shape = RoundedCornerShape(12.dp))
                         .background(Color.Green)
@@ -189,7 +194,7 @@ fun GetInfo(
                     modifier = Modifier
                         .padding(horizontal = 12.dp)
                         .fillMaxWidth(0.3f),
-                    value = unitOfB.intValue.toString(),
+                    value = unit.intValue.toString(),
                     shape = RoundedCornerShape(50),
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = editTextColor
@@ -207,8 +212,8 @@ fun GetInfo(
 
                 IconButton(
                     onClick = {
-                        if (unitOfB.intValue >= 1)
-                            unitOfB.intValue--
+                        if (unit.intValue >= 1)
+                            unit.intValue--
                     },
                     modifier = Modifier
                         .clip(shape = RoundedCornerShape(12.dp))
@@ -239,7 +244,7 @@ fun GetInfo(
                         .padding(horizontal = 34.dp)
                         .padding(bottom = 12.dp),
                     onClick = {
-                        unit.value = unitOfB.intValue
+                        unit.intValue = unit.intValue
                         dialog.value = true
 
                     }) {
@@ -253,15 +258,15 @@ fun GetInfo(
 
                 Text(
                     text = "!! توجه",
-                    color = Color.Green,
+                    color = Color.White,
                     fontSize = 20.sp,
                     fontFamily = FontFamily(Font(R.font.yekanbakh))
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     text = "مدیر گرامی باید برای محاسبه هزینه آب  به تعداد واحد ساختمان نفرات هر واحد را اضافه کنید",
-                    color = Color.White,
-                    fontSize = 18.sp,
+                    color = Color.LightGray,
+                    fontSize = 16.sp,
                     textAlign = TextAlign.End,
                     modifier = Modifier.padding(horizontal = 24.dp),
                     fontFamily = FontFamily(Font(R.font.yekanbakh))
@@ -280,7 +285,7 @@ fun GetInfo(
 @Composable
 private fun Dialog(
     navController: NavController,
-    name: String,
+    h_name: String,
     unit: Int
 ) {
     val context = LocalContext.current
@@ -305,7 +310,7 @@ private fun Dialog(
                         CoroutineScope(Dispatchers.IO).launch {
                             DBHandler.getDataBase(context)
                                 .buildingDao()
-                                .insertData(Building(B_id = 0, h_name.value, unitOfB.intValue))
+                                .insertData(Building(B_id = 0, h_name, unit))
 
                         }
 

@@ -14,17 +14,21 @@ import ir.arminniromandi.mybuilding.Screens.IntroFragment.GetInfo
 import ir.arminniromandi.mybuilding.Screens.IntroFragment.Intro
 import ir.arminniromandi.mybuilding.Screens.IntroFragment.SaveData
 import ir.arminniromandi.mybuilding.navigation.Screens.ScreensIntro
+import ir.arminniromandi.mybuilding.viewModel.IntroViewModel
 
 @Composable
 fun IntroNavHost(
     navController: NavHostController,
+    viewModel : IntroViewModel,
     innerPadding: PaddingValues,
     unit: MutableIntState
 ) {
+
+
     NavHost(
         navController = navController,
-        startDestination = ScreensIntro.Intro.screenName,
-        enterTransition = { // When entering Screen2
+        startDestination = if (viewModel.isAdded.value) ScreensIntro.GetBValue.screenName else ScreensIntro.Intro.screenName,
+        enterTransition = {
             slideInHorizontally(
                 initialOffsetX = { it },
                 animationSpec = tween(
@@ -36,8 +40,8 @@ fun IntroNavHost(
         modifier = Modifier.padding(innerPadding)
     ) {
         composable(ScreensIntro.Intro.screenName) { Intro(navController) }
-        composable(ScreensIntro.SaveData.screenName) { SaveData(  unit) }
-        composable(ScreensIntro.GetBValue.screenName) { GetInfo(navController , unit) }
+        composable(ScreensIntro.SaveData.screenName) { SaveData(unit) }
+        composable(ScreensIntro.GetBValue.screenName) { GetInfo(navController , unit , viewModel) }
     }
 
 

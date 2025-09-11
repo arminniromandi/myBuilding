@@ -3,6 +3,7 @@ package ir.arminniromandi.mybuilding.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -13,8 +14,10 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ir.arminniromandi.mybuilding.Activity.ui.theme.AppTheme
 import ir.arminniromandi.mybuilding.Activity.ui.theme.statusBarIntro
 import ir.arminniromandi.mybuilding.navigation.navHost.IntroNavHost
+import ir.arminniromandi.mybuilding.viewModel.IntroViewModel
 
 class IntroActivity : ComponentActivity() {
+    private val viewModel :  IntroViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -38,9 +41,14 @@ class IntroActivity : ComponentActivity() {
         val unit = remember {
             mutableIntStateOf(0)
         }
+        if (viewModel.isAdded.value) {
+            navController
+        }
+
         Scaffold { it ->
             IntroNavHost(
                 navController = navController,
+                viewModel,
                 innerPadding = it,
                 unit = unit
             )
