@@ -1,19 +1,21 @@
 package ir.arminniromandi.mybuilding.viewModel
 
-import android.content.Context
+import android.app.Application
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class IntroViewModel(
-    context: Context
-) : ViewModel() {
+    context: Application
+) : AndroidViewModel(context) {
 
-    val db = DBHandler.getDataBase(context)
+    private val db = DBHandler.getDataBase(context)
 
 
     private val _name = MutableLiveData("")
@@ -25,27 +27,28 @@ class IntroViewModel(
     val isAdded = mutableStateOf(false)
 
 
-    init {
-        isUserAdded()
-        getOldData()
-    }
-
-
+    val scope = CoroutineScope(Dispatchers.IO)
     fun isUserAdded() {
-        viewModelScope.launch {
+        scope.launch() {
             val count = db.buildingDao().countOfBuilding()
-            isAdded.value = count != 0
+            withContext(Dispatchers.Main) {
+                isAdded.value = count != 0
+            }
+
         }
     }
 
     fun getOldData() {
 
-        viewModelScope.launch {
+        scope.launch(Dispatchers.IO) {
             val userName = db.buildingDao().getBHostName()
             val count = db.buildingDao().getBUnitCount()
 
-            _name.value = userName
-            _count.value = count
+            withContext(Dispatchers.Main) {
+                _name.value = userName
+                _count.value = count
+            }
+
 
         }
 

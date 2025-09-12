@@ -38,11 +38,13 @@ class IntroActivity : ComponentActivity() {
     @Composable
     fun Body() {
         val navController = rememberNavController()
-        val unit = remember {
-            mutableIntStateOf(0)
-        }
+        viewModel.isUserAdded()
+
         if (viewModel.isAdded.value) {
-            navController
+            viewModel.getOldData()
+        }
+        val unit = remember {
+            mutableIntStateOf(viewModel.count.value ?: 0)
         }
 
         Scaffold { it ->
