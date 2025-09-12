@@ -1,6 +1,7 @@
 package ir.arminniromandi.mybuilding.Screens.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -169,7 +170,7 @@ fun Home(navigate: NavHostController, viewModel: MainViewModel) {
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.primary // آبی ملایم‌تر
             ),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().clickable{ viewModel.getPayed(Date().getDateForCalculate(), Conststanse.PAID) }
         ) {
             Row(
                 modifier = Modifier

@@ -38,7 +38,7 @@ class MainViewModel(
     }
 
     fun checkIsInserted(onAction : ()->Unit){
-        if (!prefsManager.checkState())
+        if (prefsManager.checkState())
             if (isInsert.value == false)
                 onAction()
 

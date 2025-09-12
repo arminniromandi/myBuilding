@@ -1,6 +1,6 @@
 package ir.arminniromandi.mybuilding.Screens.IntroFragment
 
-import android.R.attr.name
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -72,6 +72,7 @@ fun GetInfo(
     val h_name = remember {
         mutableStateOf(viewModel.name.value ?: "")
     }
+    Log.i("test", h_name.value)
     if (dialog.value)
         Dialog(navController, h_name.value, unit.intValue)
     
@@ -359,7 +360,7 @@ private fun Dialog(
         text = {
             Column(horizontalAlignment = Alignment.End) {
                 Text(
-                    text = "نام مدیر : $name",
+                    text = "نام مدیر : $h_name",
                     fontSize = 18.sp,
                     color = Color.White,
                     modifier = Modifier.fillMaxWidth(),
