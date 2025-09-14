@@ -15,14 +15,15 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +39,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
@@ -45,7 +47,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import ir.arminniromandi.mybuilding.Activity.ui.theme.backIntro
-import ir.arminniromandi.mybuilding.Activity.ui.theme.customButton
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
 import ir.arminniromandi.mybuilding.Activity.ui.theme.transparent
@@ -67,7 +68,7 @@ fun GetInfo(
     unit: MutableIntState,
     viewModel: IntroViewModel
 ) {
-    
+
 
     val h_name = remember {
         mutableStateOf(viewModel.name.value ?: "")
@@ -75,7 +76,7 @@ fun GetInfo(
     Log.i("test", h_name.value)
     if (dialog.value)
         Dialog(navController, h_name.value, unit.intValue)
-    
+
 
     Box(
         Modifier
@@ -198,7 +199,11 @@ fun GetInfo(
                     value = unit.intValue.toString(),
                     shape = RoundedCornerShape(50),
                     colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = editTextColor
+                        backgroundColor = editTextColor,
+                        disabledIndicatorColor = transparent,
+                        focusedIndicatorColor = transparent,
+                        unfocusedIndicatorColor = transparent
+
                     ),
                     textStyle = TextStyle(
                         color = Color.White,
@@ -206,9 +211,12 @@ fun GetInfo(
                         textAlign = TextAlign.Center
                     ),
                     onValueChange = {
-
-
-                    })
+                        unit.intValue = it.toInt()
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.NumberPassword
+                    )
+                )
 
 
                 IconButton(
@@ -304,9 +312,6 @@ private fun Dialog(
             ) {
 
                 Button(
-                    colors = androidx.compose.material.ButtonDefaults.buttonColors(
-                        backgroundColor = customButton
-                    ),
                     onClick = {
                         CoroutineScope(Dispatchers.IO).launch {
                             DBHandler.getDataBase(context)
@@ -327,9 +332,7 @@ private fun Dialog(
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Button(
-                    colors = androidx.compose.material.ButtonDefaults.buttonColors(
-                        backgroundColor = Color.White
-                    ),
+
                     onClick = {
                         dialog.value = false
                     }) {
