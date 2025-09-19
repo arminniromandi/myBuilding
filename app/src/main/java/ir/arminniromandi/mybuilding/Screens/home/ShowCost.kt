@@ -3,6 +3,7 @@ package ir.arminniromandi.mybuilding.Screens.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,11 +53,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
-import ir.arminniromandi.mybuilding.Activity.ui.theme.back
 import ir.arminniromandi.mybuilding.Activity.ui.theme.checkBox
 import ir.arminniromandi.mybuilding.Activity.ui.theme.customButton
 import ir.arminniromandi.mybuilding.Activity.ui.theme.primary
-import ir.arminniromandi.mybuilding.Activity.ui.theme.primaryVariant
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.customUi.DialogText
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
@@ -80,7 +79,7 @@ fun ShowCost(navigate: NavHostController) {
 
     val cost = remember { mutableStateOf<Array<CostForUnit>>(emptyArray()) }
     val mouths = remember { mutableStateOf<Array<CostInMonth>>(emptyArray()) }
-
+    val color = if (isSystemInDarkTheme()) Color.White else Color.Black
 
 
 
@@ -118,49 +117,46 @@ fun ShowCost(navigate: NavHostController) {
 
     Column(
         modifier = Modifier
-
             .fillMaxWidth()
             .fillMaxHeight()
+            .background(MaterialTheme.colorScheme.background)
     ) {
 
         Row(
             Modifier
                 .fillMaxWidth()
-                .background(back)
                 .padding(vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
 
 
-            Box(modifier = Modifier
-                .fillMaxWidth(0.8f)
-                .height(68.dp)
-                .drawBehind {
-                    drawRoundRect(
-                        primaryVariant,
-                        cornerRadius = CornerRadius(10.dp.toPx())
-                    )
-                }
-                .clickable {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .height(68.dp)
+                    .clip(RoundedCornerShape(12.dp))
 
-                    if (show.value) {
-                        dialog.value = true
-                    } else {
+                    .background(MaterialTheme.colorScheme.primary)
+                    .clickable {
 
-                        CoroutineScope(Dispatchers.IO).launch {
-                            val db = DBHandler
-                                .getDataBase(context)
-                                .buildingDao()
+                        if (show.value) {
+                            dialog.value = true
+                        } else {
 
-                            db.deleteCost()
-                            db.deleteMounth()
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val db = DBHandler
+                                    .getDataBase(context)
+                                    .buildingDao()
+
+                                db.deleteCost()
+                                db.deleteMounth()
+
+                            }
 
                         }
 
-                    }
-
-                },
+                    },
                 contentAlignment = Alignment.Center
             ) {
 
@@ -191,7 +187,7 @@ fun ShowCost(navigate: NavHostController) {
                     imageVector = if (!show.value) Icons.Outlined.Home else Icons.Default.ArrowForward,
                     modifier = Modifier.size(45.dp),
                     contentDescription = "",
-                    tint = Color.White
+                    tint = color
                 )
             }
 
@@ -208,71 +204,79 @@ fun ShowCost(navigate: NavHostController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(),
+            horizontalAlignment = Alignment.CenterHorizontally
 
 
         ) {
             if (show.value) {
-                ShowCostByMouth(cost.value)
+                ShowCostByMouth(cost.value , color)
             } else {
 
-                if(mouths.value.isNotEmpty())
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    modifier = Modifier
-                        .padding(12.dp),
-                    state = state,
-                    reverseLayout = false
-                ) {
-                    items(mouths.value.size) {
-                        Box(
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                                .clip(RoundedCornerShape(8.dp))
-                                .background(primary)
-                                .clickable(true) {
-                                    index.intValue = it
-                                    clickedMouth.value = mouths.value[it].CostInMounthAndYear
-                                    show.value = true
-                                },
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Column {
-                                Text(
-                                    text = mouths.value[it].CostInMounthAndYear,
-                                    style = TextStyle(
-                                        color = Color.White,
-                                        fontFamily = FontFamily(Font(R.font.yekanbakh))
-                                    ),
-                                    fontSize = 24.sp,
-                                    modifier = Modifier.padding(top = 12.dp, bottom = 8.dp)
-                                )
+                if (mouths.value.isNotEmpty())
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        modifier = Modifier
+                            .padding(12.dp),
+                        state = state,
+                        reverseLayout = false
+                    ) {
+                        items(mouths.value.size) {
+                            Box(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(primary)
+                                    .clickable(true) {
+                                        index.intValue = it
+                                        clickedMouth.value = mouths.value[it].CostInMounthAndYear
+                                        show.value = true
+                                    },
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Column {
+                                    Text(
+                                        text = mouths.value[it].CostInMounthAndYear,
+                                        style = TextStyle(
+                                            color = Color.White,
+                                            fontFamily = FontFamily(Font(R.font.yekanbakh))
+                                        ),
+                                        fontSize = 24.sp,
+                                        modifier = Modifier.padding(top = 12.dp, bottom = 8.dp)
+                                    )
 
 
-                                Text(
-                                    text = format.format(mouths.value[it].sumOfAll),
-                                    style = TextStyle(
-                                        fontFamily = FontFamily(Font(R.font.yekanbakh)),
-                                        color = Color.White
-                                    ),
-                                    fontSize = 24.sp,
-                                    modifier = Modifier
-                                        .padding(bottom = 12.dp)
-                                        .align(Alignment.CenterHorizontally)
-                                )
+                                    Text(
+                                        text = format.format(mouths.value[it].sumOfAll),
+                                        style = TextStyle(
+                                            fontFamily = FontFamily(Font(R.font.yekanbakh)),
+                                            color = Color.White
+                                        ),
+                                        fontSize = 24.sp,
+                                        modifier = Modifier
+                                            .padding(bottom = 12.dp)
+                                            .align(Alignment.CenterHorizontally)
+                                    )
+                                }
+
                             }
 
                         }
 
                     }
-
-                }
-                else Row (
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ){
-                    Text("هیچ شارژی محاسبه نکرده اید برای محاسبه جدید روی + کلیک کنید" , style = MaterialTheme.typography.titleLarge , color = MaterialTheme.colorScheme.onBackground)
-                }
+                else
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            "هیچ شارژی محاسبه نکرده اید برای محاسبه جدید روی + کلیک کنید",
+                            style = MaterialTheme.typography.titleLarge,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
             }
 
         }
@@ -283,14 +287,14 @@ fun ShowCost(navigate: NavHostController) {
 
 
 @Composable
-private fun ShowCostByMouth(cost: Array<CostForUnit>) {
+private fun ShowCostByMouth(cost: Array<CostForUnit> , color : Color) {
 
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(back)
+
             .padding(vertical = 24.dp, horizontal = 24.dp)
     ) {
 
@@ -309,7 +313,7 @@ private fun ShowCostByMouth(cost: Array<CostForUnit>) {
                     fontFamily = FontFamily(
                         Font(R.font.yekanbakh)
                     ),
-                    color = Color.White
+                    color = color
                 )
             )
 
@@ -320,7 +324,7 @@ private fun ShowCostByMouth(cost: Array<CostForUnit>) {
                     fontFamily = FontFamily(
                         Font(R.font.yekanbakh)
                     ),
-                    color = Color.White
+                    color = color
                 )
             )
 
@@ -331,7 +335,7 @@ private fun ShowCostByMouth(cost: Array<CostForUnit>) {
                     fontFamily = FontFamily(
                         Font(R.font.yekanbakh)
                     ),
-                    color = Color.White
+                    color = color
                 )
             )
 

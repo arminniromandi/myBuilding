@@ -157,11 +157,12 @@ fun Home(navigate: NavHostController, viewModel: MainViewModel) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 MText(
-                    text = Date().getDate() , size = 22,color =  textColor.copy(0.9f)
+                    text = Date().getDate(), size = 22, color = textColor.copy(0.9f)
                 )
 
             }
         }
+
         Spacer(modifier = Modifier.height(8.dp))
 
         Card(
@@ -170,8 +171,11 @@ fun Home(navigate: NavHostController, viewModel: MainViewModel) {
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.primary // آبی ملایم‌تر
             ),
-            modifier = Modifier.fillMaxWidth().clickable{ viewModel.getPayed(Date().getDateForCalculate(), Conststanse.PAID) }
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { viewModel.getPayed(Date().getDateForCalculate(), Conststanse.PAID) }
         ) {
+
             Row(
                 modifier = Modifier
                     .padding(18.dp)
@@ -188,7 +192,7 @@ fun Home(navigate: NavHostController, viewModel: MainViewModel) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    MText(text = "تعداد پرداخت های این ماه", color = Color.White, size = 18 )
+                    MText(text = "تعداد پرداخت های این ماه", color = Color.White, size = 18)
 
                     Text(
                         if (isChargeAdded == true) payedCount?.toString() ?: ""
@@ -205,7 +209,7 @@ fun Home(navigate: NavHostController, viewModel: MainViewModel) {
 
         Spacer(Modifier.height(16.dp))
 
-        Card (
+        Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
@@ -215,19 +219,25 @@ fun Home(navigate: NavHostController, viewModel: MainViewModel) {
         ) {
 
             TextInBox(
-                 "اضافه کردن شارژ",textColor, Icons.Outlined.AddHomeWork
+                "اضافه کردن شارژ", textColor, Icons.Outlined.AddHomeWork
             ) { navigate.navigate(HomeScreens.Add.screenName) }
             HorizontalDivider(modifier = Modifier.padding(horizontal = 24.dp))
 
 
             TextInBox(
-                "نمایش تمامی شارژ ",textColor, Icons.Outlined.Today
+                "نمایش تمامی شارژ ", textColor, Icons.Outlined.Today
             ) { navigate.navigate(HomeScreens.Cost.screenName) }
-            HorizontalDivider(modifier = Modifier.padding(horizontal = 24.dp) , color = DividerDefaults.color.copy(0.8f) )
-            TextInBox(text = "نمایش تمامی افراد ",textColor, icon = Icons.Outlined.Groups) {
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 24.dp),
+                color = DividerDefaults.color.copy(0.8f)
+            )
+            TextInBox(text = "نمایش تمامی افراد ", textColor, icon = Icons.Outlined.Groups) {
                 navigate.navigate(HomeScreens.ShowBUnit.screenName)
             }
-            HorizontalDivider(modifier = Modifier.padding(horizontal = 24.dp) , color = DividerDefaults.color.copy(0.8f) )
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 24.dp),
+                color = DividerDefaults.color.copy(0.8f)
+            )
 
 
             TextInBox(
@@ -241,7 +251,6 @@ fun Home(navigate: NavHostController, viewModel: MainViewModel) {
 
     }
 }
-
 
 
 @Composable

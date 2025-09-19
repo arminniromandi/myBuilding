@@ -32,8 +32,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -78,6 +76,7 @@ fun ShowBUnit() {
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
+            .background(MaterialTheme.colorScheme.background)
             .padding(vertical = 16.dp, horizontal = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -185,13 +184,8 @@ fun ItemshowBUnit(users: BUser, onClick: (BUser) -> Unit) {
             .fillMaxWidth()
             .height(68.dp)
             .padding(vertical = 4.dp)
-
-            .drawBehind {
-                drawRoundRect(
-                    Color(0xFF212121),
-                    cornerRadius = CornerRadius(8.dp.toPx())
-                )
-            }
+            .clip(RoundedCornerShape(10.dp))
+            .background(MaterialTheme.colorScheme.secondary)
             .padding(horizontal = 24.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -327,18 +321,13 @@ internal fun ShowDialog(unit: Int, count: Int) {
             Button(
                 onClick = {
                     dialog.value = false
-
-
                     CoroutineScope(Dispatchers.IO).launch {
-
                         DBHandler.getDataBase(context).buildingDao().updateUsers(
                             BUser(
                                 unit,
                                 changedUnit_Users.intValue
                             )
-
                         )
-
                     }
 
 
@@ -350,7 +339,7 @@ internal fun ShowDialog(unit: Int, count: Int) {
                     ),
                 shape = RoundedCornerShape(8.dp),
                 colors = buttonColors(
-
+                    backgroundColor = MaterialTheme.colorScheme.primary
                 )
             ) {
                 Text(

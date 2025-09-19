@@ -1,6 +1,7 @@
 package ir.arminniromandi.mybuilding.Screens.home
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +19,6 @@ import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,13 +41,13 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor
-import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
+import ir.arminniromandi.mybuilding.Activity.ui.theme.primary
 import ir.arminniromandi.mybuilding.Activity.ui.theme.primaryVariant
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.customUi.DialogText
 import ir.arminniromandi.mybuilding.navigation.Screens.HomeScreens
 import ir.arminniromandi.mybuilding.utils.Calculate
+import ir.arminniromandi.mybuilding.utils.ThousandSeparatorTransformation
 import ir.arminniromandi.mybuilding.utils.date.CheckDate
 import ir.arminniromandi.mybuilding.utils.date.Date
 import ir.arminniromandi.mybuilding.viewModel.MainViewModel
@@ -69,6 +69,7 @@ fun Add(
         Modifier
             .fillMaxHeight()
             .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background)
     ) {
 
         View(navigate = navigate , viewModel = viewModel)
@@ -131,7 +132,8 @@ fun GetCostWaterScreen(continueClick: () -> Unit) {
 
     Box(
         Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -174,6 +176,7 @@ fun GetCostWaterScreen(continueClick: () -> Unit) {
                         style = TextStyle(textDirection = TextDirection.Rtl)
                     )
                 },
+                visualTransformation = ThousandSeparatorTransformation(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number
                 )
@@ -223,7 +226,8 @@ private fun View(navigate: NavHostController , viewModel: MainViewModel ) {
         } else {
             Column(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -260,12 +264,10 @@ inline fun BUnitTF(navigate: NavHostController, crossinline onAdded:()->Unit) {
             modifier = Modifier
                 .padding(vertical = 8.dp, horizontal = 8.dp)
                 .fillMaxWidth(),
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = editTextColor
-            ),
             textStyle = TextStyle(
-                color = Color.White
+                color = MaterialTheme.colorScheme.onBackground
             ),
+            visualTransformation = ThousandSeparatorTransformation(),
 
 
             label = {
@@ -273,7 +275,7 @@ inline fun BUnitTF(navigate: NavHostController, crossinline onAdded:()->Unit) {
                     "هزینه ${i + 1}",
                     style = TextStyle(
                         textDirection = TextDirection.Rtl,
-                        color = editTextColor_Text
+                        color = MaterialTheme.colorScheme.onBackground
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -298,7 +300,10 @@ inline fun BUnitTF(navigate: NavHostController, crossinline onAdded:()->Unit) {
             },
             modifier = Modifier
                 .fillMaxWidth(0.5f)
-                .padding(8.dp)
+                .padding(8.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = MaterialTheme.colorScheme.primary
+            )
 
 
         ) {
@@ -313,7 +318,10 @@ inline fun BUnitTF(navigate: NavHostController, crossinline onAdded:()->Unit) {
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
+                .padding(8.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = MaterialTheme.colorScheme.secondary
+            )
 
 
         ) {
@@ -341,11 +349,23 @@ inline fun BUnitTF(navigate: NavHostController, crossinline onAdded:()->Unit) {
 
 
         },
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = primary
+        ),
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 8.dp)
 
     ) {
-        Text(text = "محاسبه", style = TextStyle(fontSize = 20.sp))
+        Text(text = "محاسبه",
+            style = TextStyle(
+                fontFamily = FontFamily(Font(R.font.yekanbakh)),
+                fontSize = 20.sp,
+                color = MaterialTheme.colorScheme.onPrimary
+                )
+        )
+
+
     }
 
 
