@@ -102,7 +102,7 @@ dependencies {
     val lifecycle_version = "2.6.1"
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
 
-    implementation ("com.google.code.gson:gson:2.10.1")
+//    implementation ("com.google.code.gson:gson:2.10.1")
 
 
 }

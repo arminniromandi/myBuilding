@@ -1,6 +1,8 @@
 package ir.arminniromandi.mybuilding.Screens.home
 
 import android.annotation.SuppressLint
+import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,15 +23,20 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.platform.AndroidUiDispatcher
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -51,19 +58,23 @@ import ir.arminniromandi.mybuilding.utils.ThousandSeparatorTransformation
 import ir.arminniromandi.mybuilding.utils.date.CheckDate
 import ir.arminniromandi.mybuilding.utils.date.Date
 import ir.arminniromandi.mybuilding.viewModel.MainViewModel
+import kotlinx.coroutines.delay
 
-var showDialog = mutableStateOf(false)
+
 @Composable
 fun Add(
     navigate: NavHostController,
     viewModel: MainViewModel
 ) {
     val context = LocalContext.current
+    var showDialog by remember { mutableStateOf(false) }
 
-    showDialog.value = !CheckDate(context).getAndCheck(Date())
+    //fixme : move to viewModel
+    Log.i("test" , showDialog.toString())
+    LaunchedEffect(Unit) {
+        showDialog = CheckDate(context).getAndCheck(Date())
+    }
 
-    if(showDialog.value)
-        ShowDialog(navigate = navigate , showDialog.value)
 
     Column(
         Modifier
@@ -72,7 +83,9 @@ fun Add(
             .background(MaterialTheme.colorScheme.background)
     ) {
 
-        View(navigate = navigate , viewModel = viewModel)
+        View(navigate = navigate, viewModel = viewModel)
+        if (showDialog)
+            ShowDialog(navigate)
 
 
     }
@@ -80,7 +93,7 @@ fun Add(
 }
 
 @Composable
-private  fun ShowDialog(navigate: NavHostController , showDialog : Boolean) {
+private fun ShowDialog(navigate: NavHostController) {
 
     AlertDialog(
         onDismissRequest = { },
@@ -98,7 +111,7 @@ private  fun ShowDialog(navigate: NavHostController , showDialog : Boolean) {
                     )
                 ) {
                     Text(
-                        text = "برگشت به خانه" ,
+                        text = "برگشت به خانه",
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.End,
@@ -108,16 +121,20 @@ private  fun ShowDialog(navigate: NavHostController , showDialog : Boolean) {
             }
         },
         title = {
-            Text(text = "اخطار زمان اضافه کردن",
+            Text(
+                text = "اخطار زمان اضافه کردن",
                 modifier = Modifier.fillMaxWidth(),
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.End,
                 fontFamily = FontFamily(Font(R.font.yekanbakh))
-                )
+            )
         },
         text = {
-            DialogText(text = "این ماه فقط میتوانید یک بار هزینه هارا اضافه کنید" , color = Color.DarkGray)
+            DialogText(
+                text = "این ماه فقط میتوانید یک بار هزینه هارا اضافه کنید",
+                color = Color.DarkGray
+            )
         }
     )
 
@@ -125,8 +142,8 @@ private  fun ShowDialog(navigate: NavHostController , showDialog : Boolean) {
 }
 
 
-
 var costWater = 0
+
 @Composable
 fun GetCostWaterScreen(continueClick: () -> Unit) {
 
@@ -148,7 +165,7 @@ fun GetCostWaterScreen(continueClick: () -> Unit) {
                 fontFamily = FontFamily(Font(R.font.yekanbakh)),
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
             )
-            
+
 
             var waterCost by remember {
                 mutableStateOf("")
@@ -191,9 +208,7 @@ fun GetCostWaterScreen(continueClick: () -> Unit) {
                     .clip(RoundedCornerShape(2.dp)),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colorScheme.primary
-                )
-
-                ,
+                ),
 
                 onClick = {
                     continueClick()
@@ -202,7 +217,7 @@ fun GetCostWaterScreen(continueClick: () -> Unit) {
             ) {
                 Text(
                     "ادامه",
-                    color = MaterialTheme.colorScheme.onPrimary ,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 22.sp,
                     fontFamily = FontFamily(
                         Font(R.font.yekanbakh)
@@ -215,7 +230,7 @@ fun GetCostWaterScreen(continueClick: () -> Unit) {
 
 
 @Composable
-private fun View(navigate: NavHostController , viewModel: MainViewModel ) {
+private fun View(navigate: NavHostController, viewModel: MainViewModel) {
 
 
     var shouldShowOnboarding by remember { mutableStateOf(true) }
@@ -236,7 +251,7 @@ private fun View(navigate: NavHostController , viewModel: MainViewModel ) {
                     fontFamily = FontFamily(Font(R.font.yekanbakh)),
                     color = MaterialTheme.colorScheme.onBackground
                 )
-                BUnitTF(navigate = navigate){
+                BUnitTF(navigate = navigate) {
                     viewModel.isChargeAdded()
                 }
 
@@ -245,9 +260,8 @@ private fun View(navigate: NavHostController , viewModel: MainViewModel ) {
     }
 }
 
-@SuppressLint("SuspiciousIndentation")
 @Composable
-inline fun BUnitTF(navigate: NavHostController, crossinline onAdded:()->Unit) {
+inline fun BUnitTF(navigate: NavHostController, crossinline onAdded: () -> Unit) {
     var unit by remember {
         mutableIntStateOf(2)
     }
@@ -255,11 +269,14 @@ inline fun BUnitTF(navigate: NavHostController, crossinline onAdded:()->Unit) {
     var data by remember { mutableStateOf(List(unit) { "" }) }
 
 
+
     for (i in data.indices) {
         TextField(
             value = data[i],
             onValueChange = { newData ->
-                data = data.toMutableList().also { it[i] = newData }
+                data = data.toMutableList().also {
+                    it[i] = if (newData.isEmpty()) "1" else newData
+                }
             },
             modifier = Modifier
                 .padding(vertical = 8.dp, horizontal = 8.dp)
@@ -307,7 +324,14 @@ inline fun BUnitTF(navigate: NavHostController, crossinline onAdded:()->Unit) {
 
 
         ) {
-            Text(text = "افزودن", style = TextStyle(fontSize = 20.sp))
+            Text(
+                text = "افزودن",
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.yekanbakh))
+                ),
+                color = MaterialTheme.colorScheme.onPrimary
+            )
         }
 
         OutlinedButton(
@@ -316,16 +340,23 @@ inline fun BUnitTF(navigate: NavHostController, crossinline onAdded:()->Unit) {
                 data = data.toMutableList().also { it.removeLast() }
 
             },
+            border = BorderStroke(1.dp, Black),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
             colors = ButtonDefaults.buttonColors(
-                backgroundColor = MaterialTheme.colorScheme.secondary
+                backgroundColor = MaterialTheme.colorScheme.surfaceVariant
             )
 
 
         ) {
-            Text(text = "کاهش", style = TextStyle(fontSize = 20.sp))
+            Text(
+                text = "کاهش", style = TextStyle(
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.yekanbakh))
+                ),
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 
@@ -357,12 +388,13 @@ inline fun BUnitTF(navigate: NavHostController, crossinline onAdded:()->Unit) {
             .padding(horizontal = 8.dp)
 
     ) {
-        Text(text = "محاسبه",
+        Text(
+            text = "محاسبه",
             style = TextStyle(
                 fontFamily = FontFamily(Font(R.font.yekanbakh)),
                 fontSize = 20.sp,
-                color = MaterialTheme.colorScheme.onPrimary
-                )
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
         )
 
 

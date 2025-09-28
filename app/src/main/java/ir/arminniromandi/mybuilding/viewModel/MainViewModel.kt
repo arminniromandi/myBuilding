@@ -16,8 +16,8 @@ import kotlinx.coroutines.withContext
 
 class MainViewModel(
     private val application: Context,
-    val prefsManager : PreferencesManager
-    ) : ViewModel(){
+    val prefsManager: PreferencesManager
+) : ViewModel() {
 
     private val db = DBHandler.getDataBase(application)
 
@@ -26,10 +26,10 @@ class MainViewModel(
     private val _isInsert = MutableLiveData(false)
     private val _isChargeAdded = MutableLiveData(false)
 
-     val isChargeAdded :LiveData<Boolean> = _isChargeAdded
+    val isChargeAdded: LiveData<Boolean> = _isChargeAdded
     val payed: LiveData<Int> = _data
-    val name :LiveData<String> = _name
-    val isInsert :LiveData<Boolean> = _isInsert
+    val name: LiveData<String> = _name
+    val isInsert: LiveData<Boolean> = _isInsert
 
     init {
         getName()
@@ -37,59 +37,46 @@ class MainViewModel(
         isChargeAdded()
     }
 
-    fun checkIsInserted(onAction : ()->Unit){
+    fun checkIsInserted(onAction: () -> Unit) {
         if (prefsManager.checkState())
             if (isInsert.value == false)
                 onAction()
 
     }
 
-    fun changeState(){
+    fun changeState() {
         prefsManager.saveState()
     }
 
 
-
-
-
-
     fun isInserted() {
         viewModelScope.launch {
-            val count =  withContext(Dispatchers.IO) {
+            val count = withContext(Dispatchers.IO) {
                 db.buildingDao().getBData()
             }
+            _isInsert.value = count == 0
 
-
-             _isInsert.value = count == 0
-            Log.i(
-                "test",
-                "count" +(count).toString()
-            )
-            Log.i(
-                "test",
-                "is Insert = " +isInsert.value.toString()
-            )
         }
     }
-    fun isChargeAdded(){
+
+    fun isChargeAdded() {
         val today = Date().getDateForCalculate()
         viewModelScope.launch {
             val isExist = withContext(Dispatchers.IO) { // Perform database operation on IO thread
 
                 db.buildingDao().isLastMonthExist(today)
             }
-             _isChargeAdded.value = isExist != 0
-
+            _isChargeAdded.value = isExist != 0
 
 
         }
     }
 
-    fun getPayed(month: String , paid : Int) {
+    fun getPayed(month: String, paid: Int) {
         viewModelScope.launch {
             val count = withContext(Dispatchers.IO) {
 
-                db.buildingDao().getPaidCount(month , paid  )
+                db.buildingDao().getPaidCount(month, paid)
             }
             _data.value = count
         }
@@ -105,7 +92,6 @@ class MainViewModel(
             _name.value = name
         }
     }
-
 
 
 }
