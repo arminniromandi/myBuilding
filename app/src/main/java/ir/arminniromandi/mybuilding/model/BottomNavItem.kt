@@ -34,14 +34,15 @@ fun RowScope.NavBarItem(
     currentRoute: String?,
     navController: NavHostController
 ) {
-
+    val routeState = currentRoute == item.name
     NavigationBarItem(
-        selected = currentRoute == item.name,
+        selected = routeState,
 
         colors = NavigationBarItemDefaults.colors(
             indicatorColor = MaterialTheme.colorScheme.secondaryContainer
         ),
         onClick = {
+            if (!routeState)
             navController.navigate(item.name) {
                 popUpTo(navController.graph.startDestinationId)
                 launchSingleTop = true

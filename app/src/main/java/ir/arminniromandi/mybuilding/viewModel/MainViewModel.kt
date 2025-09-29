@@ -8,14 +8,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
 import ir.arminniromandi.mybuilding.data.local.preferences.PreferencesManager
+import ir.arminniromandi.mybuilding.utils.date.CheckDate
 import ir.arminniromandi.mybuilding.utils.date.Date
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
 class MainViewModel(
-    private val application: Context,
+    application: Context,
     val prefsManager: PreferencesManager
 ) : ViewModel() {
 
@@ -36,6 +41,43 @@ class MainViewModel(
         isInserted()
         isChargeAdded()
     }
+
+    private val _showDateWarningDialog = MutableStateFlow(false)
+    val showDateWarningDialog: StateFlow<Boolean> = _showDateWarningDialog.asStateFlow()
+
+    private val _waterCost = MutableStateFlow(0) // Default water cost
+    val waterCost: StateFlow<Int> = _waterCost.asStateFlow()
+
+    // You'll need to implement the actual storage/logic for this
+    private var isChargeAlreadyAddedThisMonth = false
+
+
+     fun checkDateForWarning(context: Context) {
+        viewModelScope.launch {
+            delay(100)
+            _showDateWarningDialog.value = !CheckDate(context).getAndCheck(Date())
+        }
+    }
+
+
+
+    fun updateWaterCost(cost: Int) {
+        _waterCost.value = cost
+        // Potentially save this to SharedPreferences or a database if needed persistently
+    }
+
+    fun markChargeAsAdded() {
+        // Here, you would implement the logic to persist that a charge has been added
+        // For example, update SharedPreferences or a database flag
+        isChargeAlreadyAddedThisMonth = true
+        // You might also want to update _showDateWarningDialog if the warning
+        // should disappear immediately after adding (though current logic shows it on screen entry)
+        Log.i("ViewModel", "Charge marked as added for the month.")
+    }
+
+
+
+
 
     fun checkIsInserted(onAction: () -> Unit) {
         if (prefsManager.checkState())

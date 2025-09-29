@@ -1,5 +1,6 @@
 package ir.arminniromandi.mybuilding.navigation.navHost
 
+import AddCostScreen
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import ir.arminniromandi.mybuilding.Screens.home.Add
 import ir.arminniromandi.mybuilding.Screens.home.Home
 import ir.arminniromandi.mybuilding.Screens.home.Note
 import ir.arminniromandi.mybuilding.Screens.home.ShowBUnit
@@ -39,7 +39,7 @@ fun MainNavHost(
     ) {
         composable(HomeScreens.Home.screenName) { Home(navController, myViewModel) }
         composable(HomeScreens.Note.screenName) { Note() }
-        composable(HomeScreens.Add.screenName) { Add(navController , myViewModel) }
+        composable(HomeScreens.Add.screenName) { AddCostScreen(navController , myViewModel) }
         composable(HomeScreens.ShowBUnit.screenName) { ShowBUnit() }
         composable(HomeScreens.Cost.screenName) { ShowCost(navController) }
     }

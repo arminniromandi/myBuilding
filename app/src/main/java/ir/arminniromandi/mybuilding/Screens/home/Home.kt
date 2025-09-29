@@ -101,6 +101,9 @@ fun PaymentScreen() {
 @Composable
 fun Home(navigate: NavHostController, viewModel: MainViewModel) {
     val textColor = if (!isSystemInDarkTheme()) Color.Black else Color.White
+
+    viewModel.isChargeAdded()
+
     val isChargeAdded by
     viewModel.isChargeAdded.observeAsState()
 
