@@ -29,7 +29,6 @@ class MainActivity : ComponentActivity() {
         myViewModel.checkIsInserted{
             startActivity(Intent(this, IntroActivity::class.java))
         }
-
         setContent {
             AppTheme {
                 val systemUiController = rememberSystemUiController()
