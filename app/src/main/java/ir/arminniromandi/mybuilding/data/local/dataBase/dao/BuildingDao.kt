@@ -5,10 +5,10 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BUser
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.Building
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.CostForUnit
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.CostInMonth
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.BUser
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.Building
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostForUnit
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostInMonth
 import kotlinx.coroutines.flow.Flow
 
 @Dao

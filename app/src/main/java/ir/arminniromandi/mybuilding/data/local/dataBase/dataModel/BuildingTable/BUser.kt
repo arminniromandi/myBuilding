@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.data.local.dataBase.dataModel
+package ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

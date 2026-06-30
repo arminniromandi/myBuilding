@@ -9,10 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import ir.arminniromandi.mybuilding.Screens.home.Home
-import ir.arminniromandi.mybuilding.Screens.home.Note
-import ir.arminniromandi.mybuilding.Screens.home.ShowBUnit
-import ir.arminniromandi.mybuilding.Screens.home.ShowCost
+import ir.arminniromandi.mybuilding.presentation.ui.home.Home
+import ir.arminniromandi.mybuilding.presentation.ui.home.Note
+import ir.arminniromandi.mybuilding.presentation.ui.home.ShowBUnit
+import ir.arminniromandi.mybuilding.presentation.ui.home.ShowCost
 import ir.arminniromandi.mybuilding.navigation.Screens.HomeScreens
 import ir.arminniromandi.mybuilding.viewModel.MainViewModel
 

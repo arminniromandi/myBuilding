@@ -10,9 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import ir.arminniromandi.mybuilding.Screens.IntroFragment.GetInfo
-import ir.arminniromandi.mybuilding.Screens.IntroFragment.Intro
-import ir.arminniromandi.mybuilding.Screens.IntroFragment.SaveData
+import ir.arminniromandi.mybuilding.presentation.ui.IntroFragment.GetInfo
+import ir.arminniromandi.mybuilding.presentation.ui.IntroFragment.Intro
+import ir.arminniromandi.mybuilding.presentation.ui.IntroFragment.SaveData
 import ir.arminniromandi.mybuilding.navigation.Screens.ScreensIntro
 import ir.arminniromandi.mybuilding.viewModel.IntroViewModel
 

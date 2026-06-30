@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.Screens.home
+package ir.arminniromandi.mybuilding.presentation.ui.home
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
@@ -70,7 +70,7 @@ import androidx.compose.material3.SmallFloatingActionButton
 import ir.arminniromandi.mybuilding.Activity.ui.theme.primary
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.NoteProblem
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.NoteTable.NoteProblem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

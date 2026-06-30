@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.Screens.home
+package ir.arminniromandi.mybuilding.presentation.ui.home
 
 
 import androidx.compose.foundation.background
@@ -57,10 +57,10 @@ import ir.arminniromandi.mybuilding.Activity.ui.theme.checkBox
 import ir.arminniromandi.mybuilding.Activity.ui.theme.customButton
 import ir.arminniromandi.mybuilding.Activity.ui.theme.primary
 import ir.arminniromandi.mybuilding.R
-import ir.arminniromandi.mybuilding.customUi.DialogText
+import ir.arminniromandi.mybuilding.presentation.customUi.DialogText
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.CostForUnit
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.CostInMonth
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostForUnit
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostInMonth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -87,7 +87,7 @@ fun ShowCost(navigate: NavHostController) {
     LaunchedEffect(key1 = Unit) {
         cost.value = emptyArray()
         DBHandler.getDataBase(context).buildingDao().getMouths().collect { data ->
-            mouths.value = data.toTypedArray()
+            mouths.value = data.reversed().toTypedArray()
         }
     }
     val clickedMouth = remember {
@@ -148,10 +148,8 @@ fun ShowCost(navigate: NavHostController) {
                                 val db = DBHandler
                                     .getDataBase(context)
                                     .buildingDao()
-
                                 db.deleteCost()
                                 db.deleteMounth()
-
                             }
 
                         }

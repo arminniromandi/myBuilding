@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
 import ir.arminniromandi.mybuilding.data.local.preferences.PreferencesManager
 import ir.arminniromandi.mybuilding.utils.date.CheckDate
@@ -19,8 +21,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
+
+@HiltViewModel
 class MainViewModel(
-    application: Context,
+    @ApplicationContext application: Context,
     val prefsManager: PreferencesManager
 ) : ViewModel() {
 
@@ -36,6 +40,8 @@ class MainViewModel(
     val name: LiveData<String> = _name
     val isInsert: LiveData<Boolean> = _isInsert
 
+
+    //load data when MainViewModel initilized
     init {
         getName()
         isInserted()
@@ -72,7 +78,6 @@ class MainViewModel(
         isChargeAlreadyAddedThisMonth = true
         // You might also want to update _showDateWarningDialog if the warning
         // should disappear immediately after adding (though current logic shows it on screen entry)
-        Log.i("ViewModel", "Charge marked as added for the month.")
     }
 
 
@@ -95,7 +100,7 @@ class MainViewModel(
 
     fun isInserted() {
         viewModelScope.launch {
-            val count = withContext(Dispatchers.IO) {
+            val count = withContext<Int>(Dispatchers.IO) {
                 db.buildingDao().getBData()
             }
             _isInsert.value = count == 0
@@ -106,7 +111,7 @@ class MainViewModel(
     fun isChargeAdded() {
         val today = Date().getDateForCalculate()
         viewModelScope.launch {
-            val isExist = withContext(Dispatchers.IO) { // Perform database operation on IO thread
+            val isExist = withContext<Int>(Dispatchers.IO) { // Perform database operation on IO thread
 
                 db.buildingDao().isLastMonthExist(today)
             }
@@ -118,7 +123,7 @@ class MainViewModel(
 
     fun getPayed(month: String, paid: Int) {
         viewModelScope.launch {
-            val count = withContext(Dispatchers.IO) {
+            val count = withContext<Int>(Dispatchers.IO) {
 
                 db.buildingDao().getPaidCount(month, paid)
             }
@@ -129,7 +134,7 @@ class MainViewModel(
 
     fun getName() {
         viewModelScope.launch {
-            val name = withContext(Dispatchers.IO) {
+            val name = withContext<String>(Dispatchers.IO) {
 
                 db.buildingDao().getBHostName()
             }

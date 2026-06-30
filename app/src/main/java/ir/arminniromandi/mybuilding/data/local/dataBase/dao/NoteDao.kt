@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.NoteProblem
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.NoteTable.NoteProblem
 import kotlinx.coroutines.flow.Flow
 
 @Dao

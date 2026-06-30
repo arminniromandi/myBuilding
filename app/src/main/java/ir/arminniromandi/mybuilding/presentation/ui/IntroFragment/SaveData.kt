@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.Screens.IntroFragment
+package ir.arminniromandi.mybuilding.presentation.ui.IntroFragment
 
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -12,7 +12,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -37,9 +39,9 @@ import ir.arminniromandi.mybuilding.Activity.ui.theme.customButton
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor
 import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
 import ir.arminniromandi.mybuilding.R
-import ir.arminniromandi.mybuilding.customUi.DialogText
+import ir.arminniromandi.mybuilding.presentation.customUi.DialogText
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BUser
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.BUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -78,7 +80,7 @@ fun SaveData(
                     data = data.toMutableList().also { it[i] = newData }
 
                 },
-                colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
+                colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = editTextColor
                 ),
                 textStyle = TextStyle(
@@ -141,7 +143,7 @@ fun SaveData(
 
 
             },
-            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+            colors = ButtonDefaults.buttonColors(
                 containerColor = customButton
             ),
             modifier = Modifier
@@ -175,7 +177,7 @@ private fun ShowDialog(state: MutableState<Boolean>) {
             Button(
                 modifier = Modifier.padding(start = 12.dp , bottom = 12.dp),
                 onClick = { state.value = false },
-                colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = customButton)
+                colors = ButtonDefaults.buttonColors(containerColor = customButton)
             ) {
                 Text(
                     text = "اوکی",

@@ -9,7 +9,7 @@ class ThousandSeparatorTransformation : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val originalText = text.text
 
-        // فقط عدد رو جدا کن
+
         val formattedText = originalText.reversed()
             .chunked(3)
             .joinToString(",")

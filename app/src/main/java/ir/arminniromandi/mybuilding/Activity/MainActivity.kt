@@ -1,74 +1,49 @@
 package ir.arminniromandi.mybuilding.Activity
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import dagger.hilt.android.AndroidEntryPoint
 import ir.arminniromandi.mybuilding.Activity.ui.theme.AppTheme
-import ir.arminniromandi.mybuilding.data.local.preferences.PreferencesManager
-import ir.arminniromandi.mybuilding.navigation.navBar.BottomNavigationBar
-import ir.arminniromandi.mybuilding.navigation.navHost.MainNavHost
-import ir.arminniromandi.mybuilding.viewModel.MainViewModel
+import ir.arminniromandi.mybuilding.presentation.ui.MainScreen
 
+/*
+* main activity
+* if user set and saved data in IntroActivity
+* this activity become first
+* or
+* else user dosent save any data .user navigate to IntroActivity
+*
+*  the activity for
+*       --adding cost per mounth
+*       --edit data (per unit person)
+*       --show data about Building like(unitCount , charge(Cost) , )
+*       --showing how many person payed Cost in this mounth
+* */
+
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private lateinit var myViewModel : MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        myViewModel = MainViewModel(application , PreferencesManager(this))
 
-        myViewModel.checkIsInserted{
-            startActivity(Intent(this, IntroActivity::class.java))
-        }
+
         setContent {
             AppTheme {
+                //setting status bar color to black
                 val systemUiController = rememberSystemUiController()
                 SideEffect {
                     systemUiController.setSystemBarsColor(Color.Black)
                 }
-
-                Body()
+                MainScreen(this)
 
             }
         }
 
-    }
-
-    @Composable
-    fun Body() {
-        val navController = rememberNavController()
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
-
-
-        Scaffold(
-            bottomBar = {
-                BottomNavigationBar(navController , currentRoute.toString())
-            }
-        ) { it ->
-
-            MainNavHost(
-                navController = navController,
-                innerPadding = it,
-                myViewModel = myViewModel
-            )
-        }
-
-    }
-
-
-    override fun onPause() {
-        super.onPause()
-        myViewModel.changeState()
     }
 
 

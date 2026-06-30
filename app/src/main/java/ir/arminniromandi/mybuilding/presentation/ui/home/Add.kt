@@ -19,7 +19,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -45,7 +44,7 @@ import androidx.navigation.NavHostController
 import ir.arminniromandi.mybuilding.Activity.ui.theme.primary
 import ir.arminniromandi.mybuilding.Activity.ui.theme.primaryVariant
 import ir.arminniromandi.mybuilding.R
-import ir.arminniromandi.mybuilding.customUi.DialogText
+import ir.arminniromandi.mybuilding.presentation.customUi.DialogText
 import ir.arminniromandi.mybuilding.navigation.Screens.HomeScreens
 import ir.arminniromandi.mybuilding.utils.Calculate
 import ir.arminniromandi.mybuilding.utils.ThousandSeparatorTransformation

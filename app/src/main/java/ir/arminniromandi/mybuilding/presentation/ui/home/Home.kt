@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.Screens.home
+package ir.arminniromandi.mybuilding.presentation.ui.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import ir.arminniromandi.mybuilding.R
-import ir.arminniromandi.mybuilding.customUi.TextInBox
+import ir.arminniromandi.mybuilding.presentation.customUi.TextInBox
 import ir.arminniromandi.mybuilding.navigation.Screens.HomeScreens
 import ir.arminniromandi.mybuilding.utils.date.Conststanse
 import ir.arminniromandi.mybuilding.utils.date.Date

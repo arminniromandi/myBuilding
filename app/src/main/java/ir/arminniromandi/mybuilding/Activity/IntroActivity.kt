@@ -3,25 +3,27 @@ package ir.arminniromandi.mybuilding.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import dagger.hilt.android.AndroidEntryPoint
 import ir.arminniromandi.mybuilding.Activity.ui.theme.AppTheme
 import ir.arminniromandi.mybuilding.Activity.ui.theme.statusBarIntro
-import ir.arminniromandi.mybuilding.navigation.navHost.IntroNavHost
-import ir.arminniromandi.mybuilding.viewModel.IntroViewModel
+import ir.arminniromandi.mybuilding.presentation.ui.IntroScreen
 
+
+/*
+* Intro Activity
+* first activity when the user install app
+*
+*  this activitu for :
+*   --getting user and Building data and save in database
+*
+* */
+
+@AndroidEntryPoint
 class IntroActivity : ComponentActivity() {
-    private val viewModel :  IntroViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
         setContent {
             AppTheme {
                 val systemUiController = rememberSystemUiController()
@@ -29,33 +31,8 @@ class IntroActivity : ComponentActivity() {
                     systemUiController.setSystemBarsColor(statusBarIntro)
                 }
 
-                Body()
+                IntroScreen()
             }
-        }
-    }
-
-
-    @Composable
-    fun Body() {
-        val navController = rememberNavController()
-        viewModel.isUserAdded()
-
-        if (viewModel.isAdded.value) {
-            viewModel.getOldData()
-        }
-        val unit = remember {
-            mutableIntStateOf(viewModel.count.value ?: 0)
-        }
-
-        Scaffold { it ->
-            IntroNavHost(
-                navController = navController,
-                viewModel,
-                innerPadding = it,
-                unit = unit
-            )
-
-
         }
     }
 

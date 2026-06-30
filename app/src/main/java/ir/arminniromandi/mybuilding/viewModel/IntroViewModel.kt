@@ -1,19 +1,26 @@
 package ir.arminniromandi.mybuilding.viewModel
 
-import android.app.Application
+
+import android.content.Context
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+
+
+@HiltViewModel
 class IntroViewModel(
-    context: Application
-) : AndroidViewModel(context) {
+    @ApplicationContext context: Context
+) : ViewModel() {
 
     private val db = DBHandler.getDataBase(context)
 
@@ -27,9 +34,8 @@ class IntroViewModel(
     val isAdded = mutableStateOf(false)
 
 
-    val scope = CoroutineScope(Dispatchers.IO)
     fun isUserAdded() {
-        scope.launch() {
+        viewModelScope.launch(Dispatchers.IO) {
             val count = db.buildingDao().countOfBuilding()
             withContext(Dispatchers.Main) {
                 isAdded.value = count != 0
@@ -40,7 +46,7 @@ class IntroViewModel(
 
     fun getOldData() {
 
-        scope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             val userName = db.buildingDao().getBHostName()
             val count = db.buildingDao().getBUnitCount()
 

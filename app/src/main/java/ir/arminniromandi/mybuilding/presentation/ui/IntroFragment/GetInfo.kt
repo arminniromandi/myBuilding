@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.Screens.IntroFragment
+package ir.arminniromandi.mybuilding.presentation.ui.IntroFragment
 
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -52,7 +52,7 @@ import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
 import ir.arminniromandi.mybuilding.Activity.ui.theme.transparent
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.Building
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.Building
 import ir.arminniromandi.mybuilding.navigation.Screens.ScreensIntro
 import ir.arminniromandi.mybuilding.viewModel.IntroViewModel
 import kotlinx.coroutines.CoroutineScope
