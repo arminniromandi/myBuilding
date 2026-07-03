@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.Activity
+package ir.arminniromandi.mybuilding.presentation.Activity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -7,7 +7,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
-import ir.arminniromandi.mybuilding.Activity.ui.theme.AppTheme
+import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.AppTheme
 import ir.arminniromandi.mybuilding.presentation.ui.MainScreen
 
 /*

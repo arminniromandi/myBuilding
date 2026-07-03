@@ -1,14 +1,13 @@
-package ir.arminniromandi.mybuilding.viewModel
+package ir.arminniromandi.mybuilding.presentation.viewModel
 
+import BuildingRepository
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
+import ir.arminniromandi.mybuilding.data.repository.NoteRepository
 import ir.arminniromandi.mybuilding.data.local.preferences.PreferencesManager
 import ir.arminniromandi.mybuilding.utils.date.CheckDate
 import ir.arminniromandi.mybuilding.utils.date.Date
@@ -19,17 +18,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
+import javax.inject.Inject
 
 
 @HiltViewModel
-class MainViewModel(
-    @ApplicationContext application: Context,
-    val prefsManager: PreferencesManager
+class MainViewModel @Inject constructor(
+    private val prefsManager: PreferencesManager,
+    private val buildingRepository: BuildingRepository,
+    private val noteRepository: NoteRepository,
 ) : ViewModel() {
 
-    private val db = DBHandler.getDataBase(application)
-
+    // todo: should have better
     private val _name = MutableLiveData("مدیر")
     private val _data = MutableLiveData(1)
     private val _isInsert = MutableLiveData(false)
@@ -55,6 +54,7 @@ class MainViewModel(
     val waterCost: StateFlow<Int> = _waterCost.asStateFlow()
 
     // You'll need to implement the actual storage/logic for this
+    //shared viewModel
     private var isChargeAlreadyAddedThisMonth = false
 
 

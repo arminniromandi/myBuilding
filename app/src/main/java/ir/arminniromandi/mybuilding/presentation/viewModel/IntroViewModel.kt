@@ -1,6 +1,7 @@
-package ir.arminniromandi.mybuilding.viewModel
+package ir.arminniromandi.mybuilding.presentation.viewModel
 
 
+import BuildingRepository
 import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
@@ -12,17 +13,17 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
+import javax.inject.Inject
 
 
 @HiltViewModel
-class IntroViewModel(
-    @ApplicationContext context: Context
+class IntroViewModel @Inject constructor(
+    private val buildingRepository : BuildingRepository
 ) : ViewModel() {
-
-    private val db = DBHandler.getDataBase(context)
+//todo: should be thinck about that
 
 
     private val _name = MutableLiveData("")
@@ -31,12 +32,13 @@ class IntroViewModel(
     val name: LiveData<String> = _name
     val count: LiveData<Int> = _count
 
+    //todo: better become shared flow
     val isAdded = mutableStateOf(false)
 
 
     fun isUserAdded() {
         viewModelScope.launch(Dispatchers.IO) {
-            val count = db.buildingDao().countOfBuilding()
+            val count = buildingRepository.countOfBuilding()
             withContext(Dispatchers.Main) {
                 isAdded.value = count != 0
             }
@@ -47,8 +49,9 @@ class IntroViewModel(
     fun getOldData() {
 
         viewModelScope.launch(Dispatchers.IO) {
-            val userName = db.buildingDao().getBHostName()
-            val count = db.buildingDao().getBUnitCount()
+
+            val userName =   buildingRepository.getBHostName()
+            val count = buildingRepository.getBUnitCount()
 
             withContext(Dispatchers.Main) {
                 _name.value = userName

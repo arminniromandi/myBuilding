@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.navigation.navBar
+package ir.arminniromandi.mybuilding.presentation.navigation.navBar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,8 +17,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import ir.arminniromandi.mybuilding.model.NavBarItem
-import ir.arminniromandi.mybuilding.navigation.Screens.HomeScreens
+import ir.arminniromandi.mybuilding.presentation.model.NavBarItem
+import ir.arminniromandi.mybuilding.presentation.navigation.Screens.HomeScreens
 import ir.arminniromandi.mybuilding.utils.date.Conststanse.BottomNavItem
 
 @Composable

@@ -45,10 +45,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.presentation.customUi.TextInBox
-import ir.arminniromandi.mybuilding.navigation.Screens.HomeScreens
+import ir.arminniromandi.mybuilding.presentation.navigation.Screens.HomeScreens
 import ir.arminniromandi.mybuilding.utils.date.Conststanse
 import ir.arminniromandi.mybuilding.utils.date.Date
-import ir.arminniromandi.mybuilding.viewModel.MainViewModel
+import ir.arminniromandi.mybuilding.presentation.viewModel.MainViewModel
 
 
 @Composable

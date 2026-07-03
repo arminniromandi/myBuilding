@@ -41,14 +41,14 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import ir.arminniromandi.mybuilding.Activity.ui.theme.primary
-import ir.arminniromandi.mybuilding.Activity.ui.theme.primaryVariant
+import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.primary
+import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.primaryVariant
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.presentation.customUi.DialogText
-import ir.arminniromandi.mybuilding.navigation.Screens.HomeScreens
+import ir.arminniromandi.mybuilding.presentation.navigation.Screens.HomeScreens
 import ir.arminniromandi.mybuilding.utils.Calculate
 import ir.arminniromandi.mybuilding.utils.ThousandSeparatorTransformation
-import ir.arminniromandi.mybuilding.viewModel.MainViewModel
+import ir.arminniromandi.mybuilding.presentation.viewModel.MainViewModel
 
 @Composable
 fun AddCostScreen(

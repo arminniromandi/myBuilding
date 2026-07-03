@@ -7,7 +7,7 @@ import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.Home
-import ir.arminniromandi.mybuilding.model.BottomNavItem
+import ir.arminniromandi.mybuilding.presentation.model.BottomNavItem
 
 object Conststanse {
     const val PAID = 1

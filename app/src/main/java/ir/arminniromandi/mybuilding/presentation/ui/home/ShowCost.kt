@@ -53,9 +53,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
-import ir.arminniromandi.mybuilding.Activity.ui.theme.checkBox
-import ir.arminniromandi.mybuilding.Activity.ui.theme.customButton
-import ir.arminniromandi.mybuilding.Activity.ui.theme.primary
+import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.checkBox
+import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.customButton
+import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.primary
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.presentation.customUi.DialogText
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler

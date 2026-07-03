@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.navigation.navHost
+package ir.arminniromandi.mybuilding.presentation.navigation.navHost
 
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
@@ -13,8 +13,8 @@ import androidx.navigation.compose.composable
 import ir.arminniromandi.mybuilding.presentation.ui.IntroFragment.GetInfo
 import ir.arminniromandi.mybuilding.presentation.ui.IntroFragment.Intro
 import ir.arminniromandi.mybuilding.presentation.ui.IntroFragment.SaveData
-import ir.arminniromandi.mybuilding.navigation.Screens.ScreensIntro
-import ir.arminniromandi.mybuilding.viewModel.IntroViewModel
+import ir.arminniromandi.mybuilding.presentation.navigation.Screens.ScreensIntro
+import ir.arminniromandi.mybuilding.presentation.viewModel.IntroViewModel
 
 @Composable
 fun IntroNavHost(

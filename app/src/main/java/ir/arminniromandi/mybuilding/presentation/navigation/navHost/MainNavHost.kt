@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.navigation.navHost
+package ir.arminniromandi.mybuilding.presentation.navigation.navHost
 
 import AddCostScreen
 import androidx.compose.animation.core.tween
@@ -7,18 +7,19 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import ir.arminniromandi.mybuilding.presentation.ui.home.Home
 import ir.arminniromandi.mybuilding.presentation.ui.home.Note
 import ir.arminniromandi.mybuilding.presentation.ui.home.ShowBUnit
 import ir.arminniromandi.mybuilding.presentation.ui.home.ShowCost
-import ir.arminniromandi.mybuilding.navigation.Screens.HomeScreens
-import ir.arminniromandi.mybuilding.viewModel.MainViewModel
+import ir.arminniromandi.mybuilding.presentation.navigation.Screens.HomeScreens
+import ir.arminniromandi.mybuilding.presentation.viewModel.MainViewModel
 
 @Composable
 fun MainNavHost(
-    navController: androidx.navigation.NavHostController,
+    navController: NavHostController,
     innerPadding: PaddingValues,
     myViewModel: MainViewModel
 ) {

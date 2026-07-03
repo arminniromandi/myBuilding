@@ -8,13 +8,13 @@ import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.Building
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostForUnit
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostInMonth
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.NoteTable.NoteProblem
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.NoteTable.Note
 
 @Database(
     entities =
     [
         Building::class,
-        NoteProblem::class,
+        Note::class,
         BUser::class,
         CostForUnit::class,
         CostInMonth::class

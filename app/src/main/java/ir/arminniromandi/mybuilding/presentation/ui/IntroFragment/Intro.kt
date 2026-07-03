@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.accompanist.pager.HorizontalPagerIndicator
-import ir.arminniromandi.mybuilding.navigation.Screens.ScreensIntro
+import ir.arminniromandi.mybuilding.presentation.navigation.Screens.ScreensIntro
 import ir.arminniromandi.mybuilding.R
 import kotlinx.coroutines.launch
 

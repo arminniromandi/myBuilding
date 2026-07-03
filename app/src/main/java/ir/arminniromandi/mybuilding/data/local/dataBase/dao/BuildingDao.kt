@@ -13,90 +13,63 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BuildingDao {
-
+    @Insert
+    suspend fun insertData(building: Building)
 
     @Insert
-    fun insertData(building: Building)
-
-    @Insert
-    fun addUsers(users: BUser)
+    suspend fun addUsers(users: BUser)
 
     @Update
-    fun updateUsers(users: BUser)
-
-
-
+    suspend fun updateUsers(users: BUser)
 
     @Query("SELECT * FROM ${DBHandler.CostInMounth_TABLE}")
-    fun getMouths():Flow<List<CostInMonth>>
-
-
-
-
+    fun getMouths(): Flow<List<CostInMonth>>
 
     @Query("SELECT SUM(U_Unit) FROM ${DBHandler.User_TABLE}")
-    fun getBData():Int
-
+    suspend fun getBData(): Int?
 
     @Query("SELECT COUNT(*) FROM ${DBHandler.User_TABLE}")
-    fun getBUnitCount():Int
-
-
+    suspend fun getBUnitCount(): Int
 
     @Query("SELECT B_HostName FROM ${DBHandler.Building_TABLE}")
-    fun getBHostName():String
+    suspend fun getBHostName(): String?
 
     @Query("SELECT COUNT(B_Id) FROM ${DBHandler.Building_TABLE}")
-    fun countOfBuilding():Int
-
-
-    @Query("SELECT * FROM ${DBHandler.User_TABLE}")
-    fun getUserUnit():List<BUser>
-
-
-
-
+    suspend fun countOfBuilding(): Int
 
     @Query("SELECT * FROM ${DBHandler.User_TABLE}")
-    fun getUserUnitForEdit():Flow<List<BUser>>
+    suspend fun getUserUnit(): List<BUser>
+
+    @Query("SELECT * FROM ${DBHandler.User_TABLE}")
+    fun getUserUnitForEdit(): Flow<List<BUser>>
 
     @Insert
-    fun insertMonth(month: CostInMonth)
+    suspend fun insertMonth(month: CostInMonth)
 
     @Insert
-    fun insertCost(cost: CostForUnit)
-
-
+    suspend fun insertCost(cost: CostForUnit)
 
     @Query("SELECT * FROM ${DBHandler.CostForUnit_TABLE} WHERE CostInMonthAndYear = :month")
-    fun getCostWithMonth(month:String):Flow<List<CostForUnit>>
-
-
+    fun getCostWithMonth(month: String): Flow<List<CostForUnit>>
 
     @Update
-    fun updateCost(cost: CostForUnit)
+    suspend fun updateCost(cost: CostForUnit)
 
-    @Query("SELECT COUNT(isPaid) FROM CostForUnit_TABLE where CostInMonthAndYear =:month AND isPaid = :isPaid")
-    fun getPaidCount(month:String , isPaid:Int):Int
-
+    @Query("SELECT COUNT(isPaid) FROM ${DBHandler.CostForUnit_TABLE} WHERE CostInMonthAndYear = :month AND isPaid = :isPaid")
+    suspend fun getPaidCount(month: String, isPaid: Int): Int
 
     @Query("SELECT * FROM ${DBHandler.CostInMounth_TABLE} ORDER BY CostInMonth_Id DESC LIMIT 1")
-    fun getLastMonth():CostInMonth
+    suspend fun getLastMonth(): CostInMonth?
 
-    @Query("SELECT COUNT(CostInMonth_Id) FROM ${DBHandler.CostInMounth_TABLE} where CostInMonthAndYear =:month ")
-    fun isLastMonthExist(month:String):Int
-
+    @Query("SELECT COUNT(CostInMonth_Id) FROM ${DBHandler.CostInMounth_TABLE} WHERE CostInMonthAndYear = :month")
+    suspend fun isLastMonthExist(month: String): Int
 
     @Query("SELECT * FROM ${DBHandler.User_TABLE}")
-    fun getAllUsers():Flow<List<BUser>>
-
+    fun getAllUsers(): Flow<List<BUser>>
 
     @Query("DELETE FROM ${DBHandler.CostForUnit_TABLE}")
-    fun deleteCost()
-
+    suspend fun deleteCost()
 
     @Query("DELETE FROM ${DBHandler.CostInMounth_TABLE}")
-    fun deleteMounth()
-
-
+    suspend fun deleteMounth()
 }

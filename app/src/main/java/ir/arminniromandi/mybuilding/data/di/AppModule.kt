@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.module
+package ir.arminniromandi.mybuilding.data.di
 
 import dagger.Module
 import dagger.hilt.InstallIn

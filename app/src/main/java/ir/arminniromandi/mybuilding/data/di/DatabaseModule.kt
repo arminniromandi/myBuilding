@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.module
+package ir.arminniromandi.mybuilding.data.di
 
 import android.content.Context
 import androidx.room.Room

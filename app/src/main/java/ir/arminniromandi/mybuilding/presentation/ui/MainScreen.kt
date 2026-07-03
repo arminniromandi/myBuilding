@@ -8,10 +8,10 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import ir.arminniromandi.mybuilding.Activity.IntroActivity
-import ir.arminniromandi.mybuilding.navigation.navBar.BottomNavigationBar
-import ir.arminniromandi.mybuilding.navigation.navHost.MainNavHost
-import ir.arminniromandi.mybuilding.viewModel.MainViewModel
+import ir.arminniromandi.mybuilding.presentation.Activity.IntroActivity
+import ir.arminniromandi.mybuilding.presentation.navigation.navBar.BottomNavigationBar
+import ir.arminniromandi.mybuilding.presentation.navigation.navHost.MainNavHost
+import ir.arminniromandi.mybuilding.presentation.viewModel.MainViewModel
 
 
 @Composable

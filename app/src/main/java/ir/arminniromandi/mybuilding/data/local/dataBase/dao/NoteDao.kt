@@ -5,22 +5,22 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.NoteTable.NoteProblem
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.NoteTable.Note
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
 
     @Insert
-    fun insertNote(Note: NoteProblem)
+    suspend fun insertNote(Note: Note)
 
     @Query("SELECT * FROM ${DBHandler.Note_TABLE}")
-    fun getNotes(): Flow<List<NoteProblem>>
+    suspend fun getNotes(): Flow<List<Note>>
 
 
     @Query("DELETE FROM ${DBHandler.Note_TABLE}")
-    fun deleteAllNotes()
+    suspend fun deleteAllNotes()
 
     @Update
-    fun updateNotes(noteProblem: NoteProblem)
+    suspend fun updateNotes(note: Note)
 }

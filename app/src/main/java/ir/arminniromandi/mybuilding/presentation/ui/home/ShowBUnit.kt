@@ -43,10 +43,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import ir.arminniromandi.mybuilding.Activity.ui.theme.backDialog
-import ir.arminniromandi.mybuilding.Activity.ui.theme.customButton
-import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor
-import ir.arminniromandi.mybuilding.Activity.ui.theme.editTextColor_Text
+import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.backDialog
+import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.customButton
+import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.editTextColor
+import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.editTextColor_Text
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.BUser

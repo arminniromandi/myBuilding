@@ -67,10 +67,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.SmallFloatingActionButton
-import ir.arminniromandi.mybuilding.Activity.ui.theme.primary
+import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.primary
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.NoteTable.NoteProblem
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.NoteTable.Note
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -197,7 +197,7 @@ fun Note() {
 @Composable
 fun ShowNote() {
     val context = LocalContext.current
-    val notes = remember { mutableStateOf<Array<NoteProblem>>(emptyArray()) }
+    val notes = remember { mutableStateOf<Array<Note>>(emptyArray()) }
     LaunchedEffect(key1 = Unit) {
         DBHandler.getDataBase(context).NoteDao().getNotes().collect { fetchedNotes ->
             notes.value = fetchedNotes.toTypedArray()
@@ -214,7 +214,7 @@ fun ShowNote() {
 
 
 @Composable
-fun Items(data: NoteProblem) {
+fun Items(data: Note) {
     val textColor = if (!isSystemInDarkTheme()) Color.Black else Color.White
 
     val context = LocalContext.current
@@ -388,7 +388,7 @@ fun CustomDialog(
                     CoroutineScope(Dispatchers.IO).launch {
 
                         DBHandler.getDataBase(context).NoteDao().insertNote(
-                            NoteProblem(
+                            Note(
                                 Note = editMessage.value,
                                 Checked = false
                             )
