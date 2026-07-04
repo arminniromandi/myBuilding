@@ -4,6 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ir.arminniromandi.mybuilding.domain.useCase.CalculateMonthlyCostsUseCase
+import ir.arminniromandi.mybuilding.domain.useCase.CheckNeedCreateNewMonthUseCase
+import ir.arminniromandi.mybuilding.utils.date.Date
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddCostViewModel @Inject constructor(
-    private val calculateMonthlyCostsUseCase: CalculateMonthlyCostsUseCase
+    private val calculateMonthlyCostsUseCase: CalculateMonthlyCostsUseCase,
+    private val checkNeedCreateNewMonthUseCase: CheckNeedCreateNewMonthUseCase
 ) : ViewModel() {
     private val _waterCostInput = MutableStateFlow("0")
     val waterCostInput: StateFlow<String> = _waterCostInput.asStateFlow()
@@ -23,7 +27,28 @@ class AddCostViewModel @Inject constructor(
     private val _costValues = MutableStateFlow(listOf("", ""))
     val costValues: StateFlow<List<String>> = _costValues.asStateFlow()
 
+    private val _showDateWarningDialog = MutableStateFlow(false)
+    val showDateWarningDialog: StateFlow<Boolean> = _showDateWarningDialog.asStateFlow()
+
+    private val _waterCost = MutableStateFlow(0) // Default water cost
+    val waterCost: StateFlow<Int> = _waterCost.asStateFlow()
+
     private var initialWaterCostApplied = false
+
+
+
+    fun checkDateForWarning() {
+        viewModelScope.launch {
+            delay(100)
+            _showDateWarningDialog.value = checkNeedCreateNewMonthUseCase(Date())
+        }
+    }
+
+
+    fun updateWaterCost(cost: Int) {
+        _waterCost.value = cost
+        // Potentially save this to SharedPreferences or a database if needed persistently
+    }
 
     fun setInitialWaterCost(waterCost: Int) {
         if (initialWaterCostApplied) return

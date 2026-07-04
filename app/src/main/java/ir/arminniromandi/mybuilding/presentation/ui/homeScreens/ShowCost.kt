@@ -34,16 +34,18 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -52,64 +54,65 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.checkBox
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.customButton
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.primary
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.presentation.customUi.DialogText
-import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostForUnit
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostInMonth
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.text.DecimalFormat
+import ir.arminniromandi.mybuilding.presentation.viewModel.ShowCostViewModel
+import ir.arminniromandi.mybuilding.utils.date.Conststanse.IntFormat
 
 
-private val dialog = mutableStateOf(false)
 private val index = mutableIntStateOf(0)
-private val show = mutableStateOf(false)
-private val format = DecimalFormat("0,000")
 
 @Composable
-fun ShowCost(navigate: NavHostController) {
-    val context = LocalContext.current
+fun ShowCost(
+    navigate: NavHostController,
+    viewModel: ShowCostViewModel = hiltViewModel<ShowCostViewModel>()
+) {
 
 
-    val cost = remember { mutableStateOf<Array<CostForUnit>>(emptyArray()) }
-    val mouths = remember { mutableStateOf<Array<CostInMonth>>(emptyArray()) }
+
+
+
+    val costPerUnit by viewModel.costPerUnit.collectAsState()
+    val mouths by viewModel.mounths.collectAsState()
     val color = if (isSystemInDarkTheme()) Color.White else Color.Black
 
+    val showDialog by viewModel.showExposeDialog.collectAsState()
+    val isOnAllCostShow by viewModel.isOnAllCostShow.collectAsState()
 
 
 
-    LaunchedEffect(key1 = Unit) {
-        cost.value = emptyArray()
-        DBHandler.getDataBase(context).buildingDao().getMouths().collect { data ->
-            mouths.value = data.reversed().toTypedArray()
-        }
+
+    LaunchedEffect(Unit) {
+        viewModel.getMonths()
     }
-    val clickedMouth = remember {
+
+
+
+
+    var clickedMouth by remember {
         mutableStateOf("")
     }
 
 
-    if (show.value) {
-        LaunchedEffect(key1 = Unit) {
-            DBHandler.getDataBase(context).buildingDao().getCostWithMonth(clickedMouth.value)
-                .collect { fetchedCost ->
-                    cost.value = fetchedCost.toTypedArray()
-                }
+    //fixme : در صورتی که نمایش درست نبوده
+        LaunchedEffect( Unit, clickedMouth) {
+            viewModel.getCostPerUnitWithMounth(clickedMouth)
         }
-    }
 
 
 
 
 
-    if (dialog.value) {
-        Dialog(costInMonth = mouths.value[index.intValue])
+
+    if (showDialog) {
+        Dialog(costInMonth = mouths[index.intValue] , viewModel)
     }
 
 
@@ -140,17 +143,17 @@ fun ShowCost(navigate: NavHostController) {
                     .background(MaterialTheme.colorScheme.primary)
                     .clickable {
 
-                        if (show.value) {
-                            dialog.value = true
+                        if (isOnAllCostShow) {
+                            viewModel.changeDialogState(true)
                         } else {
 
-                            CoroutineScope(Dispatchers.IO).launch {
+                            /*CoroutineScope(Dispatchers.IO).launch {
                                 val db = DBHandler
                                     .getDataBase(context)
                                     .buildingDao()
                                 db.deleteCost()
                                 db.deleteMounth()
-                            }
+                            }*/
 
                         }
 
@@ -159,7 +162,7 @@ fun ShowCost(navigate: NavHostController) {
             ) {
 
                 Text(
-                    text = if (!show.value) "تمامی هزینه ها" else "برای نمایش ریز هزینه کلیک کنید",
+                    text = if (!isOnAllCostShow) "تمامی هزینه ها" else "برای نمایش ریز هزینه کلیک کنید",
                     style = TextStyle(
                         fontFamily = FontFamily(
                             Font(R.font.yekanbakh)
@@ -173,16 +176,16 @@ fun ShowCost(navigate: NavHostController) {
 
             IconButton(
                 onClick = {
-                    if (!show.value) {
+                    if (!isOnAllCostShow) {
                         navigate.navigate("home")
                     } else {
-                        show.value = false
+                        viewModel.changeisOnAllCostShow(false)
                     }
 
                 }
             ) {
                 Icon(
-                    imageVector = if (!show.value) Icons.Outlined.Home else Icons.Default.ArrowForward,
+                    imageVector = if (!isOnAllCostShow) Icons.Outlined.Home else Icons.Default.ArrowForward,
                     modifier = Modifier.size(45.dp),
                     contentDescription = "",
                     tint = color
@@ -206,11 +209,11 @@ fun ShowCost(navigate: NavHostController) {
 
 
         ) {
-            if (show.value) {
-                ShowCostByMouth(cost.value , color)
+            if (isOnAllCostShow) {
+                ShowCostByMouth(costPerUnit, viewModel,color)
             } else {
 
-                if (mouths.value.isNotEmpty())
+                if (mouths.isNotEmpty())
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(2),
                         modifier = Modifier
@@ -218,7 +221,7 @@ fun ShowCost(navigate: NavHostController) {
                         state = state,
                         reverseLayout = false
                     ) {
-                        items(mouths.value.size) {
+                        items(mouths.size) {
                             Box(
                                 Modifier
                                     .fillMaxWidth()
@@ -227,14 +230,14 @@ fun ShowCost(navigate: NavHostController) {
                                     .background(primary)
                                     .clickable(true) {
                                         index.intValue = it
-                                        clickedMouth.value = mouths.value[it].CostInMounthAndYear
-                                        show.value = true
+                                        clickedMouth = mouths[it].CostInMounthAndYear
+                                        viewModel.changeisOnAllCostShow(true)
                                     },
                                 contentAlignment = Alignment.Center
                             ) {
                                 Column {
                                     Text(
-                                        text = mouths.value[it].CostInMounthAndYear,
+                                        text = mouths[it].CostInMounthAndYear,
                                         style = TextStyle(
                                             color = Color.White,
                                             fontFamily = FontFamily(Font(R.font.yekanbakh))
@@ -245,7 +248,7 @@ fun ShowCost(navigate: NavHostController) {
 
 
                                     Text(
-                                        text = format.format(mouths.value[it].sumOfAll),
+                                        text = IntFormat.format(mouths[it].sumOfAll),
                                         style = TextStyle(
                                             fontFamily = FontFamily(Font(R.font.yekanbakh)),
                                             color = Color.White
@@ -285,7 +288,7 @@ fun ShowCost(navigate: NavHostController) {
 
 
 @Composable
-private fun ShowCostByMouth(cost: Array<CostForUnit> , color : Color) {
+private fun ShowCostByMouth(cost: List<CostForUnit>, viewModel : ShowCostViewModel,color: Color) {
 
 
     Column(
@@ -350,7 +353,7 @@ private fun ShowCostByMouth(cost: Array<CostForUnit> , color : Color) {
         ) {
 
             itemsIndexed(cost) { index, item ->
-                CostItems(item, index + 1)
+                CostItems(item, index + 1 , viewModel)
             }
 
         }
@@ -362,10 +365,10 @@ private fun ShowCostByMouth(cost: Array<CostForUnit> , color : Color) {
 }
 
 @Composable
-private fun CostItems(data: CostForUnit, index: Int) {
-    val context = LocalContext.current
+private fun CostItems(data: CostForUnit, index: Int ,viewModel: ShowCostViewModel) {
 
-    val cost = format.format(data.C_Cost.toInt())
+
+    val cost = IntFormat.format(data.C_Cost.toInt())
 
     Row(
         Modifier
@@ -386,11 +389,7 @@ private fun CostItems(data: CostForUnit, index: Int) {
         Checkbox(
             checked = data.isPaid,
             onCheckedChange = {
-                data.isPaid = it
-                CoroutineScope(Dispatchers.IO).launch {
-                    DBHandler.getDataBase(context).buildingDao()
-                        .updateCost(data.copy(isPaid = it))
-                }
+                viewModel.changePaidState(data)
             },
             colors = CheckboxDefaults.colors(
                 checkedColor = checkBox,
@@ -434,13 +433,13 @@ private fun CostItems(data: CostForUnit, index: Int) {
 
 @Composable
 private fun Dialog(
-    costInMonth: CostInMonth
+    costInMonth: CostInMonth,
+    viewModel: ShowCostViewModel
 ) {
-    val format = DecimalFormat("0,000")
 
 
     AlertDialog(
-        onDismissRequest = { dialog.value = false },
+        onDismissRequest = { viewModel.changeDialogState(false) },
         backgroundColor = Color.DarkGray,
         confirmButton = {
 
@@ -455,7 +454,7 @@ private fun Dialog(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = customButton
                     ),
-                    onClick = { dialog.value = false }) {
+                    onClick = { viewModel.changeDialogState(false) }) {
                     Text(
                         text = "اوکی", fontSize = 20.sp, fontFamily = FontFamily(
                             Font(R.font.yekanbakhr)
@@ -479,9 +478,9 @@ private fun Dialog(
         text = {
             Column(horizontalAlignment = Alignment.End) {
 
-                DialogText("هزینه آب :  ${format.format(costInMonth.costWater)}")
-                DialogText("هزینه این ماه :  ${format.format(costInMonth.cost)}")
-                DialogText(" هزینه کل :  ${format.format(costInMonth.sumOfAll)}")
+                DialogText("هزینه آب :  ${IntFormat.format(costInMonth.costWater)}")
+                DialogText("هزینه این ماه :  ${IntFormat.format(costInMonth.cost)}")
+                DialogText(" هزینه کل :  ${IntFormat.format(costInMonth.sumOfAll)}")
             }
         },
         properties = DialogProperties(

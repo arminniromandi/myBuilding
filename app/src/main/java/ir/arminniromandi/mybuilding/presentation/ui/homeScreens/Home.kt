@@ -51,6 +51,7 @@ import ir.arminniromandi.mybuilding.utils.date.Date
 import ir.arminniromandi.mybuilding.presentation.viewModel.MainViewModel
 
 
+/*
 @Composable
 fun PaymentScreen() {
     Column(
@@ -96,6 +97,7 @@ fun PaymentScreen() {
 
     }
 }
+*/
 
 
 @Composable

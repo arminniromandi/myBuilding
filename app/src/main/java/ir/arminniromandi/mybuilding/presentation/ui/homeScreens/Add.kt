@@ -54,14 +54,13 @@ private val yekanBakhFontFamily = FontFamily(Font(R.font.yekanbakh))
 @Composable
 fun AddCostScreen(
     navController: NavHostController,
-    viewModel: MainViewModel,
     addCostViewModel: AddCostViewModel = composeViewModel()
 ) {
-    val showDateWarningDialog by viewModel.showDateWarningDialog.collectAsState()
-    val mainWaterCost by viewModel.waterCost.collectAsState()
+    val showDateWarningDialog by addCostViewModel.showDateWarningDialog.collectAsState()
+    val mainWaterCost by addCostViewModel.waterCost.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.checkDateForWarning()
+        addCostViewModel.checkDateForWarning()
     }
 
     LaunchedEffect(mainWaterCost) {
@@ -85,7 +84,6 @@ fun AddCostScreen(
     ) {
         AddCostContent(
             navController = navController,
-            mainViewModel = viewModel,
             addCostViewModel = addCostViewModel
         )
     }
@@ -94,11 +92,9 @@ fun AddCostScreen(
 @Composable
 private fun AddCostContent(
     navController: NavHostController,
-    mainViewModel: MainViewModel,
     addCostViewModel: AddCostViewModel
 ) {
     val showWaterCostInput by addCostViewModel.showWaterCostInput.collectAsState()
-    val context = LocalContext.current
 
     Surface(Modifier.fillMaxSize()) {
         if (showWaterCostInput) {
@@ -106,7 +102,7 @@ private fun AddCostContent(
                 viewModel = addCostViewModel,
                 onContinueClicked = {
                     addCostViewModel.onContinueClicked { waterCost ->
-                        mainViewModel.updateWaterCost(waterCost)
+                        addCostViewModel.updateWaterCost(waterCost)
                     }
                 }
             )
@@ -130,13 +126,11 @@ private fun AddCostContent(
                     viewModel = addCostViewModel,
                     onCostsCalculated = {
                         addCostViewModel.calculateCosts {
-                            mainViewModel.markChargeAsAdded()
                             navController.navigate(HomeScreens.Home.screenName) {
                                 popUpTo(HomeScreens.Home.screenName) { inclusive = true }
                             }
                         }
 
-                        mainViewModel.markChargeAsAdded()
 
                         navController.navigate(HomeScreens.Home.screenName) {
                             popUpTo(HomeScreens.Home.screenName) { inclusive = true }

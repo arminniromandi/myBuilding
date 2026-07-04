@@ -22,7 +22,6 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val prefsManager: PreferencesManager,
     private val buildingRepository: BuildingRepository,
-    private val noteRepository: NoteRepository,
     private val checkNeedCreateNewMonthUseCase: CheckNeedCreateNewMonthUseCase
 ) : ViewModel() {
 
@@ -45,29 +44,18 @@ class MainViewModel @Inject constructor(
         isChargeAdded()
     }
 
-    private val _showDateWarningDialog = MutableStateFlow(false)
-    val showDateWarningDialog: StateFlow<Boolean> = _showDateWarningDialog.asStateFlow()
 
-    private val _waterCost = MutableStateFlow(0) // Default water cost
-    val waterCost: StateFlow<Int> = _waterCost.asStateFlow()
+
 
     // You'll need to implement the actual storage/logic for this
     //shared viewModel
     private var isChargeAlreadyAddedThisMonth = false
 
 
-    fun checkDateForWarning() {
-        viewModelScope.launch {
-            delay(100)
-            _showDateWarningDialog.value = checkNeedCreateNewMonthUseCase(Date())
-        }
-    }
 
 
-    fun updateWaterCost(cost: Int) {
-        _waterCost.value = cost
-        // Potentially save this to SharedPreferences or a database if needed persistently
-    }
+
+
 
     fun markChargeAsAdded() {
         // Here, you would implement the logic to persist that a charge has been added

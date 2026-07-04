@@ -1,0 +1,80 @@
+package ir.arminniromandi.mybuilding.presentation.viewModel
+
+import BuildingRepository
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostForUnit
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostInMonth
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+
+@HiltViewModel
+class ShowCostViewModel @Inject constructor(
+
+    private val buildingRepository: BuildingRepository
+) : ViewModel() {
+
+    private val _showExposeDialog = MutableStateFlow(false)
+    val showExposeDialog: StateFlow<Boolean> = _showExposeDialog.asStateFlow()
+
+    private val _isOnAllCostShow = MutableStateFlow(false)
+    val isOnAllCostShow: StateFlow<Boolean> = _isOnAllCostShow.asStateFlow()
+
+
+    private val _mounths = MutableStateFlow<List<CostInMonth>>(emptyList())
+    val mounths: StateFlow<List<CostInMonth>> = _mounths.asStateFlow()
+
+    private val _costPerUnit = MutableStateFlow<List<CostForUnit>>(emptyList())
+    val costPerUnit: StateFlow<List<CostForUnit>> = _costPerUnit.asStateFlow()
+
+
+    fun getMonths() {
+        viewModelScope.launch {
+
+
+            buildingRepository.getMouths().collect { data ->
+                _mounths.value = data.reversed()
+            }
+
+        }
+    }
+
+
+    fun getCostPerUnitWithMounth(mouth: String) {
+
+
+        viewModelScope.launch {
+
+            buildingRepository.getCostWithMonth(mouth)
+                .collect { fetchedCost ->
+                    _costPerUnit.value = fetchedCost
+                }
+        }
+
+
+    }
+
+
+    fun changePaidState(data : CostForUnit ){
+        viewModelScope.launch {
+            buildingRepository
+                .updateCost(data.copy(isPaid = !data.isPaid))
+        }
+    }
+
+
+    fun changeDialogState(state: Boolean) {
+        _showExposeDialog.value = (state)
+    }
+
+    fun changeisOnAllCostShow(state: Boolean) {
+        _isOnAllCostShow.value = (state)
+    }
+
+
+}

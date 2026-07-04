@@ -1,5 +1,6 @@
 package ir.arminniromandi.mybuilding.utils.date
 
+import android.icu.text.DecimalFormat
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.EventNote
 import androidx.compose.material.icons.automirrored.outlined.EventNote
@@ -12,6 +13,7 @@ import ir.arminniromandi.mybuilding.presentation.model.BottomNavItem
 object Conststanse {
     const val PAID = 1
     const val NOT_PAID = 0
+    val IntFormat = DecimalFormat("0,000")
 
     val BottomNavItem = arrayOf(
 
