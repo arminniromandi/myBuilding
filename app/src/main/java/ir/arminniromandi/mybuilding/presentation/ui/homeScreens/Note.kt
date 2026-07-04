@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.presentation.ui.home
+package ir.arminniromandi.mybuilding.presentation.ui.homeScreens
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
@@ -83,7 +83,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun Note() {
 
-    val context = LocalContext.current
 
     val openDialog = remember { mutableStateOf(false) }
     val editMessage = remember { mutableStateOf("") }

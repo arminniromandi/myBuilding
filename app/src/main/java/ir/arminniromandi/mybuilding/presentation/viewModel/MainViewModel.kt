@@ -1,23 +1,20 @@
 package ir.arminniromandi.mybuilding.presentation.viewModel
 
 import BuildingRepository
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ir.arminniromandi.mybuilding.data.repository.NoteRepository
 import ir.arminniromandi.mybuilding.data.local.preferences.PreferencesManager
-import ir.arminniromandi.mybuilding.utils.date.CheckDate
+import ir.arminniromandi.mybuilding.data.repository.NoteRepository
+import ir.arminniromandi.mybuilding.domain.useCase.CheckNeedCreateNewMonthUseCase
 import ir.arminniromandi.mybuilding.utils.date.Date
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -26,6 +23,7 @@ class MainViewModel @Inject constructor(
     private val prefsManager: PreferencesManager,
     private val buildingRepository: BuildingRepository,
     private val noteRepository: NoteRepository,
+    private val checkNeedCreateNewMonthUseCase: CheckNeedCreateNewMonthUseCase
 ) : ViewModel() {
 
     // todo: should have better
@@ -58,13 +56,12 @@ class MainViewModel @Inject constructor(
     private var isChargeAlreadyAddedThisMonth = false
 
 
-     fun checkDateForWarning(context: Context) {
+    fun checkDateForWarning() {
         viewModelScope.launch {
             delay(100)
-            _showDateWarningDialog.value = !CheckDate(context).getAndCheck(Date())
+            _showDateWarningDialog.value = checkNeedCreateNewMonthUseCase(Date())
         }
     }
-
 
 
     fun updateWaterCost(cost: Int) {
@@ -81,11 +78,6 @@ class MainViewModel @Inject constructor(
     }
 
 
-
-
-
-
-
     fun checkIsInserted(onAction: () -> Unit) {
         if (prefsManager.checkState())
             if (isInsert.value == false)
@@ -100,9 +92,8 @@ class MainViewModel @Inject constructor(
 
     fun isInserted() {
         viewModelScope.launch {
-            val count = withContext<Int>(Dispatchers.IO) {
-                db.buildingDao().getBData()
-            }
+            val count  = buildingRepository.getBData()
+
             _isInsert.value = count == 0
 
         }
@@ -111,10 +102,8 @@ class MainViewModel @Inject constructor(
     fun isChargeAdded() {
         val today = Date().getDateForCalculate()
         viewModelScope.launch {
-            val isExist = withContext<Int>(Dispatchers.IO) { // Perform database operation on IO thread
+            val isExist = buildingRepository.isLastMonthExist(today)
 
-                db.buildingDao().isLastMonthExist(today)
-            }
             _isChargeAdded.value = isExist != 0
 
 
@@ -123,10 +112,9 @@ class MainViewModel @Inject constructor(
 
     fun getPayed(month: String, paid: Int) {
         viewModelScope.launch {
-            val count = withContext<Int>(Dispatchers.IO) {
+            val count =
+                buildingRepository.getPaidCount(month, paid)
 
-                db.buildingDao().getPaidCount(month, paid)
-            }
             _data.value = count
         }
 
@@ -134,11 +122,8 @@ class MainViewModel @Inject constructor(
 
     fun getName() {
         viewModelScope.launch {
-            val name = withContext<String>(Dispatchers.IO) {
-
-                db.buildingDao().getBHostName()
-            }
-            _name.value = name
+            val name = buildingRepository.getBHostName()
+            _name.value = name ?: "مدیر"
         }
     }
 

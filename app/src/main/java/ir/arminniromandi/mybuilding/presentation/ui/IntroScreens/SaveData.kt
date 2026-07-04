@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.presentation.ui.IntroFragment
+package ir.arminniromandi.mybuilding.presentation.ui.IntroScreens
 
 import android.content.Intent
 import androidx.compose.foundation.background

@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.presentation.ui.home
+package ir.arminniromandi.mybuilding.presentation.ui.homeScreens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

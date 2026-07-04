@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.presentation.ui.IntroFragment
+package ir.arminniromandi.mybuilding.presentation.ui.IntroScreens
 
 import android.util.Log
 import androidx.compose.foundation.Image

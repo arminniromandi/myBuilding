@@ -1,6 +1,5 @@
 package ir.arminniromandi.mybuilding.presentation.navigation.navHost
 
-import AddCostScreen
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,11 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import ir.arminniromandi.mybuilding.presentation.ui.home.Home
-import ir.arminniromandi.mybuilding.presentation.ui.home.Note
-import ir.arminniromandi.mybuilding.presentation.ui.home.ShowBUnit
-import ir.arminniromandi.mybuilding.presentation.ui.home.ShowCost
 import ir.arminniromandi.mybuilding.presentation.navigation.Screens.HomeScreens
+import ir.arminniromandi.mybuilding.presentation.ui.homeScreens.AddCostScreen
+import ir.arminniromandi.mybuilding.presentation.ui.homeScreens.Home
+import ir.arminniromandi.mybuilding.presentation.ui.homeScreens.Note
+import ir.arminniromandi.mybuilding.presentation.ui.homeScreens.ShowBUnit
+import ir.arminniromandi.mybuilding.presentation.ui.homeScreens.ShowCost
 import ir.arminniromandi.mybuilding.presentation.viewModel.MainViewModel
 
 @Composable

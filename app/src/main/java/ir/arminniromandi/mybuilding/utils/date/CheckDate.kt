@@ -1,5 +1,6 @@
 package ir.arminniromandi.mybuilding.utils.date
 
+import BuildingRepository
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
@@ -12,11 +13,11 @@ import javax.inject.Singleton
 // useCase بشه بهتره
 @Singleton
 class CheckDate @Inject constructor(
-    private val
+    private val buildingRepository: BuildingRepository
 ) {
     suspend fun getAndCheck(date: Date): Boolean {
         return withContext(Dispatchers.IO) {
-            val lastIndex = DBHandler.getDataBase(context).buildingDao().getLastMonth()
+            val lastIndex = buildingRepository.getLastMonth()
 
             if (lastIndex != null) {
                 lastIndex.CostInMounthAndYear != date.getDateForCalculate()

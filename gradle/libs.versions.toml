@@ -11,6 +11,7 @@ composeBom = "2024.04.01"
 runtimeLivedata = "1.6.8"
 hiltAndroid = "2.51.1"
 hiltAndroidCompiler = "2.51.1"
+runtime = "1.11.3"
 
 
 [libraries]
@@ -32,6 +33,7 @@ androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtim
 
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
 
 
 [plugins]

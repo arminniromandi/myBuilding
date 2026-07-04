@@ -1,4 +1,6 @@
-import android.util.Log
+package ir.arminniromandi.mybuilding.presentation.ui.homeScreens
+
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,13 +21,9 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,33 +39,39 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.primary
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.primaryVariant
-import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.presentation.customUi.DialogText
 import ir.arminniromandi.mybuilding.presentation.navigation.Screens.HomeScreens
-import ir.arminniromandi.mybuilding.utils.Calculate
-import ir.arminniromandi.mybuilding.utils.ThousandSeparatorTransformation
+import ir.arminniromandi.mybuilding.presentation.viewModel.AddCostViewModel
 import ir.arminniromandi.mybuilding.presentation.viewModel.MainViewModel
+import ir.arminniromandi.mybuilding.utils.ThousandSeparatorTransformation
+import androidx.lifecycle.viewmodel.compose.viewModel as composeViewModel
+
+private val yekanBakhFontFamily = FontFamily(Font(R.font.yekanbakh))
 
 @Composable
 fun AddCostScreen(
     navController: NavHostController,
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
+    addCostViewModel: AddCostViewModel = composeViewModel()
 ) {
-    val context = LocalContext.current
-
-    viewModel.checkDateForWarning(context)
-
     val showDateWarningDialog by viewModel.showDateWarningDialog.collectAsState()
+    val mainWaterCost by viewModel.waterCost.collectAsState()
 
-    Log.i("testUi" , showDateWarningDialog.toString())
+    LaunchedEffect(Unit) {
+        viewModel.checkDateForWarning()
+    }
+
+    LaunchedEffect(mainWaterCost) {
+        addCostViewModel.setInitialWaterCost(mainWaterCost)
+    }
 
     if (showDateWarningDialog) {
         DateWarningDialog(
             onNavigateHome = {
                 navController.navigate(HomeScreens.Home.screenName) {
-                    // Optional: Configure navigation to clear back stack or be single top
                     popUpTo(HomeScreens.Home.screenName) { inclusive = true }
                 }
             }
@@ -76,10 +80,71 @@ fun AddCostScreen(
 
     Column(
         Modifier
-            .fillMaxSize() // Prefer fillMaxSize over fillMaxHeight and fillMaxWidth separately
+            .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        AddCostContent(navController = navController, viewModel = viewModel)
+        AddCostContent(
+            navController = navController,
+            mainViewModel = viewModel,
+            addCostViewModel = addCostViewModel
+        )
+    }
+}
+
+@Composable
+private fun AddCostContent(
+    navController: NavHostController,
+    mainViewModel: MainViewModel,
+    addCostViewModel: AddCostViewModel
+) {
+    val showWaterCostInput by addCostViewModel.showWaterCostInput.collectAsState()
+    val context = LocalContext.current
+
+    Surface(Modifier.fillMaxSize()) {
+        if (showWaterCostInput) {
+            WaterCostInputScreen(
+                viewModel = addCostViewModel,
+                onContinueClicked = {
+                    addCostViewModel.onContinueClicked { waterCost ->
+                        mainViewModel.updateWaterCost(waterCost)
+                    }
+                }
+            )
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "هزینه های پیش آمده را اضافه کنید",
+                    fontSize = 20.sp,
+                    fontFamily = yekanBakhFontFamily,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
+                DynamicCostInputFields(
+                    viewModel = addCostViewModel,
+                    onCostsCalculated = {
+                        addCostViewModel.calculateCosts {
+                            mainViewModel.markChargeAsAdded()
+                            navController.navigate(HomeScreens.Home.screenName) {
+                                popUpTo(HomeScreens.Home.screenName) { inclusive = true }
+                            }
+                        }
+
+                        mainViewModel.markChargeAsAdded()
+
+                        navController.navigate(HomeScreens.Home.screenName) {
+                            popUpTo(HomeScreens.Home.screenName) { inclusive = true }
+                        }
+                    }
+                )
+            }
+        }
     }
 }
 
@@ -92,12 +157,12 @@ private fun DateWarningDialog(
         confirmButton = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start // Or Arrangement.End depending on desired layout
+                horizontalArrangement = Arrangement.Start
             ) {
                 Button(
                     onClick = onNavigateHome,
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = primaryVariant // Consider using MaterialTheme.colorScheme
+                        backgroundColor = primaryVariant
                     )
                 ) {
                     Text(
@@ -105,7 +170,7 @@ private fun DateWarningDialog(
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.End,
-                        fontFamily = FontFamily(Font(R.font.yekanbakh)),
+                        fontFamily = yekanBakhFontFamily
                     )
                 }
             }
@@ -115,16 +180,16 @@ private fun DateWarningDialog(
             Text(
                 text = "اخطار زمان اضافه کردن",
                 modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colorScheme.onSurface, // Use themed color
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.End,
-                fontFamily = FontFamily(Font(R.font.yekanbakh))
+                fontFamily = yekanBakhFontFamily
             )
         },
         text = {
-            DialogText( // Assuming DialogText is a custom Composable
+            DialogText(
                 text = "این ماه فقط میتوانید یک بار هزینه هارا اضافه کنید",
-                color = MaterialTheme.colorScheme.onSurfaceVariant // Consider MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     )
@@ -132,11 +197,10 @@ private fun DateWarningDialog(
 
 @Composable
 fun WaterCostInputScreen(
-    viewModel: MainViewModel,
+    viewModel: AddCostViewModel,
     onContinueClicked: () -> Unit
 ) {
-    // Get water cost from ViewModel and provide a way to update it
-    var waterCostInput by rememberSaveable { mutableStateOf(viewModel.waterCost.value.toString()) }
+    val waterCostInput by viewModel.waterCostInput.collectAsState()
 
     Box(
         Modifier
@@ -145,21 +209,19 @@ fun WaterCostInputScreen(
         contentAlignment = Alignment.Center
     ) {
         Column(
-            horizontalAlignment = Alignment.End // For RTL text alignment
+            horizontalAlignment = Alignment.End
         ) {
             Text(
                 color = MaterialTheme.colorScheme.onBackground,
                 text = "لطفا هزینه آب را وارد کنید",
                 fontSize = 24.sp,
-                fontFamily = FontFamily(Font(R.font.yekanbakh)),
+                fontFamily = yekanBakhFontFamily,
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
             )
 
             TextField(
                 value = waterCostInput,
-                onValueChange = {
-                    waterCostInput = it.filter { char -> char.isDigit() }
-                }, // Allow only digits
+                onValueChange = viewModel::onWaterCostChanged,
                 modifier = Modifier
                     .padding(vertical = 8.dp, horizontal = 14.dp)
                     .fillMaxWidth(),
@@ -172,7 +234,7 @@ fun WaterCostInputScreen(
                         "هزینه آب ساختمان",
                         modifier = Modifier.fillMaxWidth(),
                         color = MaterialTheme.colorScheme.onBackground,
-                        style = TextStyle(textDirection = TextDirection.Rtl) // Label also RTL
+                        style = TextStyle(textDirection = TextDirection.Rtl)
                     )
                 },
                 visualTransformation = ThousandSeparatorTransformation(),
@@ -186,63 +248,18 @@ fun WaterCostInputScreen(
                 modifier = Modifier
                     .padding(vertical = 16.dp, horizontal = 18.dp)
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(8.dp)), // Slightly more rounded
+                    .clip(RoundedCornerShape(8.dp)),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colorScheme.primary
                 ),
-                onClick = {
-                    viewModel.updateWaterCost(waterCostInput.toIntOrNull() ?: 0)
-                    onContinueClicked()
-                },
-                enabled = waterCostInput.isNotBlank() // Disable button if input is empty
+                onClick = onContinueClicked,
+                enabled = viewModel.canContinue()
             ) {
                 Text(
                     "ادامه",
                     color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 22.sp,
-                    fontFamily = FontFamily(Font(R.font.yekanbakh))
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun AddCostContent(
-    navController: NavHostController,
-    viewModel: MainViewModel
-) {
-    var showWaterCostInput by rememberSaveable { mutableStateOf(true) }
-    val waterCost by viewModel.waterCost.collectAsState()
-
-    Surface(Modifier.fillMaxSize()) { // Ensure Surface takes full size
-        if (showWaterCostInput) {
-            WaterCostInputScreen(viewModel = viewModel) {
-                showWaterCostInput = false
-            }
-        } else {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(16.dp), // Add some padding around the content
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "هزینه های پیش آمده را اضافه کنید",
-                    fontSize = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.yekanbakh)),
-                    color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-                DynamicCostInputFields(
-                    waterCost = waterCost, // Pass the collected water cost
-                    onCostsCalculated = {
-                        viewModel.markChargeAsAdded() // ViewModel handles this logic
-                        navController.navigate(HomeScreens.Home.screenName) {
-                            popUpTo(HomeScreens.Home.screenName) { inclusive = true }
-                        }
-                    }
+                    fontFamily = yekanBakhFontFamily
                 )
             }
         }
@@ -251,42 +268,34 @@ private fun AddCostContent(
 
 @Composable
 fun DynamicCostInputFields(
-    waterCost: Int,
+    viewModel: AddCostViewModel,
     onCostsCalculated: () -> Unit
 ) {
-    val context = LocalContext.current
-    var numberOfCostFields by rememberSaveable { mutableIntStateOf(2) }
-    var costValues by remember { mutableStateOf(List(numberOfCostFields) { "" }) }
+    val costValues by viewModel.costValues.collectAsState()
 
-    // Use LazyColumn for potentially long lists of TextFields for performance
-    // For a small fixed number, Column is fine.
     Column {
-        for (i in costValues.indices) {
+        costValues.forEachIndexed { index, value ->
             TextField(
-                value = costValues[i],
+                value = value,
                 onValueChange = { newValue ->
-                    costValues = costValues.toMutableList().also {
-                        // Allow only digits, default to "0" if empty after filtering
-                        val filteredValue = newValue.filter { char -> char.isDigit() }
-                        it[i] = filteredValue
-                    }
+                    viewModel.onCostValueChanged(index, newValue)
                 },
                 modifier = Modifier
-                    .padding(vertical = 8.dp) // Removed horizontal for fillMaxWidth
+                    .padding(vertical = 8.dp)
                     .fillMaxWidth(),
                 textStyle = TextStyle(
                     color = MaterialTheme.colorScheme.onBackground,
-                    textAlign = TextAlign.End // Align text to end for numbers
+                    textAlign = TextAlign.End
                 ),
                 visualTransformation = ThousandSeparatorTransformation(),
                 label = {
                     Text(
-                        "هزینه ${i + 1}",
+                        "هزینه ${index + 1}",
                         style = TextStyle(
                             textDirection = TextDirection.Rtl,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant // Use a less prominent color for label
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         ),
-                        modifier = Modifier.fillMaxWidth() // Label takes full width for RTL text
+                        modifier = Modifier.fillMaxWidth()
                     )
                 },
                 keyboardOptions = KeyboardOptions(
@@ -301,17 +310,14 @@ fun DynamicCostInputFields(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp) // Add space between buttons
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         OutlinedButton(
-            onClick = {
-                numberOfCostFields++
-                costValues = costValues.toMutableList().also { it.add("") }
-            },
+            onClick = viewModel::addCostField,
             modifier = Modifier
-                .weight(1f) // Distribute width equally or as needed
-                .padding(vertical = 8.dp), // Consistent padding
-            colors = ButtonDefaults.outlinedButtonColors( // Use outlinedButtonColors
+                .weight(1f)
+                .padding(vertical = 8.dp),
+            colors = ButtonDefaults.outlinedButtonColors(
                 backgroundColor = MaterialTheme.colorScheme.primary
             ),
             shape = RoundedCornerShape(8.dp)
@@ -320,33 +326,29 @@ fun DynamicCostInputFields(
                 text = "افزودن",
                 style = TextStyle(
                     fontSize = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.yekanbakh))
+                    fontFamily = yekanBakhFontFamily
                 ),
                 color = MaterialTheme.colorScheme.onPrimary
             )
         }
 
         OutlinedButton(
-            onClick = {
-                if (numberOfCostFields > 0) { // Prevent removing below zero fields
-                    numberOfCostFields--
-                    costValues = costValues.toMutableList().also { it.removeLast() }
-                }
-            },
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline), // Use themed outline
+            onClick = viewModel::removeCostField,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
             modifier = Modifier
                 .weight(1f)
                 .padding(vertical = 8.dp),
-            colors = ButtonDefaults.outlinedButtonColors( // Use outlinedButtonColors
+            colors = ButtonDefaults.outlinedButtonColors(
                 backgroundColor = MaterialTheme.colorScheme.surfaceVariant
             ),
             shape = RoundedCornerShape(8.dp),
-            enabled = numberOfCostFields > 0 // Disable if no fields to remove
+            enabled = viewModel.canRemoveCostField()
         ) {
             Text(
-                text = "کاهش", style = TextStyle(
+                text = "کاهش",
+                style = TextStyle(
                     fontSize = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.yekanbakh))
+                    fontFamily = yekanBakhFontFamily
                 ),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -354,26 +356,22 @@ fun DynamicCostInputFields(
     }
 
     Button(
-        onClick = {
-            val totalOtherCosts = costValues.sumOf { it.toIntOrNull() ?: 0 }
-            Calculate(context).calculateAll(waterCost, totalOtherCosts)
-            onCostsCalculated()
-        },
+        onClick = onCostsCalculated,
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = primary // Or MaterialTheme.colorScheme.primary
+            backgroundColor = primary
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp), // Add vertical padding
+            .padding(vertical = 16.dp),
         shape = RoundedCornerShape(8.dp),
-        enabled = costValues.any { it.isNotBlank() } // Enable only if at least one cost is entered
+        enabled = viewModel.canCalculate()
     ) {
         Text(
             text = "محاسبه",
             style = TextStyle(
-                fontFamily = FontFamily(Font(R.font.yekanbakh)),
+                fontFamily = yekanBakhFontFamily,
                 fontSize = 20.sp,
-                color = MaterialTheme.colorScheme.onPrimary // Ensure contrast
+                color = MaterialTheme.colorScheme.onPrimary
             )
         )
     }
