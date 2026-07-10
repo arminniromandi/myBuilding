@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.presentation.viewModel
+package ir.arminniromandi.mybuilding.presentation.viewModel.home
 
 import BuildingRepository
 import androidx.lifecycle.ViewModel

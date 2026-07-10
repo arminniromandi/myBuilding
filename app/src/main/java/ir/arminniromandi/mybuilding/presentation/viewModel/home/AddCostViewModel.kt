@@ -1,4 +1,4 @@
-package ir.arminniromandi.mybuilding.presentation.viewModel
+package ir.arminniromandi.mybuilding.presentation.viewModel.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

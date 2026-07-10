@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -44,8 +43,7 @@ import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.primary
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.primaryVariant
 import ir.arminniromandi.mybuilding.presentation.customUi.DialogText
 import ir.arminniromandi.mybuilding.presentation.navigation.Screens.HomeScreens
-import ir.arminniromandi.mybuilding.presentation.viewModel.AddCostViewModel
-import ir.arminniromandi.mybuilding.presentation.viewModel.MainViewModel
+import ir.arminniromandi.mybuilding.presentation.viewModel.home.AddCostViewModel
 import ir.arminniromandi.mybuilding.utils.ThousandSeparatorTransformation
 import androidx.lifecycle.viewmodel.compose.viewModel as composeViewModel
 

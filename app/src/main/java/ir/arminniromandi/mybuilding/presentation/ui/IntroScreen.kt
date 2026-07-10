@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import ir.arminniromandi.mybuilding.presentation.navigation.navHost.IntroNavHost
-import ir.arminniromandi.mybuilding.presentation.viewModel.IntroViewModel
+import ir.arminniromandi.mybuilding.presentation.viewModel.intro.IntroViewModel
 
 @Composable
 fun IntroScreen() {

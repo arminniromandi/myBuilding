@@ -11,7 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import ir.arminniromandi.mybuilding.presentation.Activity.IntroActivity
 import ir.arminniromandi.mybuilding.presentation.navigation.navBar.BottomNavigationBar
 import ir.arminniromandi.mybuilding.presentation.navigation.navHost.MainNavHost
-import ir.arminniromandi.mybuilding.presentation.viewModel.MainViewModel
+import ir.arminniromandi.mybuilding.presentation.viewModel.home.MainViewModel
 
 
 @Composable

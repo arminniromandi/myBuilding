@@ -15,7 +15,7 @@ interface NoteDao {
     suspend fun insertNote(Note: Note)
 
     @Query("SELECT * FROM ${DBHandler.Note_TABLE}")
-    suspend fun getNotes(): Flow<List<Note>>
+    fun getNotes(): Flow<List<Note>>
 
 
     @Query("DELETE FROM ${DBHandler.Note_TABLE}")

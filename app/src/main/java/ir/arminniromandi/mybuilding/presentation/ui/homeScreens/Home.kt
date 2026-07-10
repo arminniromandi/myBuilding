@@ -18,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalanceWallet
-import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.outlined.AddHomeWork
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Groups
@@ -39,7 +38,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -48,7 +46,7 @@ import ir.arminniromandi.mybuilding.presentation.customUi.TextInBox
 import ir.arminniromandi.mybuilding.presentation.navigation.Screens.HomeScreens
 import ir.arminniromandi.mybuilding.utils.date.Conststanse
 import ir.arminniromandi.mybuilding.utils.date.Date
-import ir.arminniromandi.mybuilding.presentation.viewModel.MainViewModel
+import ir.arminniromandi.mybuilding.presentation.viewModel.home.MainViewModel
 
 
 /*

@@ -32,6 +32,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import ir.arminniromandi.mybuilding.presentation.Activity.MainActivity
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.backDialog
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.backIntro
@@ -42,6 +43,7 @@ import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.presentation.customUi.DialogText
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.BUser
+import ir.arminniromandi.mybuilding.presentation.viewModel.intro.IntroViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,7 +53,8 @@ private val showDialog = mutableStateOf(false)
 
 @Composable
 fun SaveData(
-    unit: MutableState<Int>
+    unit: MutableState<Int>,
+    viewModel : IntroViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
 

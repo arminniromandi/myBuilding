@@ -1,6 +1,5 @@
 package ir.arminniromandi.mybuilding.presentation.ui.IntroScreens
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +25,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -46,20 +46,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
+import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.backIntro
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.editTextColor
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.editTextColor_Text
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.transparent
-import ir.arminniromandi.mybuilding.R
-import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.Building
 import ir.arminniromandi.mybuilding.presentation.navigation.Screens.ScreensIntro
-import ir.arminniromandi.mybuilding.presentation.viewModel.IntroViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-
-private val dialog = mutableStateOf(false)
+import ir.arminniromandi.mybuilding.presentation.viewModel.intro.IntroViewModel
 
 
 @Composable
@@ -69,13 +62,14 @@ fun GetInfo(
     viewModel: IntroViewModel
 ) {
 
+    val showDialog by viewModel.showDateWarningDialog.collectAsState()
+
 
     val h_name = remember {
         mutableStateOf(viewModel.name.value ?: "")
     }
-    Log.i("test", h_name.value)
-    if (dialog.value)
-        Dialog(navController, h_name.value, unit.intValue)
+    if (showDialog)
+        Dialog(navController, viewModel,h_name.value, unit.intValue)
 
 
     Box(
@@ -254,7 +248,7 @@ fun GetInfo(
                         .padding(bottom = 12.dp),
                     onClick = {
                         unit.intValue = unit.intValue
-                        dialog.value = true
+                        viewModel.dialogState(true)
 
                     }) {
                     Text(
@@ -294,13 +288,13 @@ fun GetInfo(
 @Composable
 private fun Dialog(
     navController: NavController,
+    viewModel : IntroViewModel,
     h_name: String,
     unit: Int
 ) {
-    val context = LocalContext.current
 
     AlertDialog(
-        onDismissRequest = { dialog.value = false },
+        onDismissRequest = { viewModel.dialogState(false)},
         backgroundColor = Color.DarkGray,
         confirmButton = {
 
@@ -313,12 +307,7 @@ private fun Dialog(
 
                 Button(
                     onClick = {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            DBHandler.getDataBase(context)
-                                .buildingDao()
-                                .insertData(Building(B_id = 0, h_name, unit))
-
-                        }
+                        viewModel.insertBuildingUser()
 
                         navController.navigate(ScreensIntro.SaveData.screenName)
                     }) {
@@ -334,7 +323,7 @@ private fun Dialog(
                 Button(
 
                     onClick = {
-                        dialog.value = false
+                        viewModel.dialogState(false)
                     }) {
                     Text(
                         text = "خیر", fontSize = 16.sp, fontFamily = FontFamily(

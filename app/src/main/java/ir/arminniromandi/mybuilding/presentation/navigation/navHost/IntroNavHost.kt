@@ -14,7 +14,7 @@ import ir.arminniromandi.mybuilding.presentation.ui.IntroScreens.GetInfo
 import ir.arminniromandi.mybuilding.presentation.ui.IntroScreens.Intro
 import ir.arminniromandi.mybuilding.presentation.ui.IntroScreens.SaveData
 import ir.arminniromandi.mybuilding.presentation.navigation.Screens.ScreensIntro
-import ir.arminniromandi.mybuilding.presentation.viewModel.IntroViewModel
+import ir.arminniromandi.mybuilding.presentation.viewModel.intro.IntroViewModel
 
 @Composable
 fun IntroNavHost(
