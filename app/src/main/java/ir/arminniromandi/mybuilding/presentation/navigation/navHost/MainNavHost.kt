@@ -13,7 +13,7 @@ import ir.arminniromandi.mybuilding.presentation.navigation.Screens.HomeScreens
 import ir.arminniromandi.mybuilding.presentation.screen.ShowBUnit
 import ir.arminniromandi.mybuilding.presentation.ui.homeScreens.AddCostScreen
 import ir.arminniromandi.mybuilding.presentation.ui.homeScreens.Home
-import ir.arminniromandi.mybuilding.presentation.ui.homeScreens.Note
+import ir.arminniromandi.mybuilding.presentation.ui.homeScreens.NoteScreen
 import ir.arminniromandi.mybuilding.presentation.ui.homeScreens.ShowCost
 import ir.arminniromandi.mybuilding.presentation.viewModel.home.MainViewModel
 
@@ -39,7 +39,7 @@ fun MainNavHost(
         modifier = Modifier.padding(innerPadding)
     ) {
         composable(HomeScreens.Home.screenName) { Home(navController, myViewModel) }
-        composable(HomeScreens.Note.screenName) { Note() }
+        composable(HomeScreens.Note.screenName) { NoteScreen() }
         composable(HomeScreens.Add.screenName) { AddCostScreen(navController) }
         composable(HomeScreens.ShowBUnit.screenName) { ShowBUnit() }
         composable(HomeScreens.Cost.screenName) { ShowCost(navController) }

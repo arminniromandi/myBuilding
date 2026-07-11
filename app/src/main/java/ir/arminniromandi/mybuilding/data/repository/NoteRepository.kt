@@ -2,18 +2,19 @@ package ir.arminniromandi.mybuilding.data.repository
 
 import ir.arminniromandi.mybuilding.data.local.dataBase.dao.NoteDao
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.NoteTable.Note
+import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
-class NoteRepository(
+class NoteRepository @Inject constructor(
     private val dao : NoteDao
 ) {
     suspend fun insertNote(note: Note){
         dao.insertNote(note)
     }
 
-    suspend fun getNotes() =
+     fun getNotes() =
         dao.getNotes()
 
 
@@ -21,7 +22,7 @@ class NoteRepository(
         dao.deleteAllNotes()
 
 
-    suspend fun updateNotes(note: Note){
+    suspend fun updateNote(note: Note){
         dao.updateNotes(note)
     }
 

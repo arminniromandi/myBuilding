@@ -1,8 +1,8 @@
 package ir.arminniromandi.mybuilding.domain.useCase
 
-import BuildingRepository
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostForUnit
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostInMonth
+import ir.arminniromandi.mybuilding.data.repository.BuildingRepository
 import ir.arminniromandi.mybuilding.utils.date.Date
 import javax.inject.Inject
 import kotlin.math.roundToInt

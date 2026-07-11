@@ -33,20 +33,15 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.presentation.Activity.MainActivity
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.backDialog
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.backIntro
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.customButton
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.editTextColor
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.editTextColor_Text
-import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.presentation.customUi.DialogText
-import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.BUser
 import ir.arminniromandi.mybuilding.presentation.viewModel.intro.IntroViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 private val showDialog = mutableStateOf(false)
@@ -120,25 +115,18 @@ fun SaveData(
                     if (it.isNullOrBlank()) null else it.toInt()
                  }
 
-                  allUnit.forEach { intData ->
-                    if (intData == null) {
+                  allUnit.forEach { unit ->
+                    if (unit == null) {
                         showDialog.value = true
                     }
-                      if (!(intData == null))
+                      if (!(unit == null))
                           isValidData.value = true
 
                 }
 
                 if (isValidData.value){
 
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val dao = DBHandler.getDataBase(context).buildingDao()
-                        allUnit.forEach {
-                            dao.addUsers(BUser(U_Unit = it!!))
-                        }
-                    }
-
-
+                    viewModel.insertAllBUnit(allUnit)
                     context.startActivity(Intent(context, MainActivity::class.java))
                 }
 

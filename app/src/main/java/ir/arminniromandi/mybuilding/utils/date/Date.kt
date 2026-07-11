@@ -1,9 +1,9 @@
 package ir.arminniromandi.mybuilding.utils.date
 
+import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
-class Date {
+class Date @Inject constructor() {
      fun getDate(): String {
         val date = PersianDate()
         val currentDate = "${date.strWeekDay}  ${date.day}   ${date.strMonth}"

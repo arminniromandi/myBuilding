@@ -1,13 +1,12 @@
 package ir.arminniromandi.mybuilding.presentation.viewModel.intro
 
-import BuildingRepository
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.BUser
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.Building
+import ir.arminniromandi.mybuilding.data.repository.BuildingRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -79,6 +78,15 @@ class IntroViewModel @Inject constructor(
                 buildingRepository
                 .insertData(Building(B_id = 0, name.value, count.value))
 
+        }
+    }
+    fun insertAllBUnit(allUnit :List<Int?>){
+
+        viewModelScope.launch {
+
+            allUnit.forEach {
+                buildingRepository.addUsers(BUser(U_Unit = it!!))
+            }
         }
     }
 
