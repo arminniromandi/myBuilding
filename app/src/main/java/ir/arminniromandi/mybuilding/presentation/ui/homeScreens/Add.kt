@@ -37,6 +37,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.primary
@@ -52,7 +53,7 @@ private val yekanBakhFontFamily = FontFamily(Font(R.font.yekanbakh))
 @Composable
 fun AddCostScreen(
     navController: NavHostController,
-    addCostViewModel: AddCostViewModel = composeViewModel()
+    addCostViewModel: AddCostViewModel = hiltViewModel()
 ) {
     val showDateWarningDialog by addCostViewModel.showDateWarningDialog.collectAsState()
     val mainWaterCost by addCostViewModel.waterCost.collectAsState()
@@ -65,7 +66,7 @@ fun AddCostScreen(
         addCostViewModel.setInitialWaterCost(mainWaterCost)
     }
 
-    if (showDateWarningDialog) {
+    if (!showDateWarningDialog) {
         DateWarningDialog(
             onNavigateHome = {
                 navController.navigate(HomeScreens.Home.screenName) {
