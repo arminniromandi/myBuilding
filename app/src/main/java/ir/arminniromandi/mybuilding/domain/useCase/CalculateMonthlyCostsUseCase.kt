@@ -1,11 +1,10 @@
 package ir.arminniromandi.mybuilding.domain.useCase
 
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostForUnit
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostInMonth
 import ir.arminniromandi.mybuilding.data.repository.BuildingRepository
+import ir.arminniromandi.mybuilding.domain.model.MonthlyCostCommand
+import ir.arminniromandi.mybuilding.domain.model.UnitMonthlyCost
 import ir.arminniromandi.mybuilding.utils.date.Date
 import javax.inject.Inject
-import kotlin.math.roundToInt
 
 class CalculateMonthlyCostsUseCase @Inject constructor(
     private val repository: BuildingRepository,
@@ -16,7 +15,10 @@ class CalculateMonthlyCostsUseCase @Inject constructor(
         water: Int,
         allCost: Int
     ) {
-        val users = repository.getUserUnit()
+
+        val users = repository
+            .getUserUnit()
+            .sortedBy { it.U_Number }
         val buildingUnitCount = repository.getBData() ?: 0
         val buildingTotalUnitCount = repository.getBUnitCount()
 
@@ -24,36 +26,45 @@ class CalculateMonthlyCostsUseCase @Inject constructor(
         if (buildingUnitCount <= 0) return
         if (buildingTotalUnitCount <= 0) return
 
-        val date = dateProvider.getDateForCalculate()
 
         val waterCostPerUnit = water.toDouble() / buildingUnitCount.toDouble()
         val sharedCostPerUnit = allCost.toDouble() / buildingTotalUnitCount.toDouble()
-        val totalMonthCost = water + allCost
 
-        repository.insertMonth(
-            CostInMonth(
-                C_MonthId = 0,
-                CostInMounthAndYear = Date().getDateForCalculate(),
-                costWater = water,
-                cost = allCost,
-                sumOfAll = totalMonthCost
-            )
-        )
+
+
+
+        val unitCosts = mutableListOf<UnitMonthlyCost>()
 
         users.forEachIndexed { index, user ->
-            val unitNumber = index + 1
             val waterCostForUnit = user.U_Unit * waterCostPerUnit
             val totalCostForUnit = waterCostForUnit + sharedCostPerUnit
 
-            repository.insertCost(
-                CostForUnit(
-                    B_id = 0,
-                    C_Cost = totalCostForUnit.roundToInt().toString(),
-                    C_Unit = unitNumber,
-                    isPaid = false,
-                    C_MonthAndYear = date
+            unitCosts.add(
+                index +1,
+                UnitMonthlyCost(
+                    user.U_Number,
+                    totalCostForUnit.toInt()
                 )
             )
         }
+
+
+        repository.insertMonthWithCosts(
+            MonthlyCostCommand(
+                buildingId = 0,
+                year = dateProvider.year,
+                monthNumber = dateProvider.month,
+                monthDisplayName = dateProvider.strMonth,
+                waterCost = water,
+                otherCost = allCost,
+                totalCost = water + allCost,
+                unitCosts = unitCosts
+            )
+        )
+
+
+
+
+
     }
 }

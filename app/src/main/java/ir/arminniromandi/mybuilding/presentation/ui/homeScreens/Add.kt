@@ -46,7 +46,6 @@ import ir.arminniromandi.mybuilding.presentation.customUi.DialogText
 import ir.arminniromandi.mybuilding.presentation.navigation.Screens.HomeScreens
 import ir.arminniromandi.mybuilding.presentation.viewModel.home.AddCostViewModel
 import ir.arminniromandi.mybuilding.utils.ThousandSeparatorTransformation
-import androidx.lifecycle.viewmodel.compose.viewModel as composeViewModel
 
 private val yekanBakhFontFamily = FontFamily(Font(R.font.yekanbakh))
 

@@ -17,8 +17,10 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val prefsManager: PreferencesManager,
     private val buildingRepository: BuildingRepository,
-    private val checkNeedCreateNewMonthUseCase: CheckNeedCreateNewMonthUseCase
+    private val date : Date
 ) : ViewModel() {
+
+    var nowDate: String = date.getDate()
 
     // todo: should have better
     private val _name = MutableLiveData("مدیر")
@@ -83,7 +85,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun isChargeAdded() {
-        val today = Date().getDateForCalculate()
+        val today = date.getDateForCalculate()
         viewModelScope.launch {
             val isExist = buildingRepository.isLastMonthExist(today)
 
@@ -93,7 +95,9 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getPayed(month: String, paid: Int) {
+    fun getPayed(paid: Boolean) {
+        val month = date.getDateForCalculate()
+
         viewModelScope.launch {
             val count =
                 buildingRepository.getPaidCount(month, paid)

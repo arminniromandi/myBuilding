@@ -17,10 +17,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
-import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.outlined.Home
@@ -32,6 +33,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -51,19 +53,19 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import ir.arminniromandi.mybuilding.R
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostForUnit
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostInMonth
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.Relationship.CostForUnitDetails
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.checkBox
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.customButton
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.primary
-import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.presentation.customUi.DialogText
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostForUnit
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostInMonth
 import ir.arminniromandi.mybuilding.presentation.viewModel.home.ShowCostViewModel
 import ir.arminniromandi.mybuilding.utils.date.Conststanse.IntFormat
 
@@ -75,10 +77,6 @@ fun ShowCost(
     navigate: NavHostController,
     viewModel: ShowCostViewModel = hiltViewModel<ShowCostViewModel>()
 ) {
-
-
-
-
 
     val costPerUnit by viewModel.costPerUnit.collectAsState()
     val mouths by viewModel.mounths.collectAsState()
@@ -97,14 +95,13 @@ fun ShowCost(
 
 
 
-    var clickedMouth by remember {
-        mutableStateOf("")
+    var clickedMouthId by remember {
+        mutableIntStateOf(0)
     }
 
 
-    //fixme : در صورتی که نمایش درست نبوده
-        LaunchedEffect( Unit, clickedMouth) {
-            viewModel.getCostPerUnitWithMounth(clickedMouth)
+        LaunchedEffect( Unit, clickedMouthId) {
+            viewModel.getCostPerUnitWithMounth(clickedMouthId)
         }
 
 
@@ -113,7 +110,7 @@ fun ShowCost(
 
 
     if (showDialog) {
-        Dialog(costInMonth = mouths[index.intValue] , viewModel)
+        Dialog(costInMonth =  mouths[1]., viewModel)
     }
 
 
@@ -222,7 +219,15 @@ fun ShowCost(
                         state = state,
                         reverseLayout = false
                     ) {
-                        items(mouths.size) {
+
+                        ite
+
+
+                        items(
+                            mouths ,
+                            key = {
+                                it.C_MonthId
+                            }) {
                             Box(
                                 Modifier
                                     .fillMaxWidth()
@@ -230,8 +235,8 @@ fun ShowCost(
                                     .clip(RoundedCornerShape(8.dp))
                                     .background(primary)
                                     .clickable(true) {
-                                        index.intValue = it
-                                        clickedMouth = mouths[it].CostInMounthAndYear
+                                        index.intValue = it.
+                                        clickedMouthId = it.C_MonthId
                                         viewModel.changeisOnAllCostShow(true)
                                     },
                                 contentAlignment = Alignment.Center
@@ -240,7 +245,7 @@ fun ShowCost(
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Text(
-                                        text = mouths[it].CostInMounthAndYear,
+                                        text = it.CostInMounthAndYear,
                                         style = TextStyle(
                                             color = Color.White,
                                             fontFamily = FontFamily(Font(R.font.yekanbakh))
@@ -291,7 +296,7 @@ fun ShowCost(
 
 
 @Composable
-private fun ShowCostByMouth(cost: List<CostForUnit>, viewModel : ShowCostViewModel,color: Color) {
+private fun ShowCostByMouth(cost: List<CostForUnitDetails>, viewModel : ShowCostViewModel, color: Color) {
 
 
     Column(
@@ -368,10 +373,10 @@ private fun ShowCostByMouth(cost: List<CostForUnit>, viewModel : ShowCostViewMod
 }
 
 @Composable
-private fun CostItems(data: CostForUnit, index: Int ,viewModel: ShowCostViewModel) {
+private fun CostItems(data: CostForUnitDetails, index: Int ,viewModel: ShowCostViewModel) {
 
 
-    val cost = IntFormat.format(data.C_Cost.toInt())
+    val cost = IntFormat.format(data.costForUnit.C_Cost.toInt())
 
     Row(
         Modifier
@@ -390,9 +395,12 @@ private fun CostItems(data: CostForUnit, index: Int ,viewModel: ShowCostViewMode
     ) {
 
         Checkbox(
-            checked = data.isPaid,
+            checked = data.costForUnit.isPaid,
+            //todo: fixme = should change paidStatus with CostForUnit
             onCheckedChange = {
-                viewModel.changePaidState(data)
+                viewModel.changePaidState(CostForUnit(
+
+                ))
             },
             colors = CheckboxDefaults.colors(
                 checkedColor = checkBox,
@@ -439,6 +447,7 @@ private fun Dialog(
     costInMonth: CostInMonth,
     viewModel: ShowCostViewModel
 ) {
+
 
 
     AlertDialog(

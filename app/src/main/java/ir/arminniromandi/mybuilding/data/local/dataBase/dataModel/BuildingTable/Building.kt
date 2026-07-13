@@ -5,10 +5,24 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
 
+/*
+* جدول اطلاعات کلی ساختمان
+* شمال داده های
+* نام مدیز
+* تعداد تمامی واحد ها
+* */
+
 @Entity(tableName = DBHandler.Building_TABLE)
 data class Building(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "B_Id") var B_id: Int = 0,
-    @ColumnInfo(name = "B_HostName" ) var B_HostName: String,
-    @ColumnInfo(name = "B_Unit" ) var B_Unit: Int
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "B_Id")
+    val B_id: Int = 0,
 
+    @ColumnInfo(name = "B_HostName")
+    val B_HostName: String,
+
+    /*
+     * تعداد کل واحدهای ساختمان
+     */
+    @ColumnInfo(name = "B_Unit")
+    val B_Unit: Int
 )

@@ -8,10 +8,10 @@ import javax.inject.Singleton
 
 @Singleton
 class CheckNeedCreateNewMonthUseCase @Inject constructor(
-    val buildingRepository: BuildingRepository,
-
+    private val buildingRepository: BuildingRepository,
+    private val date : Date
     ) {
-    suspend operator fun invoke(date: Date): Boolean {
+    suspend operator fun invoke(): Boolean {
         val lastMonth = buildingRepository.getLastMonth()
 
         return lastMonth?.CostInMounthAndYear != date.getDateForCalculate()

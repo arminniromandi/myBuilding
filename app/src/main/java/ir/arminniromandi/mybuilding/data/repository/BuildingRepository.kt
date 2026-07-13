@@ -6,6 +6,8 @@ import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.Building
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostForUnit
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostInMonth
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.Relationship.CostForUnitDetails
+import ir.arminniromandi.mybuilding.domain.model.MonthlyCostCommand
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -26,6 +28,9 @@ class BuildingRepository @Inject constructor(
 
     fun getMouths(): Flow<List<CostInMonth>> =
         dao.getMouths()
+
+
+
 
     suspend fun getBData(): Int? =
         dao.getBData()
@@ -51,13 +56,26 @@ class BuildingRepository @Inject constructor(
     suspend fun insertCost(cost: CostForUnit) =
         dao.insertCost(cost)
 
-    fun getCostWithMonth(month: String): Flow<List<CostForUnit>> =
-        dao.getCostWithMonth(month)
+
+
+
+
+     suspend fun insertMonthWithCosts(
+        command: MonthlyCostCommand
+    ): Int {
+        return dao.insertMonthWithCosts(command)
+    }
+
+
+
+
+    fun getCostWithMonth(monthId : Int): Flow<List<CostForUnitDetails>> =
+        dao.getCostWithMonth(monthId)
 
     suspend fun updateCost(cost: CostForUnit) =
         dao.updateCost(cost)
 
-    suspend fun getPaidCount(month: String, isPaid: Int): Int =
+    suspend fun getPaidCount(month: String, isPaid: Boolean): Int =
         dao.getPaidCount(month, isPaid)
 
     suspend fun getLastMonth(): CostInMonth? =

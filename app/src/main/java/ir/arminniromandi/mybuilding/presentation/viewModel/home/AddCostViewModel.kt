@@ -39,7 +39,7 @@ class AddCostViewModel @Inject constructor(
 
     fun checkDateForWarning() {
         viewModelScope.launch {
-            _showDateWarningDialog.value = checkNeedCreateNewMonthUseCase(Date())
+            _showDateWarningDialog.value = checkNeedCreateNewMonthUseCase()
         }
     }
 

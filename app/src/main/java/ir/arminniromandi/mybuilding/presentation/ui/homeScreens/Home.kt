@@ -44,8 +44,6 @@ import androidx.navigation.NavHostController
 import ir.arminniromandi.mybuilding.R
 import ir.arminniromandi.mybuilding.presentation.customUi.TextInBox
 import ir.arminniromandi.mybuilding.presentation.navigation.Screens.HomeScreens
-import ir.arminniromandi.mybuilding.utils.date.Conststanse
-import ir.arminniromandi.mybuilding.utils.date.Date
 import ir.arminniromandi.mybuilding.presentation.viewModel.home.MainViewModel
 
 
@@ -108,7 +106,7 @@ fun Home(navigate: NavHostController, viewModel: MainViewModel) {
     viewModel.isChargeAdded.observeAsState()
 
     if (isChargeAdded == true) {
-        viewModel.getPayed(Date().getDateForCalculate(), Conststanse.PAID)
+        viewModel.getPayed(true)
     }
 
 
@@ -160,7 +158,7 @@ fun Home(navigate: NavHostController, viewModel: MainViewModel) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 MText(
-                    text = Date().getDate(), size = 22, color = textColor.copy(0.9f)
+                    text = viewModel.nowDate, size = 22, color = textColor.copy(0.9f)
                 )
 
             }
@@ -176,7 +174,7 @@ fun Home(navigate: NavHostController, viewModel: MainViewModel) {
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { viewModel.getPayed(Date().getDateForCalculate(), Conststanse.PAID) }
+                .clickable { viewModel.getPayed(true) }
         ) {
 
             Row(

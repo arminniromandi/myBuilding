@@ -8,6 +8,7 @@ import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.Building
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostForUnit
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostInMonth
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostInYear
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.NoteTable.Note
 
 @Database(
@@ -16,6 +17,7 @@ import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.NoteTable.Note
         Building::class,
         Note::class,
         BUser::class,
+        CostInYear::class,
         CostForUnit::class,
         CostInMonth::class
     ],
@@ -35,6 +37,8 @@ abstract class DBHandler : RoomDatabase() {
         const val User_TABLE = "User_TABLE"
         const val CostForUnit_TABLE = "CostForUnit_TABLE"
         const val CostInMounth_TABLE = "CostInMounth_TABLE"
+        const val CostInYear_TABLE = "CostInYear_TABLE"
+
         const val Note_TABLE = "Note_Table"
 
         const val B_Unit = "B_Unit"

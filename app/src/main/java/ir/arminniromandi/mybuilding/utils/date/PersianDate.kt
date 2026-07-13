@@ -3,9 +3,11 @@ package ir.arminniromandi.mybuilding.utils.date
 import java.util.Calendar
 import java.util.Date
 import java.util.GregorianCalendar
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-class PersianDate {
+class PersianDate @Inject constructor(){
 
     var strWeekDay = ""
     var strMonth = ""

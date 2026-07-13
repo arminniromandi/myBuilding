@@ -11,8 +11,7 @@ import androidx.compose.material.icons.outlined.Home
 import ir.arminniromandi.mybuilding.presentation.model.BottomNavItem
 
 object Conststanse {
-    const val PAID = 1
-    const val NOT_PAID = 0
+
     val IntFormat = DecimalFormat("0,000")
 
     val BottomNavItem = arrayOf(

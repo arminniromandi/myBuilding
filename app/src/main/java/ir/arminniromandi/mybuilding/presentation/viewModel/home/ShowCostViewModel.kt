@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostForUnit
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostInMonth
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.Relationship.CostForUnitDetails
 import ir.arminniromandi.mybuilding.data.repository.BuildingRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,14 +30,13 @@ class ShowCostViewModel @Inject constructor(
     private val _mounths = MutableStateFlow<List<CostInMonth>>(emptyList())
     val mounths: StateFlow<List<CostInMonth>> = _mounths.asStateFlow()
 
-    private val _costPerUnit = MutableStateFlow<List<CostForUnit>>(emptyList())
-    val costPerUnit: StateFlow<List<CostForUnit>> = _costPerUnit.asStateFlow()
+    private val _costPerUnit = MutableStateFlow<List<CostForUnitDetails>>(emptyList())
+    val costPerUnit: StateFlow<List<CostForUnitDetails>> = _costPerUnit.asStateFlow()
 
 
+    //تابغ گرفتن تمامی ماه ها
     fun getMonths() {
         viewModelScope.launch {
-
-
             buildingRepository.getMouths().collect { data ->
                 _mounths.value = data.reversed()
             }
@@ -45,12 +45,14 @@ class ShowCostViewModel @Inject constructor(
     }
 
 
-    fun getCostPerUnitWithMounth(mouth: String) {
+
+    //تابع گرفتن شاؤز بر اساس id ماه
+    fun getCostPerUnitWithMounth(mouthId: Int) {
 
 
         viewModelScope.launch {
-
-            buildingRepository.getCostWithMonth(mouth)
+//getCostWithMoths
+            buildingRepository.getCostWithMonth(mouthId)
                 .collect { fetchedCost ->
                     _costPerUnit.value = fetchedCost
                 }
@@ -67,6 +69,22 @@ class ShowCostViewModel @Inject constructor(
         }
     }
 
+
+
+    //todo : im add to this
+    //get Monthid and getForm db CostInMonth
+    fun showDialog(){
+
+
+
+
+    }
+
+
+
+    fun closeDialogState(){
+        _showExposeDialog.value = false
+    }
 
     fun changeDialogState(state: Boolean) {
         _showExposeDialog.value = (state)
