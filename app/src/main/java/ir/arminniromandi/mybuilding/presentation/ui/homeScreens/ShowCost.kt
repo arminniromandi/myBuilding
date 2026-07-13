@@ -20,7 +20,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.outlined.Home
@@ -51,6 +51,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
@@ -235,7 +236,9 @@ fun ShowCost(
                                     },
                                 contentAlignment = Alignment.Center
                             ) {
-                                Column {
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
                                     Text(
                                         text = mouths[it].CostInMounthAndYear,
                                         style = TextStyle(
@@ -495,6 +498,3 @@ private fun Dialog(
 
 
 }
-
-
-
