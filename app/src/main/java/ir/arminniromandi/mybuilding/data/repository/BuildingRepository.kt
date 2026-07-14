@@ -29,8 +29,8 @@ class BuildingRepository @Inject constructor(
     fun getMouths(): Flow<List<CostInMonth>> =
         dao.getMouths()
 
-
-
+    suspend fun getMouthDetail(mouthId: Int): CostInMonth? =
+        dao.getMonthDetails(mouthId)
 
     suspend fun getBData(): Int? =
         dao.getBData()
@@ -57,19 +57,14 @@ class BuildingRepository @Inject constructor(
         dao.insertCost(cost)
 
 
-
-
-
-     suspend fun insertMonthWithCosts(
+    suspend fun insertMonthWithCosts(
         command: MonthlyCostCommand
     ): Int {
         return dao.insertMonthWithCosts(command)
     }
 
 
-
-
-    fun getCostWithMonth(monthId : Int): Flow<List<CostForUnitDetails>> =
+    fun getCostWithMonth(monthId: Int): Flow<List<CostForUnitDetails>> =
         dao.getCostWithMonth(monthId)
 
     suspend fun updateCost(cost: CostForUnit) =

@@ -15,7 +15,7 @@ import ir.arminniromandi.mybuilding.data.local.dataBase.DBHandler
 @Entity(tableName = DBHandler.Building_TABLE)
 data class Building(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "B_Id")
-    val B_id: Int = 0,
+    val B_id: Int = 1,
 
     @ColumnInfo(name = "B_HostName")
     val B_HostName: String,

@@ -17,7 +17,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val prefsManager: PreferencesManager,
     private val buildingRepository: BuildingRepository,
-    private val date : Date
+    private val date: Date
 ) : ViewModel() {
 
     var nowDate: String = date.getDate()
@@ -37,21 +37,14 @@ class MainViewModel @Inject constructor(
     //load data when MainViewModel initilized
     init {
         getName()
-        isInserted()
         isChargeAdded()
+        println(name.value)
     }
-
-
 
 
     // You'll need to implement the actual storage/logic for this
     //shared viewModel
     private var isChargeAlreadyAddedThisMonth = false
-
-
-
-
-
 
 
     fun markChargeAsAdded() {
@@ -70,16 +63,14 @@ class MainViewModel @Inject constructor(
 
     }
 
-    fun changeState() {
-        prefsManager.saveState()
-    }
-
 
     fun isInserted() {
         viewModelScope.launch {
-            val count  = buildingRepository.getBData()
+            val count = buildingRepository.getBUnitCount()
 
-            _isInsert.value = count == 0
+            println(count)
+            _isInsert.value = count > 0
+
 
         }
     }

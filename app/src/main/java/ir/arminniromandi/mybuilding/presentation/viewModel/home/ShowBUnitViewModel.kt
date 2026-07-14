@@ -59,6 +59,7 @@ class ShowBUnitViewModel @Inject constructor(
         viewModelScope.launch {
             buildingRepository.updateUsers(
                 BUser(
+                    U_id = _selectedUnit.value,
                     U_Number = _selectedUnit.value,
                     U_Unit = _selectedUnitUsers.value
                 )

@@ -49,16 +49,17 @@ data class BUser(
      * چون در این پروژه فقط یک ساختمان مطرحه
      */
     @ColumnInfo(name = "U_BuildingId")
-    val U_BuildingId: Int = 0,
+    val U_BuildingId: Int = 1,
 
     /*
-     * شماره واقعی واحد، مثلاً 1
+     * شماره واقعی واحد، مثلاًواحد1
      */
     @ColumnInfo(name = "U_Number")
     val U_Number: Int,
 
     /*
-     * تعداد ساکنان واحد، مثلاً 3
+     * تعداد ساکنان واحد،
+     * مثلا 3 نفز
      */
     @ColumnInfo(name = "U_Unit")
     val U_Unit: Int

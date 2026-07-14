@@ -32,7 +32,7 @@ abstract class DBHandler : RoomDatabase() {
     companion object {
 
         const val DATABASE_NAME = "Building"
-        const val DATABASE_VERSION = 1
+        const val DATABASE_VERSION = 2
         const val Building_TABLE = "Building"
         const val User_TABLE = "User_TABLE"
         const val CostForUnit_TABLE = "CostForUnit_TABLE"

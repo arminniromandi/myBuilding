@@ -19,6 +19,8 @@ fun MainScreen(context: Context) {
     val viewModel = hiltViewModel<MainViewModel>()
 
 
+    viewModel.isInserted()
+
     viewModel.checkIsInserted {
         context.startActivity(Intent(context, IntroActivity::class.java))
     }

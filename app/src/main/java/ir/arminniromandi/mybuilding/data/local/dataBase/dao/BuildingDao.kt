@@ -221,6 +221,20 @@ interface BuildingDao {
 
 
 
+    @Query(
+        """
+    SELECT *
+    FROM ${DBHandler.CostInMounth_TABLE}
+    WHERE CostInMonth_Id = :monthId
+    LIMIT 1
+    """
+    )
+    suspend fun getMonthDetails(
+        monthId: Int
+    ): CostInMonth?
+
+
+
 
     @Transaction
     @Query(

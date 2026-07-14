@@ -61,6 +61,7 @@ fun GetInfo(
     unit: MutableIntState,
     viewModel: IntroViewModel
 ) {
+    viewModel.changeStateForAddingNew(false)
 
     val showDialog by viewModel.showDateWarningDialog.collectAsState()
 

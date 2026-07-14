@@ -11,12 +11,16 @@ class PreferencesManager @Inject constructor (@ApplicationContext context : Cont
 
      private  val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 
-    fun saveState(){
+    fun changeIsAddState(state: Boolean){
         prefs.edit().apply {
-            putBoolean("showIntro", false)
+            putBoolean("showIntro", state)
             apply()
         }
     }
+
+
+
+
 
     fun checkState() = prefs.getBoolean("showIntro", true)
 

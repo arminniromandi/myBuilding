@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.BUser
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.Building
+import ir.arminniromandi.mybuilding.data.local.preferences.PreferencesManager
 import ir.arminniromandi.mybuilding.data.repository.BuildingRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class IntroViewModel @Inject constructor(
-    private val buildingRepository : BuildingRepository
+    private val buildingRepository : BuildingRepository,
+    private val preferencesManager: PreferencesManager
 ) : ViewModel() {
 
 
@@ -71,6 +73,12 @@ class IntroViewModel @Inject constructor(
 
     }
 
+
+
+    fun changeStateForAddingNew(state: Boolean){
+        preferencesManager.changeIsAddState(state)
+    }
+
     fun insertBuildingUser(){
 
         viewModelScope.launch {
@@ -84,8 +92,14 @@ class IntroViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            allUnit.forEach {
-                buildingRepository.addUsers(BUser(U_Unit = it!!))
+            allUnit.forEachIndexed {index, i ->
+                buildingRepository.addUsers(BUser(
+                    //چون شماره واحد از 1 شروع میشه
+                    //لیستی که ارسال میشه به ترتیبه
+                    U_Number = index +1,
+                    U_Unit = i!!
+
+                ))
             }
         }
     }

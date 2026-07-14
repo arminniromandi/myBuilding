@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
@@ -39,7 +38,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -59,7 +57,6 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ir.arminniromandi.mybuilding.R
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostForUnit
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.CostInMonth
 import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.BuildingTable.Relationship.CostForUnitDetails
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.checkBox
@@ -69,8 +66,6 @@ import ir.arminniromandi.mybuilding.presentation.customUi.DialogText
 import ir.arminniromandi.mybuilding.presentation.viewModel.home.ShowCostViewModel
 import ir.arminniromandi.mybuilding.utils.date.Conststanse.IntFormat
 
-
-private val index = mutableIntStateOf(0)
 
 @Composable
 fun ShowCost(
@@ -84,6 +79,8 @@ fun ShowCost(
 
     val showDialog by viewModel.showExposeDialog.collectAsState()
     val isOnAllCostShow by viewModel.isOnAllCostShow.collectAsState()
+
+    val detailsInMouth by viewModel.monthDetails.collectAsState()
 
 
 
@@ -110,7 +107,13 @@ fun ShowCost(
 
 
     if (showDialog) {
-        Dialog(costInMonth =  mouths[1]., viewModel)
+        detailsInMouth?.let { details ->
+
+            Dialog(
+                details = details,
+                onDismis = viewModel::closeDialogState
+            )
+        }
     }
 
 
@@ -142,7 +145,7 @@ fun ShowCost(
                     .clickable {
 
                         if (isOnAllCostShow) {
-                            viewModel.changeDialogState(true)
+                            viewModel.showDialog(clickedMouthId)
                         } else {
 
                             /*CoroutineScope(Dispatchers.IO).launch {
@@ -220,7 +223,7 @@ fun ShowCost(
                         reverseLayout = false
                     ) {
 
-                        ite
+
 
 
                         items(
@@ -235,7 +238,6 @@ fun ShowCost(
                                     .clip(RoundedCornerShape(8.dp))
                                     .background(primary)
                                     .clickable(true) {
-                                        index.intValue = it.
                                         clickedMouthId = it.C_MonthId
                                         viewModel.changeisOnAllCostShow(true)
                                     },
@@ -256,7 +258,7 @@ fun ShowCost(
 
 
                                     Text(
-                                        text = IntFormat.format(mouths[it].sumOfAll),
+                                        text = IntFormat.format(it.sumOfAll),
                                         style = TextStyle(
                                             fontFamily = FontFamily(Font(R.font.yekanbakh)),
                                             color = Color.White
@@ -376,7 +378,7 @@ private fun ShowCostByMouth(cost: List<CostForUnitDetails>, viewModel : ShowCost
 private fun CostItems(data: CostForUnitDetails, index: Int ,viewModel: ShowCostViewModel) {
 
 
-    val cost = IntFormat.format(data.costForUnit.C_Cost.toInt())
+    val cost = IntFormat.format(data.costForUnit.C_Cost)
 
     Row(
         Modifier
@@ -396,11 +398,10 @@ private fun CostItems(data: CostForUnitDetails, index: Int ,viewModel: ShowCostV
 
         Checkbox(
             checked = data.costForUnit.isPaid,
-            //todo: fixme = should change paidStatus with CostForUnit
-            onCheckedChange = {
-                viewModel.changePaidState(CostForUnit(
 
-                ))
+            onCheckedChange = {
+                println(it)
+                viewModel.changePaidState(data.costForUnit.copy(isPaid = it))
             },
             colors = CheckboxDefaults.colors(
                 checkedColor = checkBox,
@@ -444,14 +445,14 @@ private fun CostItems(data: CostForUnitDetails, index: Int ,viewModel: ShowCostV
 
 @Composable
 private fun Dialog(
-    costInMonth: CostInMonth,
-    viewModel: ShowCostViewModel
+    details: CostInMonth,
+    onDismis : () -> Unit
 ) {
 
 
 
     AlertDialog(
-        onDismissRequest = { viewModel.changeDialogState(false) },
+        onDismissRequest = { onDismis },
         backgroundColor = Color.DarkGray,
         confirmButton = {
 
@@ -466,7 +467,7 @@ private fun Dialog(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = customButton
                     ),
-                    onClick = { viewModel.changeDialogState(false) }) {
+                    onClick = { onDismis() }) {
                     Text(
                         text = "اوکی", fontSize = 20.sp, fontFamily = FontFamily(
                             Font(R.font.yekanbakhr)
@@ -490,9 +491,9 @@ private fun Dialog(
         text = {
             Column(horizontalAlignment = Alignment.End) {
 
-                DialogText("هزینه آب :  ${IntFormat.format(costInMonth.costWater)}")
-                DialogText("هزینه این ماه :  ${IntFormat.format(costInMonth.cost)}")
-                DialogText(" هزینه کل :  ${IntFormat.format(costInMonth.sumOfAll)}")
+                DialogText("هزینه آب :  ${IntFormat.format(details.costWater)}")
+                DialogText("هزینه این ماه :  ${IntFormat.format(details.cost)}")
+                DialogText(" هزینه کل :  ${IntFormat.format(details.sumOfAll)}")
             }
         },
         properties = DialogProperties(

@@ -15,56 +15,77 @@ class CalculateMonthlyCostsUseCase @Inject constructor(
         water: Int,
         allCost: Int
     ) {
-
         val users = repository
             .getUserUnit()
             .sortedBy { it.U_Number }
-        val buildingUnitCount = repository.getBData() ?: 0
-        val buildingTotalUnitCount = repository.getBUnitCount()
+
+        val buildingId = 1
+
+        val totalUnitCount =
+            repository.getBData() ?: 0
+
+        val buildingUnitCount =
+            repository.getBUnitCount()
 
         if (users.isEmpty()) return
+        if (totalUnitCount <= 0) return
         if (buildingUnitCount <= 0) return
-        if (buildingTotalUnitCount <= 0) return
 
+        val waterCostPerUnit =
+            water.toDouble() / totalUnitCount.toDouble()
 
-        val waterCostPerUnit = water.toDouble() / buildingUnitCount.toDouble()
-        val sharedCostPerUnit = allCost.toDouble() / buildingTotalUnitCount.toDouble()
+        val sharedCostPerUnit =
+            allCost.toDouble() / buildingUnitCount.toDouble()
 
+        val unitCosts =
+            mutableListOf<UnitMonthlyCost>()
 
+        println(users)
 
+        users.forEach { user ->
 
-        val unitCosts = mutableListOf<UnitMonthlyCost>()
+            println("worked: unit=${user.U_Number}, id=${user.U_id}")
 
-        users.forEachIndexed { index, user ->
-            val waterCostForUnit = user.U_Unit * waterCostPerUnit
-            val totalCostForUnit = waterCostForUnit + sharedCostPerUnit
+            val waterCostForUnit =
+                user.U_Unit * waterCostPerUnit
+
+            val totalCostForUnit =
+                waterCostForUnit + sharedCostPerUnit
 
             unitCosts.add(
-                index +1,
                 UnitMonthlyCost(
-                    user.U_Number,
+                    /*
+                     * بسیار مهم:
+                     * اینجا U_id باید ذخیره شود،
+                     */
+                    user.U_id,
+
                     totalCostForUnit.toInt()
                 )
             )
         }
 
-
         repository.insertMonthWithCosts(
             MonthlyCostCommand(
-                buildingId = 0,
+                /*
+                 * شناسه واقعی ساختمان
+                 */
+                buildingId = buildingId,
+
                 year = dateProvider.year,
+
                 monthNumber = dateProvider.month,
+
                 monthDisplayName = dateProvider.strMonth,
+
                 waterCost = water,
+
                 otherCost = allCost,
+
                 totalCost = water + allCost,
+
                 unitCosts = unitCosts
             )
         )
-
-
-
-
-
     }
 }

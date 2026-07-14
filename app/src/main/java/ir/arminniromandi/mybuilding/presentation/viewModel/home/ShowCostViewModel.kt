@@ -33,6 +33,9 @@ class ShowCostViewModel @Inject constructor(
     private val _costPerUnit = MutableStateFlow<List<CostForUnitDetails>>(emptyList())
     val costPerUnit: StateFlow<List<CostForUnitDetails>> = _costPerUnit.asStateFlow()
 
+    private val _monthDetails =
+        MutableStateFlow<CostInMonth?>(null)
+    val monthDetails = _monthDetails.asStateFlow()
 
     //تابغ گرفتن تمامی ماه ها
     fun getMonths() {
@@ -65,7 +68,7 @@ class ShowCostViewModel @Inject constructor(
     fun changePaidState(data : CostForUnit ){
         viewModelScope.launch {
             buildingRepository
-                .updateCost(data.copy(isPaid = !data.isPaid))
+                .updateCost(data)
         }
     }
 
@@ -73,8 +76,19 @@ class ShowCostViewModel @Inject constructor(
 
     //todo : im add to this
     //get Monthid and getForm db CostInMonth
-    fun showDialog(){
+    fun showDialog(mouthId: Int){
 
+
+        viewModelScope.launch {
+
+            val detail = buildingRepository.getMouthDetail(mouthId)
+
+            if (detail != null){
+                _monthDetails.value = detail
+                _showExposeDialog.value = true
+            }
+
+        }
 
 
 
@@ -86,9 +100,9 @@ class ShowCostViewModel @Inject constructor(
         _showExposeDialog.value = false
     }
 
-    fun changeDialogState(state: Boolean) {
+    /*fun changeDialogState(state: Boolean) {
         _showExposeDialog.value = (state)
-    }
+    }*/
 
     fun changeisOnAllCostShow(state: Boolean) {
         _isOnAllCostShow.value = (state)

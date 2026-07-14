@@ -127,6 +127,7 @@ fun SaveData(
                 if (isValidData.value){
 
                     viewModel.insertAllBUnit(allUnit)
+                    viewModel.changeStateForAddingNew(true)
                     context.startActivity(Intent(context, MainActivity::class.java))
                 }
 
