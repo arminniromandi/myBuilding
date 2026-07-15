@@ -1,5 +1,6 @@
 package ir.arminniromandi.mybuilding.presentation.viewModel.intro
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -33,7 +34,6 @@ class IntroViewModel @Inject constructor(
     val name= _name.asStateFlow()
     val count = _count.asStateFlow()
 
-    val isAdded = mutableStateOf(false)
 
 
 
@@ -44,7 +44,7 @@ class IntroViewModel @Inject constructor(
 
     }
 
-    fun isUserAdded() {
+    /*fun isUserAdded() {
         viewModelScope.launch(Dispatchers.IO) {
             val count = buildingRepository.countOfBuilding()
             withContext(Dispatchers.Main) {
@@ -52,9 +52,9 @@ class IntroViewModel @Inject constructor(
             }
 
         }
-    }
+    }*/
 
-    fun getOldData() {
+   /* fun getOldData() {
 
         viewModelScope.launch(Dispatchers.IO) {
 
@@ -71,7 +71,7 @@ class IntroViewModel @Inject constructor(
 
         }
 
-    }
+    }*/
 
 
 
@@ -79,16 +79,22 @@ class IntroViewModel @Inject constructor(
         preferencesManager.changeIsAddState(state)
     }
 
-    fun insertBuildingUser(){
+    fun insertBuildingUser(hostName : String, count :Int){
+
+
+        Log.i("IntroTest" , "h name ${_name.value}")
+        Log.i("IntroTest" , "h name ${hostName}")
 
         viewModelScope.launch {
 
                 buildingRepository
-                .insertData(Building(B_id = 0, name.value, count.value))
+                .insertData(Building(B_id = 0, hostName, count))
 
         }
     }
     fun insertAllBUnit(allUnit :List<Int?>){
+        Log.i("IntroTest" , "h name ${_name.value}")
+
 
         viewModelScope.launch {
 
@@ -101,6 +107,7 @@ class IntroViewModel @Inject constructor(
 
                 ))
             }
+            println("saved")
         }
     }
 

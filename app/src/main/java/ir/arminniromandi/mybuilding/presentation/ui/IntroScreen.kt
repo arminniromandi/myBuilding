@@ -14,13 +14,6 @@ fun IntroScreen() {
     val viewModel = hiltViewModel<IntroViewModel>()
     val navController = rememberNavController()
 
-    viewModel.isUserAdded()
-
-    //if user leave app in half and dosent save any data
-    //app will get some data when user leaved and return to app
-    if (viewModel.isAdded.value) {
-        viewModel.getOldData()
-    }
     val unit = remember {
         mutableIntStateOf(viewModel.count.value ?: 0)
     }

@@ -1,5 +1,6 @@
 package ir.arminniromandi.mybuilding.presentation.ui.IntroScreens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
@@ -65,9 +67,10 @@ fun GetInfo(
 
     val showDialog by viewModel.showDateWarningDialog.collectAsState()
 
+    Log.i("IntroTest" , unit.intValue.toString())
 
     val h_name = remember {
-        mutableStateOf(viewModel.name.value ?: "")
+        mutableStateOf( "")
     }
     if (showDialog)
         Dialog(navController, viewModel,h_name.value, unit.intValue)
@@ -294,6 +297,8 @@ private fun Dialog(
     unit: Int
 ) {
 
+    Log.i("IntroTest" , h_name)
+
     AlertDialog(
         onDismissRequest = { viewModel.dialogState(false)},
         backgroundColor = Color.DarkGray,
@@ -308,12 +313,14 @@ private fun Dialog(
 
                 Button(
                     onClick = {
-                        viewModel.insertBuildingUser()
+                        Log.i("IntroTest" , "Dialog")
+
+                        viewModel.insertBuildingUser(h_name , unit)
 
                         navController.navigate(ScreensIntro.SaveData.screenName)
                     }) {
                     Text(
-                        text = "بله", fontSize = 16.sp, fontFamily = FontFamily(
+                        text = "بله ثبت شود", fontSize = 16.sp, fontFamily = FontFamily(
                             Font(R.font.yekanbakhr)
                         ),
                         color = Color.White
@@ -321,7 +328,7 @@ private fun Dialog(
                 }
                 Spacer(modifier = Modifier.width(12.dp))
 
-                Button(
+                OutlinedButton(
 
                     onClick = {
                         viewModel.dialogState(false)

@@ -100,7 +100,6 @@ fun PaymentScreen() {
 fun Home(navigate: NavHostController, viewModel: MainViewModel) {
     val textColor = if (!isSystemInDarkTheme()) Color.Black else Color.White
 
-    viewModel.isChargeAdded()
 
     val isChargeAdded by
     viewModel.isChargeAdded.observeAsState()
@@ -114,7 +113,6 @@ fun Home(navigate: NavHostController, viewModel: MainViewModel) {
     viewModel.payed.observeAsState()
 
     val name by viewModel.name.observeAsState()
-    viewModel.getName()
 
     Column(
         Modifier

@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
                 SideEffect {
                     systemUiController.setSystemBarsColor(Color.Black)
                 }
-                MainScreen(this)
+                MainScreen()
 
             }
         }

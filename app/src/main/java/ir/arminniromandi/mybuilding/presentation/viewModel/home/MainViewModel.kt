@@ -1,5 +1,6 @@
 package ir.arminniromandi.mybuilding.presentation.viewModel.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,11 +8,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ir.arminniromandi.mybuilding.data.local.preferences.PreferencesManager
 import ir.arminniromandi.mybuilding.data.repository.BuildingRepository
-import ir.arminniromandi.mybuilding.domain.useCase.CheckNeedCreateNewMonthUseCase
 import ir.arminniromandi.mybuilding.utils.date.Date
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -20,90 +19,87 @@ class MainViewModel @Inject constructor(
     private val date: Date
 ) : ViewModel() {
 
-    var nowDate: String = date.getDate()
+    val nowDate: String = date.getDate()
 
-    // todo: should have better
-    private val _name = MutableLiveData("مدیر")
-    private val _data = MutableLiveData(1)
-    private val _isInsert = MutableLiveData(false)
-    private val _isChargeAdded = MutableLiveData(false)
-
-    val isChargeAdded: LiveData<Boolean> = _isChargeAdded
-    val payed: LiveData<Int> = _data
-    val name: LiveData<String> = _name
+    /*
+     * مقدار اولیه ندارد؛ بنابراین قبل از بررسی دیتابیس
+     * true یا false اشتباه به UI ارسال نمی‌شود.
+     */
+    private val _isInsert = MutableLiveData<Boolean>()
     val isInsert: LiveData<Boolean> = _isInsert
 
+    private val _name = MutableLiveData<String>()
+    val name: LiveData<String> = _name
 
-    //load data when MainViewModel initilized
+    private val _isChargeAdded = MutableLiveData<Boolean>()
+    val isChargeAdded: LiveData<Boolean> = _isChargeAdded
+
+    private val _data = MutableLiveData(0)
+    val payed: LiveData<Int> = _data
+
     init {
-        getName()
-        isChargeAdded()
-        println(name.value)
+        loadInitialData()
     }
 
-
-    // You'll need to implement the actual storage/logic for this
-    //shared viewModel
-    private var isChargeAlreadyAddedThisMonth = false
-
-
-    fun markChargeAsAdded() {
-        // Here, you would implement the logic to persist that a charge has been added
-        // For example, update SharedPreferences or a database flag
-        isChargeAlreadyAddedThisMonth = true
-        // You might also want to update _showDateWarningDialog if the warning
-        // should disappear immediately after adding (though current logic shows it on screen entry)
-    }
-
-
-    fun checkIsInserted(onAction: () -> Unit) {
-        if (prefsManager.checkState())
-            if (isInsert.value == false)
-                onAction()
-
-    }
-
-
-    fun isInserted() {
+    private fun loadInitialData() {
         viewModelScope.launch {
-            val count = buildingRepository.getBUnitCount()
-
-            println(count)
-            _isInsert.value = count > 0
 
 
+            // مرحله اول: بررسی وجود اطلاعات ساختمان
+            val buildingUnitCount = buildingRepository.getBUnitCount()
+            val isBuildingInserted = buildingUnitCount > 0
+            val building = buildingRepository.getAllB()
+            println(building)
+
+            // فقط بعد از تمام شدن بررسی، نتیجه به UI ارسال می‌شود
+            _isInsert.value = isBuildingInserted
+
+            /*
+             * فقط وقتی ساختمان ثبت شده است،
+             * وضعیت شارژ و نام مدیر بررسی می‌شود.
+             */
+            if (isBuildingInserted) {
+                Log.i("IntroTest" , "loadIntD")
+
+                loadChargeStatus()
+                loadManagerName()
+            } else {
+
+                _isChargeAdded.value = false
+                _name.value = "مدیر"
+            }
         }
     }
 
-    fun isChargeAdded() {
-        val today = date.getDateForCalculate()
-        viewModelScope.launch {
-            val isExist = buildingRepository.isLastMonthExist(today)
+    private suspend fun loadChargeStatus() {
+        val currentMonth = date.getDateForCalculate()
 
-            _isChargeAdded.value = isExist != 0
+        val chargeCount = buildingRepository.isLastMonthExist(
+            currentMonth
+        )
 
+        _isChargeAdded.value = chargeCount != 0
+    }
 
-        }
+    private suspend fun loadManagerName() {
+        val managerName = buildingRepository.getBHostName()
+
+        println(managerName)
+        _name.value = managerName ?: "مدیر"
+    }
+
+    fun refreshInsertedState() {
+        loadInitialData()
     }
 
     fun getPayed(paid: Boolean) {
-        val month = date.getDateForCalculate()
-
         viewModelScope.launch {
-            val count =
-                buildingRepository.getPaidCount(month, paid)
+            val currentMonth = date.getDateForCalculate()
 
-            _data.value = count
-        }
-
-    }
-
-    fun getName() {
-        viewModelScope.launch {
-            val name = buildingRepository.getBHostName()
-            _name.value = name ?: "مدیر"
+            _data.value = buildingRepository.getPaidCount(
+                currentMonth,
+                paid
+            )
         }
     }
-
-
 }

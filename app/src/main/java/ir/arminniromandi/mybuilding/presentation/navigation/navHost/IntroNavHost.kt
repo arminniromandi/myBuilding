@@ -27,7 +27,7 @@ fun IntroNavHost(
 
     NavHost(
         navController = navController,
-        startDestination = if (viewModel.isAdded.value) ScreensIntro.GetBValue.screenName else ScreensIntro.Intro.screenName,
+        startDestination =  ScreensIntro.Intro.screenName,
         enterTransition = {
             slideInHorizontally(
                 initialOffsetX = { it },

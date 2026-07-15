@@ -16,6 +16,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -28,8 +29,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
-import androidx.compose.material.TextField
+import androidx.compose.material.TextButton
 import androidx.compose.material.contentColorFor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -37,38 +40,44 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import ir.arminniromandi.mybuilding.R
-import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.NoteTable.Note as NoteEntity
 import ir.arminniromandi.mybuilding.presentation.Activity.ui.theme.primary
 import ir.arminniromandi.mybuilding.presentation.viewModel.home.NoteViewModel
 import androidx.compose.material.MaterialTheme as MaterialTheme2
 import androidx.compose.material3.MaterialTheme as MaterialTheme3
-
+import ir.arminniromandi.mybuilding.data.local.dataBase.dataModel.NoteTable.Note as NoteEntity
 
 
 @Composable
@@ -317,6 +326,8 @@ fun ItemUi(
     }
 }
 
+
+
 @Composable
 fun CustomDialog(
     noteText: String,
@@ -324,61 +335,110 @@ fun CustomDialog(
     onCancelClick: () -> Unit,
     onConfirmClick: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .clip(RoundedCornerShape(4.dp))
-            .background(MaterialTheme2.colors.background)
-            .padding(8.dp)
+    Dialog(
+        onDismissRequest = onCancelClick
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
+        CompositionLocalProvider(
+            LocalLayoutDirection provides LayoutDirection.Rtl
         ) {
-            Spacer(modifier = Modifier.height(8.dp))
-
-            TextField(
-                value = noteText,
-                onValueChange = onTextChanged,
-                singleLine = true,
-                textStyle = TextStyle(
-                    textDirection = TextDirection.Rtl
-                ),
+            Surface(
                 modifier = Modifier
-                    .padding(vertical = 8.dp, horizontal = 8.dp)
-                    .fillMaxWidth(),
-                label = {
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                shape = RoundedCornerShape(24.dp),
+                color = MaterialTheme.colorScheme.surface,
+                tonalElevation = 8.dp,
+                shadowElevation = 12.dp
+            ) {
+                Column(
+                    modifier = Modifier.padding(24.dp)
+                ) {
                     Text(
-                        text = "یادداشت",
+                        text = "ثبت یادداشت",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = "یادداشت موردنظر خود را وارد کنید.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    OutlinedTextField(
+                        value = noteText,
+                        onValueChange = onTextChanged,
                         modifier = Modifier.fillMaxWidth(),
-                        style = TextStyle(
-                            textDirection = TextDirection.Rtl
+                        label = {
+                            Text(text = "متن یادداشت")
+                        },
+                        placeholder = {
+                            Text(text = "برای مثال: پرداخت هزینه آب")
+                        },
+                        maxLines = 5,
+                        shape = RoundedCornerShape(14.dp),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                if (noteText.isNotBlank()) {
+                                    onConfirmClick()
+                                }
+                            }
+                        ),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor =
+                                MaterialTheme.colorScheme.primary,
+                            focusedLabelColor =
+                                MaterialTheme.colorScheme.primary
                         )
                     )
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        TextButton(
+                            onClick = onCancelClick
+                        ) {
+                            Text(text = "انصراف")
+                        }
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Button(
+                            onClick = onConfirmClick,
+                            enabled = noteText.isNotBlank(),
+                            shape = RoundedCornerShape(12.dp),
+                            contentPadding = PaddingValues(
+                                horizontal = 24.dp,
+                                vertical = 12.dp
+                            )
+                        ) {
+                            Text(
+                                text = "ثبت یادداشت",
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+                    }
                 }
-            )
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Row(
-            modifier = Modifier.align(Alignment.Start)
-        ) {
-            Button(
-                onClick = onCancelClick
-            ) {
-                androidx.compose.material.Text("Cancel")
-            }
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Button(
-                onClick = onConfirmClick,
-                enabled = noteText.isNotBlank()
-            ) {
-                androidx.compose.material.Text("OK")
             }
         }
     }
 }
+
+
+
+
 
 data class MiniFabItems(
     val icon: ImageVector,

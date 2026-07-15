@@ -15,6 +15,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -69,6 +70,13 @@ fun SaveData(
             ShowDialog(showDialog)
 
 
+        Text(
+            text = "هزینه های پیش آمده را اضافه کنید",
+            fontSize = 20.sp,
+            fontFamily = FontFamily(Font(R.font.yekanbakh)),
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
 
         for (i in data.indices) {
             TextField(

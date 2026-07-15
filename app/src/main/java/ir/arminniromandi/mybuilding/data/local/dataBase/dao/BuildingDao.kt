@@ -26,6 +26,16 @@ interface BuildingDao {
     // Building
     // -----------------------------
 
+    @Query(
+        """
+        SELECT *
+        FROM ${DBHandler.Building_TABLE}
+        LIMIT 1
+        """
+    )
+    suspend fun getAllBuilding(): Building
+
+
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertData(building: Building): Long
 
@@ -33,11 +43,9 @@ interface BuildingDao {
         """
         SELECT B_HostName
         FROM ${DBHandler.Building_TABLE}
-        ORDER BY B_Id ASC
-        LIMIT 1
         """
     )
-    suspend fun getBHostName(): String?
+    suspend fun getBHostName(): String
 
     @Query(
         """

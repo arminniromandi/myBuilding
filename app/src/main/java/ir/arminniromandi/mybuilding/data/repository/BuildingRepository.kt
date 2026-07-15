@@ -17,6 +17,10 @@ class BuildingRepository @Inject constructor(
     private val dao: BuildingDao
 ) {
 
+
+    suspend fun getAllB()=
+        dao.getAllBuilding()
+
     suspend fun insertData(building: Building) =
         dao.insertData(building)
 
