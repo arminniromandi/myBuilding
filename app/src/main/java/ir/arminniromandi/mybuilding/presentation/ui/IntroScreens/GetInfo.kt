@@ -67,7 +67,6 @@ fun GetInfo(
 
     val showDialog by viewModel.showDateWarningDialog.collectAsState()
 
-    Log.i("IntroTest" , unit.intValue.toString())
 
     val h_name = remember {
         mutableStateOf( "")
@@ -311,7 +310,7 @@ private fun Dialog(
                 horizontalArrangement = Arrangement.Start
             ) {
 
-                Button(
+                Button (
                     onClick = {
                         Log.i("IntroTest" , "Dialog")
 
@@ -328,7 +327,7 @@ private fun Dialog(
                 }
                 Spacer(modifier = Modifier.width(12.dp))
 
-                OutlinedButton(
+                androidx.compose.material3.OutlinedButton(
 
                     onClick = {
                         viewModel.dialogState(false)
@@ -337,7 +336,7 @@ private fun Dialog(
                         text = "خیر", fontSize = 16.sp, fontFamily = FontFamily(
                             Font(R.font.yekanbakhr)
                         ),
-                        color = Color.DarkGray
+                        color = Color.White
                     )
 
 

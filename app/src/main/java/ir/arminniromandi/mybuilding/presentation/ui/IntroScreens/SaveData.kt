@@ -2,6 +2,7 @@ package ir.arminniromandi.mybuilding.presentation.ui.IntroScreens
 
 import android.content.Intent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -58,6 +59,9 @@ fun SaveData(
 
     var data by remember { mutableStateOf(List(unit.value) { "" }) } // Initialize with 4 empty strings
 
+
+
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -74,8 +78,8 @@ fun SaveData(
             text = "هزینه های پیش آمده را اضافه کنید",
             fontSize = 20.sp,
             fontFamily = FontFamily(Font(R.font.yekanbakh)),
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.padding(bottom = 16.dp)
+            color = Color.White,
+            modifier = Modifier.padding(bottom = 12.dp , top = 8.dp)
         )
 
         for (i in data.indices) {
@@ -125,13 +129,16 @@ fun SaveData(
 
                   allUnit.forEach { unit ->
                     if (unit == null) {
+                        isValidData.value = false
                         showDialog.value = true
+
                     }
                       if (!(unit == null))
                           isValidData.value = true
 
                 }
 
+                println(isValidData.value)
                 if (isValidData.value){
 
                     viewModel.insertAllBUnit(allUnit)
@@ -197,7 +204,7 @@ private fun ShowDialog(state: MutableState<Boolean>) {
 
         },
         text = {
-            DialogText(text = "لطفا تمامی واحد ها را به درستی وارد کنید" , size = 18)
+            DialogText(text = "لطفا تمامی واحد ها را  وارد کنید" , size = 18)
         }
     )
 
