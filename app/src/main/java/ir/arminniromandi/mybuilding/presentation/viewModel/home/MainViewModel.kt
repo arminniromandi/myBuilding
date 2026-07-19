@@ -41,15 +41,14 @@ class MainViewModel @Inject constructor(
         loadInitialData()
     }
 
-    private fun loadInitialData() {
+     fun loadInitialData() {
         viewModelScope.launch {
 
 
             // مرحله اول: بررسی وجود اطلاعات ساختمان
             val buildingUnitCount = buildingRepository.getBUnitCount()
             val isBuildingInserted = buildingUnitCount > 0
-            val building = buildingRepository.getAllB()
-            println(building)
+
 
             // فقط بعد از تمام شدن بررسی، نتیجه به UI ارسال می‌شود
             _isInsert.value = isBuildingInserted

@@ -75,7 +75,7 @@ fun SaveData(
 
 
         Text(
-            text = "هزینه های پیش آمده را اضافه کنید",
+            text = "تعداد نفرات هر واحد را وارد کنید.",
             fontSize = 20.sp,
             fontFamily = FontFamily(Font(R.font.yekanbakh)),
             color = Color.White,
@@ -133,6 +133,7 @@ fun SaveData(
                         showDialog.value = true
 
                     }
+
                       if (!(unit == null))
                           isValidData.value = true
 

@@ -30,6 +30,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -47,53 +48,7 @@ import ir.arminniromandi.mybuilding.presentation.navigation.Screens.HomeScreens
 import ir.arminniromandi.mybuilding.presentation.viewModel.home.MainViewModel
 
 
-/*
-@Composable
-fun PaymentScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF9FAFB))
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Card(
-            shape = RoundedCornerShape(10.dp),
-            elevation = CardDefaults.cardElevation(4.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = Color(0xFFFFFDE7)
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 12.dp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Default.CalendarToday,
-                    contentDescription = "تاریخ",
-                    tint = Color(0xFF0288D1), // آبی ملایم
-                    modifier = Modifier.size(24.dp)
-                )
-                Text(
-                    text = "۱۴۰۴/۰۵/۲۱",
-                    color = Color.Black,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
 
-        // کارت پرداختی‌ها (مثل قبل)
-
-    }
-}
-*/
 
 
 @Composable
@@ -109,8 +64,15 @@ fun Home(navigate: NavHostController, viewModel: MainViewModel) {
     }
 
 
+    LaunchedEffect(Unit) {
+        viewModel.loadInitialData()
+
+    }
+
     val payedCount by
     viewModel.payed.observeAsState()
+
+
 
     val name by viewModel.name.observeAsState()
 

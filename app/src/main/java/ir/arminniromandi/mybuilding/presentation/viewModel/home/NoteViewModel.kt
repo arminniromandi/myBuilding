@@ -36,6 +36,8 @@ class NoteViewModel @Inject constructor(
     private val _isFabExpanded = MutableStateFlow(false)
     val isFabExpanded: StateFlow<Boolean> = _isFabExpanded.asStateFlow()
 
+
+
     fun toggleFab() {
         _isFabExpanded.value = !_isFabExpanded.value
     }
@@ -50,6 +52,7 @@ class NoteViewModel @Inject constructor(
         _isAddDialogVisible.value = false
         _noteText.value = ""
     }
+
 
     fun onNoteTextChanged(value: String) {
         _noteText.value = value

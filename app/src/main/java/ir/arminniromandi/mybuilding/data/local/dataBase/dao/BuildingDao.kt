@@ -26,15 +26,6 @@ interface BuildingDao {
     // Building
     // -----------------------------
 
-    @Query(
-        """
-        SELECT *
-        FROM ${DBHandler.Building_TABLE}
-        LIMIT 1
-        """
-    )
-    suspend fun getAllBuilding(): Building
-
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertData(building: Building): Long
@@ -47,23 +38,9 @@ interface BuildingDao {
     )
     suspend fun getBHostName(): String
 
-    @Query(
-        """
-        SELECT COUNT(*)
-        FROM ${DBHandler.Building_TABLE}
-        """
-    )
-    suspend fun countOfBuilding(): Int
 
-    @Transaction
-    @Query(
-        """
-        SELECT *
-        FROM ${DBHandler.Building_TABLE}
-        ORDER BY B_Id ASC
-        """
-    )
-    fun getBuildingWithUnits(): Flow<List<BuildingWithUnits>>
+
+
 
 
     // -----------------------------
@@ -101,14 +78,6 @@ interface BuildingDao {
     )
     suspend fun getUserUnit(): List<BUser>
 
-    @Query(
-        """
-        SELECT *
-        FROM ${DBHandler.User_TABLE}
-        ORDER BY U_Number ASC
-        """
-    )
-    fun getUserUnitForEdit(): Flow<List<BUser>>
 
     @Query(
         """
@@ -127,54 +96,14 @@ interface BuildingDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertYear(year: CostInYear): Long
 
-    @Query(
-        """
-        SELECT *
-        FROM ${DBHandler.CostInYear_TABLE}
-        ORDER BY Y_Year DESC
-        """
-    )
-    fun getYears(): Flow<List<CostInYear>>
 
-    @Query(
-        """
-        SELECT *
-        FROM ${DBHandler.CostInYear_TABLE}
-        WHERE Y_BuildingId = :buildingId
-          AND Y_Year = :year
-        LIMIT 1
-        """
-    )
-    suspend fun getYear(
-        buildingId: Int,
-        year: Int
-    ): CostInYear?
 
-    @Query(
-        """
-        SELECT COUNT(*)
-        FROM ${DBHandler.CostInYear_TABLE}
-        WHERE Y_BuildingId = :buildingId
-          AND Y_Year = :year
-        """
-    )
-    suspend fun isYearExist(
-        buildingId: Int,
-        year: Int
-    ): Int
 
-    @Transaction
-    @Query(
-        """
-        SELECT *
-        FROM ${DBHandler.CostInYear_TABLE}
-        WHERE C_YearId = :yearId
-        """
-    )
-    fun getYearWithMonths(
-        yearId: Int
-    ): Flow<List<CostInYearWithMonths>>
 
+
+    /*
+    * برای حذف سال های ثبت شده
+    * */
     @Query(
         """
         DELETE FROM ${DBHandler.CostInYear_TABLE}
@@ -385,8 +314,7 @@ interface BuildingDao {
     ): Int {
 
 
-
-
+        //امکان خطا بسیار کم است
         val duplicateUnitCount = command.unitCosts
             .groupBy { it.unitId }
             .any { it.value.size > 1 }
@@ -437,97 +365,4 @@ interface BuildingDao {
 
 
 
-    // -----------------------------
-    // Annual reports
-    // -----------------------------
-
-    @Query(
-        """
-        SELECT COALESCE(SUM(month.costWater), 0)
-        FROM ${DBHandler.CostInMounth_TABLE} AS month
-        INNER JOIN ${DBHandler.CostInYear_TABLE} AS yearTable
-            ON yearTable.C_YearId = month.M_YearId
-        WHERE yearTable.Y_BuildingId = :buildingId
-          AND yearTable.Y_Year = :year
-        """
-    )
-    suspend fun getAnnualWaterCost(
-        buildingId: Int,
-        year: Int
-    ): Long
-
-    @Query(
-        """
-        SELECT COALESCE(SUM(month.cost), 0)
-        FROM ${DBHandler.CostInMounth_TABLE} AS month
-        INNER JOIN ${DBHandler.CostInYear_TABLE} AS yearTable
-            ON yearTable.C_YearId = month.M_YearId
-        WHERE yearTable.Y_BuildingId = :buildingId
-          AND yearTable.Y_Year = :year
-        """
-    )
-    suspend fun getAnnualOtherCost(
-        buildingId: Int,
-        year: Int
-    ): Long
-
-    /*
-     * جمع کل شارژهای تعیین‌شده در ماه‌های سال
-     */
-    @Query(
-        """
-        SELECT COALESCE(SUM(month.sumCost), 0)
-        FROM ${DBHandler.CostInMounth_TABLE} AS month
-        INNER JOIN ${DBHandler.CostInYear_TABLE} AS yearTable
-            ON yearTable.C_YearId = month.M_YearId
-        WHERE yearTable.Y_BuildingId = :buildingId
-          AND yearTable.Y_Year = :year
-        """
-    )
-    suspend fun getAnnualCharge(
-        buildingId: Int,
-        year: Int
-    ): Long
-
-    /*
-     * مجموع مبالغ پرداخت‌شده در کل سال
-     */
-    @Query(
-        """
-        SELECT COALESCE(SUM(unitCost.C_Cost), 0)
-        FROM ${DBHandler.CostForUnit_TABLE} AS unitCost
-        INNER JOIN ${DBHandler.CostInMounth_TABLE} AS month
-            ON month.CostInMonth_Id = unitCost.C_MonthId
-        INNER JOIN ${DBHandler.CostInYear_TABLE} AS yearTable
-            ON yearTable.C_YearId = month.M_YearId
-        WHERE yearTable.Y_BuildingId = :buildingId
-          AND yearTable.Y_Year = :year
-          AND unitCost.isPaid = 1
-        """
-    )
-    suspend fun getAnnualPaidCharge(
-        buildingId: Int,
-        year: Int
-    ): Long
-
-    /*
-     * مجموع مبالغ پرداخت‌نشده در کل سال
-     */
-    @Query(
-        """
-        SELECT COALESCE(SUM(unitCost.C_Cost), 0)
-        FROM ${DBHandler.CostForUnit_TABLE} AS unitCost
-        INNER JOIN ${DBHandler.CostInMounth_TABLE} AS month
-            ON month.CostInMonth_Id = unitCost.C_MonthId
-        INNER JOIN ${DBHandler.CostInYear_TABLE} AS yearTable
-            ON yearTable.C_YearId = month.M_YearId
-        WHERE yearTable.Y_BuildingId = :buildingId
-          AND yearTable.Y_Year = :year
-          AND unitCost.isPaid = 0
-        """
-    )
-    suspend fun getAnnualUnpaidCharge(
-        buildingId: Int,
-        year: Int
-    ): Long
 }

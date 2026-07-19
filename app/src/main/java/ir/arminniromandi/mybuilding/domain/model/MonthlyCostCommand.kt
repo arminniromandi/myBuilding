@@ -1,7 +1,7 @@
 package ir.arminniromandi.mybuilding.domain.model
 
 data class MonthlyCostCommand(
-    val buildingId: Int = 0,
+    val buildingId: Int = 1,
     val year: Int,
     val monthNumber: Int,
     val monthDisplayName: String,

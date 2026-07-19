@@ -17,10 +17,6 @@ class BuildingRepository @Inject constructor(
     private val dao: BuildingDao
 ) {
 
-
-    suspend fun getAllB()=
-        dao.getAllBuilding()
-
     suspend fun insertData(building: Building) =
         dao.insertData(building)
 
@@ -45,20 +41,11 @@ class BuildingRepository @Inject constructor(
     suspend fun getBHostName(): String? =
         dao.getBHostName()
 
-    suspend fun countOfBuilding(): Int =
-        dao.countOfBuilding()
 
     suspend fun getUserUnit(): List<BUser> =
         dao.getUserUnit()
 
-    fun getUserUnitForEdit(): Flow<List<BUser>> =
-        dao.getUserUnitForEdit()
 
-    suspend fun insertMonth(month: CostInMonth) =
-        dao.insertMonth(month)
-
-    suspend fun insertCost(cost: CostForUnit) =
-        dao.insertCost(cost)
 
 
     suspend fun insertMonthWithCosts(
@@ -86,11 +73,7 @@ class BuildingRepository @Inject constructor(
     fun getAllUsers(): Flow<List<BUser>> =
         dao.getAllUsers()
 
-    suspend fun deleteCost() =
-        dao.deleteCost()
 
-    suspend fun deleteMounth() =
-        dao.deleteMounth()
 
 
 }

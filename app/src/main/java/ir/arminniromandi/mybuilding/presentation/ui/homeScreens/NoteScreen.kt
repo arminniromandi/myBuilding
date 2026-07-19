@@ -36,11 +36,14 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.contentColorFor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
@@ -51,7 +54,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -89,7 +94,22 @@ fun NoteScreen(
     val noteText by viewModel.noteText.collectAsState()
     val isFabExpanded by viewModel.isFabExpanded.collectAsState()
 
+    var isDeleteDialogVisble by
+            remember {
+                mutableStateOf(false)
+            }
     val textColor = if (!isSystemInDarkTheme()) Color.Black else Color.White
+
+
+
+    if (isDeleteDialogVisble){
+        DeleteAllNotesDialog(
+          onDismiss = {isDeleteDialogVisble = false},
+            onConfirmDelete = {viewModel.deleteAllNotes()}
+        )
+    }
+
+
 
     Scaffold(
         floatingActionButton = {
@@ -116,7 +136,7 @@ fun NoteScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 IconButton(
-                    onClick = viewModel::deleteAllNotes
+                    onClick = { isDeleteDialogVisble = true }
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.trash),
@@ -186,6 +206,9 @@ fun NoteScreen(
             )
         }
     }
+
+
+
 }
 
 @Composable
@@ -327,6 +350,86 @@ fun ItemUi(
 }
 
 
+@Composable
+fun DeleteAllNotesDialog(
+    onDismiss: () -> Unit,
+    onConfirmDelete: () -> Unit
+) {
+
+    CompositionLocalProvider(
+        LocalLayoutDirection provides LayoutDirection.Rtl
+    ) {
+
+        AlertDialog(
+
+            onDismissRequest = {
+                onDismiss()
+            },
+
+            title = {
+                Text(
+                    text = "حذف همه یادداشت‌ها",
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            },
+
+            text = {
+                Text(
+                    text = "آیا مطمئن هستید که می‌خواهید تمام یادداشت‌ها را حذف کنید؟ این عملیات قابل بازگشت نیست.",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            },
+
+
+            confirmButton = {
+
+                androidx.compose.material3.Button (
+                    onClick = {
+                        onConfirmDelete()
+                        onDismiss()
+                    },
+
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError
+                    )
+
+                ) {
+
+                    Text("حذف")
+                }
+            },
+
+
+            dismissButton = {
+
+                OutlinedButton(
+
+                    onClick = {
+                        onDismiss()
+                    },
+
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = MaterialTheme.colorScheme.primary
+                    )
+
+                ) {
+
+                    Text("لغو")
+                }
+            },
+
+
+            containerColor = MaterialTheme.colorScheme.surface,
+
+            titleContentColor = MaterialTheme.colorScheme.onSurface,
+
+            textContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
 
 @Composable
 fun CustomDialog(
@@ -335,6 +438,9 @@ fun CustomDialog(
     onCancelClick: () -> Unit,
     onConfirmClick: () -> Unit
 ) {
+
+    val textColor = if (isSystemInDarkTheme()) Color.Black else Color.White
+
     Dialog(
         onDismissRequest = onCancelClick
     ) {
@@ -426,7 +532,8 @@ fun CustomDialog(
                         ) {
                             Text(
                                 text = "ثبت یادداشت",
-                                fontWeight = FontWeight.SemiBold
+                                fontWeight = FontWeight.SemiBold ,
+                                color = textColor
                             )
                         }
                     }
