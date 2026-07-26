@@ -29,7 +29,9 @@ fun MainScreen(
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    viewModel.refreshInsertedState()
+    LaunchedEffect(Unit) {
+        viewModel.refreshInsertedState()
+    }
     val isInserted by viewModel.isInsert.observeAsState()
 
     when (isInserted) {
@@ -52,10 +54,6 @@ fun MainScreen(
 
                 context.startActivity(intent)
 
-                /*
-                 * در صورتی که نمی‌خواهی کاربر با Back
-                 * دوباره به MainActivity برگردد.
-                 */
                 (context as? Activity)?.finish()
             }
 
