@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -7,14 +10,25 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+val keystoreProperties = Properties()
+
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+
 android {
 
     signingConfigs {
         create("release") {
-            storeFile = file("C:\\Users\\ARMIN141\\AndroidStudioProjects\\myBuilding\\myKey.jks")
-            storePassword = "@Arminn141"
-            keyAlias = "key0"
-            keyPassword = "@Armin141"
+            storeFile = file(keystoreProperties["storeFile"] as String)
+            storePassword =
+                keystoreProperties["storePassword"] as String
+            keyAlias =
+                keystoreProperties["keyAlias"] as String
+            keyPassword =
+                keystoreProperties["keyPassword"] as String
         }
     }
     namespace = "ir.arminniromandi.mybuilding"
@@ -91,14 +105,12 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.7.7")
 
 
-    implementation( "androidx.navigation:navigation-compose:2.7.7")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
 
     implementation("androidx.compose.foundation:foundation:1.4.1")
 
     implementation("com.google.accompanist:accompanist-pager-indicators:0.30.1")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
-
-
 
 
     val room_version = "2.6.1"
@@ -108,7 +120,7 @@ dependencies {
 
 
     val lifecycle_version = "2.6.1"
-    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
 
 //    implementation ("com.google.code.gson:gson:2.10.1")
 
