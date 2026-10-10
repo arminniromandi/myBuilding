@@ -205,8 +205,9 @@ Install the debug build on a connected device:
 
 The production version of MyBuilding is available on Myket:
 
-[![ِDownload it on Myket](https://img.shields.io/badge/Get_it_on-Myket-00BFA5?style=for-the-badge)](https://myket.ir/app/ir.arminniromandi.mybuilding)
-
+<a href="https://myket.ir/app/ir.arminniromandi.mybuilding">
+  <img src="get-en.png" alt="Download MyBuilding" width="150">
+</a>
 
 ## Repository Status
 
