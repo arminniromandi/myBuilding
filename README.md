@@ -11,8 +11,6 @@ An offline Android application for managing building units, calculating monthly 
 </a>
 </div>
 
----
-
 ## Overview
 
 MyBuilding is an Android application designed to simplify the monthly financial tasks involved in managing a residential building.
