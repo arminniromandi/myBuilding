@@ -6,6 +6,9 @@
 
 An offline Android application for managing building units, calculating monthly charges, distributing utility costs, and tracking payments.
 
+<a href="https://myket.ir/app/ir.arminniromandi.mybuilding">
+  <img src="get-en.png" alt="Download MyBuilding" width="150">
+</a>
 </div>
 
 ---
@@ -18,7 +21,6 @@ The application allows a building manager to register units and resident counts,
 
 All application data is stored locally, allowing the main building-management functionality to work without a backend service or internet connection.
 
-The application is published on [Myket](https://myket.ir/app/ir.arminniromandi.mybuilding).
 
 ## Features
 
